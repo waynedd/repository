@@ -78,3 +78,61 @@ Paper.searchByInput = function searchByInput(input, callback) {
         });
     });
 };
+
+/*
+ *  get paper list according to
+ *  group = pub | and
+ *  content
+ */
+Paper.searchByContent = function searchByContent(group, content, callback) {
+    pool.getConnection(function (err, connection) {
+        var sql = "" ;
+        if( group == "author" ) {
+            sql = "select * from paper.list where author LIKE ?";
+        }
+        if( group == "field" ) {
+            sql = "select * from paper.list where field = ?";
+        }
+        if( group == "publication" ) {
+            if( content == "phd" ) {
+                sql = "select * from paper.list where type = 'phdthesis'" ;
+            }
+            else if( content == "tech" ) {
+                sql = "select * from paper.list where type = 'techreport'" ;
+            }
+            else {
+                sql = "select * from paper.list where abbr = ?" ;
+            }
+        }
+        sql += " order by year DESC" ;
+
+        // there is ?
+        if( sql.indexOf('?') != -1 ) {
+            var re = content ;
+            if( group == "author") {
+                re = "%"+content+"%" ;
+            }
+            connection.query(sql, [re], function(err, results) {
+                if (err) {
+                    console.log("[!!!!] [searchByContent-1] Error: " + err.message);
+                    return;
+                }
+                connection.release();
+                console.log(results);
+                callback(err, results);
+            });
+        }
+        // there is no ?
+        else {
+            connection.query(sql, function(err, results) {
+                if (err) {
+                    console.log("[!!!!] [searchByContent-2] Error: " + err.message);
+                    return;
+                }
+                connection.release();
+                console.log(results);
+                callback(err, results);
+            });
+        }
+    });
+};

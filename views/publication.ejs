@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -8,30 +8,29 @@
     <meta name="keywords" content="repository, combinatorial testing, software testing, publication, research, paper">
     <meta name="author" content="Huayao">
 
-    <title>Search</title>
-    <link rel="shortcut icon" href=".mage/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="image/favicon.ico" type="image/x-icon">
+    <title>Venue List</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/repository.css">
-
-
+    
     <script src="js/jquery.min.js"></script>
     <script src="js/comb.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            var para = "content=<%=content%>";
-            search_now = "<%=content%>";
-            search_type = "index";
-            $("#wait").show();
-            $("#sh1").hide();
-            $("#sh2").hide();
-            $.ajax({
-                url: "/action/all",
-                type: "post",
-                dataType: "json",
-                data: para,
-                success: showsearh
+            // search field id
+            $("p[id]").click(function () {
+                var para = "content=" + $(this).attr("id") + "&group=publication";
+                search_now = $(this).text();
+                search_type = "publication";
+                $("#wait").show();
+                $("#main_list").hide();
+                $.ajax({
+                    url: "/action/publication",
+                    type: "post",
+                    dataType: "json",
+                    data: para,
+                    success: showsearh
+                });
             });
         });
     </script>
@@ -52,7 +51,7 @@
             <!-- list part -->
             <div class="col-md-2">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
+                    <li><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
                     <li><a href="#"><i class="fa fa-bars"></i>&nbsp;&nbsp;Statistic</a></li>
                     <li><a href="#"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
                 </ul>
@@ -64,33 +63,71 @@
                         <a href="./all.jsp" class="list-group-item">All</a>
                         <a href="./author.jsp" class="list-group-item">Author</a>
                         <a href="./field.jsp" class="list-group-item">Research Field</a>
-                        <a href="publication.ejs" class="list-group-item">Publication Venue</a>
+                        <a href="publication.ejs" class="active list-group-item">Publication Venue</a>
                     </div>
                 </div>
             </div>
 
-            <!-- data part -->
-            <div class="col-md-10">
+            <!-- show -->
+            <div class="col-md-10 list_col">
                 <!-- bread crumb -->
-                <!-- only display sta -->
-                <div id="pa" style="display:none" class="row-fluid">
-                    <div id="sta" class="col-md-12"></div>
+                <div id="pa" style="display:none" class="row">
+                    <div class="col-md-12">
+                        <ul class="breadcrumb">
+                            <li id="pa_main">field</li>
+                            <li id="pa_name"></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <div id="sta" class="col-md-6"></div>
+                        <div class="col-md-6">
+                        </div>
+                    </div>
                 </div>
 
                 <!-- waiting -->
                 <div id="wait" style="display:none" class="row">
                     <div class="col-md-12 text-center">
                         <h1><i class="fa fa-spinner fa-pulse fa-lg"></i></h1><br>
-                        <h4><h4>keep calm and data is loading ...</h4></h4>
+                        <h4>keep calm and data is loading ...</h4>
                     </div>
                 </div>
 
-                <!-- table -->
-                <div id="result_list" style="display:none" class="row">
+                <div id="main_list" class="row">
                     <div class="col-md-12">
-                        <table id='rstable' class='table listtable'></table>
+                        <h4>Main Journals</h4>
+                        <hr>
+                        <% article.forEach(function(each) { %>
+                        <p id="<%=each.Abbr%>"><a href='#'><%=each.Publication%> (<%=each.Abbr%>)</a></p>
+                        <% }); %>
+                        <br/><br/>
+
+                        <h4>Main Conferences</h4>
+                        <hr>
+                        <% inproceeding.forEach(function(each) { %>
+                        <p id="<%=each.Abbr%>"><a href='#'><%=each.Publication%> (<%=each.Abbr%>)</a></p>
+                        <% }); %>
+                        <br/><br/>
+
+                        <h4>Others</h4>
+                        <hr>
+                        <p id="phd"><a href="#">Ph.D. Dissertation</a></p>
+                        <p id="book"><a href="#">Book or Chapter</a></p>
+                        <p id="tech"><a href="#">Technical Report</a></p>
+                        <br/><br/>
                     </div>
                 </div>
+                <!-- main_list -->
+
+                <!-- result list -->
+                <div id="result_list" style="display:none" class="row">
+                    <div class="col-md-12">
+                        <table id='rstable' class='table listtable'>
+                        </table>
+                    </div>
+                </div>
+                <!-- result -->
 
                 <!-- pagination -->
                 <div id="search_page" style="display:none;text-align:center">
@@ -100,43 +137,19 @@
                     </ul>
                 </div>
 
-                <!-- none -->
-                <div id="search_none" style="display:none;padding-left:60px" class="row">
-                    <div class="alert alert-warning">
-                        <h4 class="alert-heading">No relevant papers are found in our database</h4>
-                        <p>please change your key words, or click <em>All</em> for the whole paper list<p>
-                    </div>
-                </div>
-
             </div>
             <!-- span10 -->
         </div>
     </div>
     <!-- /container -->
 
+    <div id="push"></div>
 </div>
 <!-- /wrap -->
 
 <!-- footer -->
+<br/><br/>
 <%- include template_bottom.ejs %>
-
-<!-- modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Attention</h4>
-            </div>
-            <div class="modal-body">
-                <p>The input text of search form cannot be empty</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn btn-danger" data-dismiss="modal">OK</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="./js/bootstrap.min.js"></script>
 </body>
