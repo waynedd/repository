@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="combinatorial testing repository is a web based application to collect works that address the topic of combinatorial testing.">
+    <meta name="keywords" content="repository, combinatorial testing, software testing, publication, research, paper">
+    <meta name="author" content="Huayao">
+
+    <title>Combinatorial Testing Repository</title>
+    <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="image/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/repository.css">
+    <link rel="stylesheet" href="css/button.css">
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#showMore").click(function () {
+                if( $(this).text() == "More" ) {
+                    $(this).text("Less") ;
+                    $('#more').fadeIn(600);
+                }
+                else {
+                    $(this).text("More") ;
+                    $('#more').fadeOut(600);
+                }
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!-- header -->
+    <header>
+        <div class="floater"></div>
+        <div class="container intro-text">
+            <div class="intro-heading">Combinatorial Testing Repository</div>
+            <div class="intro-lead-in">
+                all <span class="label label-success main-label"><%=num%></span>
+                publications are included (July 2015)
+            </div>
+
+            <!-- search form -->
+            <div id="sh2" class="row intro-button-group">
+                <div class="col-xs-8 col-xs-offset-2 col-md-6 col-md-offset-3">
+                    <div class="row">
+                        <form role="form" action="/search" method="get">
+                            <div class="form-group">
+                                <input class="form-control input-lg" id="content" name="content" size="16" type="text">
+                            </div>
+                            <div class="form-group">
+                                <button id="search" type="submit" class="button button-caution button-pill button-large">Search</button>
+                                <button id="showMore" type="button" class="button button-pill button-large">More</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- more buttons -->
+            <div id="more" style="display: none;" class="row">
+                <div class="intro-list-group">
+                    <a href="#" class="button button-plain button-border button-rounded">Statistic</a>
+                    <a href="#" class="button button-plain button-border button-rounded">Rank</a>
+                </div>
+                <div class="intro-list-group">
+                    <hr class="small">
+                    <a href="#" class="button button-plain button-border button-rounded">All</a>
+                    <a href="#" class="button button-plain button-border button-rounded">Author</a>
+                    <a href="#" class="button button-plain button-border button-rounded">Field</a>
+                    <a href="#" class="button button-plain button-border button-rounded">Venue</a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- main container
+    <div id="feature" class="container">
+        <div class="row my-center">
+            <div class="col-sm-6 col-md-3">
+                <h3><img src="image/index1.ico"/></h3>
+                <h3>Publication</h3>
+                <p>all research papers that are related to combinatorial testing are collected</p>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <h3><img src="image/index2.ico"/></h3>
+                <h3>Statistic</h3>
+                <p>different charts are organized to show the development of combinatorial testing</p>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <h3><img src="image/index3.ico"/></h3>
+                <h3>Paper List</h3>
+                <p>lists that are indexed by authors, research fields and
+                    publication venues are provided</p>
+            </div>
+
+            <div class="col-sm-6 col-md-3">
+                <h3><img src="image/index4.ico"/></h3>
+                <h3>BibTex Citation</h3>
+                <p>bibTex citations are available for all papers</p>
+            </div>
+        </div>
+    </div>
+    -->
+
+    <!-- contact -->
+    <div id="contact" class="container contact">
+        <div class="text-center">
+            <img src="image/index3.ico"/>
+        </div>
+        <div class="my-center">
+            <p>This repository is designed and maintained by <strong>Huayao Wu</strong>,
+                who is currently a Ph.D. student in
+                <a href="http://gist.nju.edu.cn">GIST</a>,
+                National Key Laboratory for Novel Software Technology,
+                Nanjing University, China.</p>
+            <p>We warmly welcome any comments and suggestions about this repository.
+                If your paper is missed, please let us know.</p>
+            <p><i class="fa fa-envelope-o fa-fw"></i> hywu <em>#</em> outlook.com
+                / changhainie <em>#</em> nju.edu.cn</p>
+
+            <p>If you would like to cite this repository, please use the following BibTeX entry:</p>
+        <pre>@misc{wu:ct,
+    author = {Huayao Wu and Changhai Nie},
+    title = {Combinatorial Testing Repository},
+    note = {gist.nju.edu.cn/ct_repository},
+}</pre>
+            <p>Thanks.</p>
+        </div>
+    </div>
+
+    <!-- footer -->
+    <div id="footer">
+        <div class="container">
+            <p class="text-center">Copyright &copy; 2015 Huayao Wu. All Rights Reserved. |
+                <script src="http://s11.cnzz.com/z_stat.php?id=1254678564&web_id=1254678564" language="JavaScript"></script>
+            </p>
+        </div>
+    </div>
+
+</body>
+</html>

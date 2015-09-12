@@ -1,0 +1,255 @@
+/*
+ * repository css file
+ */
+html {
+    overflow-y:scroll;
+    width: 100%;
+    height: 100%;
+}
+body {
+    width: 100%;
+    height: 100%;
+    font-family: "Helvetica Neue", Helvetica, sans-serif;
+}
+#wrap {
+    min-height: 100%;
+    height: auto;
+    margin: 0 auto 15px;
+    padding: 0 0 60px;
+}
+#footer {
+    padding-top: 20px;
+    height: 60px;
+    background-color: #f5f5f5;
+}
+hr.small {
+    padding: 5px 0;
+    max-width: 600px;
+    border-top: 1px solid #dddddd;
+}
+
+.my-center {
+    padding-top: 40px;
+    padding-bottom: 30px;
+}
+/*
+.my-center h3 {
+    text-align: center;
+}
+.my-center p {
+    font-size: 15px;
+}*/
+/* repository general */
+/*
+.navbar-inverse {
+    background-color: #2a3440;
+    border-color: #2a3440;
+}
+.list_col {
+    padding-left: 25px ;
+}
+.panel-heading {
+    padding: 5px 10px ;
+    border-bottom: 1px solid transparent;
+    border-top-right-radius: 3px;
+    border-top-left-radius: 3px;
+}
+/* red link */
+/*
+a.red_link:link, a.red_link:visited {
+    color: #E51400;
+    text-decoration:none;
+}
+/* none decoration link */
+/*
+a.none_dec:link {
+    text-decoration:none;
+}
+/* top navbar */
+/*
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+}
+/* search page */
+/*
+
+
+/*
+.well_search h3 {
+    font-size: 26px;
+    line-height: 34px;
+}
+.well_search_2 {
+    padding-bottom: 30px;
+}
+*/
+
+/* statistic page */
+/*
+#btn_group {
+    padding-top: 40px ;
+}
+
+.img-thumbnail {
+    border: none ;
+}
+/* author list page */
+/*
+.indexlabel {
+    font-size: 23px;
+    padding: 5px 15px 5px;
+}
+/* banner */
+/*
+.banner {
+    position: relative; overflow: auto;
+}
+.banner li {
+    list-style: none;
+}
+.banner ul li {
+    float: left;
+}
+
+#author_aff {
+    padding-left: 30px;
+}
+/* new header */
+header {
+    display: table;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: url(../image/lib1.jpg) no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+}
+header .floater {
+    float: left;
+    height: 30%;
+}
+header .intro-text {
+    text-align: center;
+    color: #ffffff;
+    clear: both;
+    position: relative;
+}
+header .intro-text .intro-heading {
+    font-family: Futura, Tahoma, sans-serif;
+    margin-bottom: 15px;
+    font-size: 30pt;
+    line-height: 1.2;
+    font-weight: 600;
+}
+header .intro-text .intro-lead-in {
+    font-family: Garamond, serif;
+    margin-bottom: 25px;
+    font-size: 18pt;
+    line-height: 1.2;
+    padding-bottom: 10px;
+}
+.main-label {
+    font-size: 20pt;
+    padding: .2em .4em .2em;
+}
+.contact {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+.contact p {
+    font-size: 14.5pt;
+    line-height: 1.35;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+pre {
+    display: block;
+    padding: 15px;
+    margin: 0 0 10px;
+    font-size: 11.5pt;
+    line-height: 1.4;
+    color: #333333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: none;
+    border-radius: 10px;
+}
+.intro-button-group {
+    padding-bottom: 35px;
+}
+.intro-list-group {
+    padding-top: 10px;
+}
+
+hr.small {
+    max-width: 300px;
+}
+
+@media(min-width: 768px) {
+    header .intro-text .intro-heading {
+        font-family: Futura, Tahoma, sans-serif;
+        margin-bottom: 17px;
+        font-size: 65px;
+        font-weight: 600;
+        line-height: 90px;
+    }
+    header .intro-text .intro-lead-in {
+        font-family: Garamond, serif;
+        margin-bottom: 25px;
+        font-size: 23pt;
+        line-height: 1.4;
+        padding-bottom: 15px;
+    }
+    .contact {
+        padding-top: 70px;
+        padding-bottom: 40px;
+    }
+    .contact p {
+        font-size: 16pt;
+        line-height: 1.4;
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    pre {
+        display: block;
+        padding: 15px;
+        margin: 0 0 10px;
+        font-size: 13pt;
+        line-height: 1.5;
+        color: #333333;
+        word-break: break-all;
+        word-wrap: break-word;
+        background-color: #f5f5f5;
+        border: none;
+        border-radius: 10px;
+    }
+    .intro-button-group {
+        padding-bottom: 35px;
+    }
+    .intro-list-group {
+        padding-top: 10px;
+    }
+}
+
+/*
+.nav-poly {
+    padding-top: 20px;
+    padding-right: 20px;
+}
+.nav-poly > li {
+    padding-left: 10px;
+}
+.nav-poly > li > a {
+    text-decoration: none;
+    font-weight: bold;
+    color: #ffffff;
+}
+.nav-poly > li > a:hover {
+    color: #fed136;
+}
+*/
+
+
