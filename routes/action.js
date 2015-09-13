@@ -1,29 +1,47 @@
+/*
+ *  the APIs to respond query request
+ */
 var express = require('express');
 var Paper = require('../model/Paper');
+var Info = require('../model/Info');
 var router = express.Router();
 
-/* POST all list */
-router.post('/all', function(req, res) {
+/* POST search list */
+router.post('/search', function(req, res) {
     var content = req.body.content;
-    console.log(content);
-
+    //console.log(content);
     Paper.searchByInput(content, function (err, results) {
-        console.log(JSON.stringify(results));
         res.send(JSON.stringify(results));
     });
 });
 
+/* POST all list */
+router.post('/all', function(req, res) {
+    Paper.getPaperAll(function (err, results) {
+        res.send(JSON.stringify(results));
+    });
+});
 
-/* POST publication list */
-router.post('/publication', function(req, res) {
+/*
+ *  POST query list
+ *  group = author | field | publication
+ *  content
+ */
+router.post('/query', function(req, res) {
     var group = req.body.group ;
     var content = req.body.content ;
-    console.log(group);
-    console.log(content);
-
     Paper.searchByContent(group, content, function (err, results) {
-        console.log(JSON.stringify(results));
         res.send(JSON.stringify(results));
+    });
+});
+
+/*
+ *  POST author information list
+ */
+router.post('/author_info', function(req, res) {
+    var content = req.body.content ;
+    Info.getAuthorInfo(content, function (err, result) {
+        res.send(JSON.stringify(result));
     });
 });
 

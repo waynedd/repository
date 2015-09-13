@@ -46,7 +46,7 @@ Paper.getWholeNum = function getWholeNum(callback) {
 /* get all paper list as results */
 Paper.getPaperAll = function getPaperAll(callback) {
     pool.getConnection(function (err, connection) {
-        var sql = "SELECT * FROM paper.list";
+        var sql = "SELECT * FROM paper.list order by year DESC";
         connection.query(sql, function(err, results) {
             if (err) {
                 console.log("[!!!!] [getPaperAll] Error: " + err.message);
@@ -73,7 +73,6 @@ Paper.searchByInput = function searchByInput(input, callback) {
                 return;
             }
             connection.release();
-            console.log(results);
             callback(err, results);
         });
     });
@@ -81,7 +80,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
 
 /*
  *  get paper list according to
- *  group = pub | and
+ *  group = author | field | publication
  *  content
  */
 Paper.searchByContent = function searchByContent(group, content, callback) {
@@ -118,7 +117,6 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
                     return;
                 }
                 connection.release();
-                console.log(results);
                 callback(err, results);
             });
         }
@@ -130,7 +128,6 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
                     return;
                 }
                 connection.release();
-                console.log(results);
                 callback(err, results);
             });
         }

@@ -63,35 +63,21 @@ a.none_dec:link {
 .navbar-inverse .navbar-brand {
     color: #ffffff;
 }
-/* search page */
-/*
-/*
-.well_search h3 {
-    font-size: 26px;
-    line-height: 34px;
-}
-.well_search_2 {
-    padding-bottom: 30px;
-}
-*/
 
 /* statistic page */
-/*
 #btn_group {
     padding-top: 40px ;
 }
-
 .img-thumbnail {
     border: none ;
 }
+
 /* author list page */
-/*
-.indexlabel {
+.index-label {
     font-size: 23px;
     padding: 5px 15px 5px;
 }
 /* banner */
-/*
 .banner {
     position: relative; overflow: auto;
 }
@@ -101,9 +87,12 @@ a.none_dec:link {
 .banner ul li {
     float: left;
 }
-
 #author_aff {
-    padding-left: 30px;
+    padding-left: 27px;
+}
+#author_aff,
+#author_contact {
+    color: #777777;
 }
 /* new header */
 header {

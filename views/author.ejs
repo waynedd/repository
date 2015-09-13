@@ -8,24 +8,30 @@
     <meta name="keywords" content="repository, combinatorial testing, software testing, publication, research, paper">
     <meta name="author" content="Huayao">
 
-    <title>Venue List</title>
+    <title>Author List</title>
     <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon">
     <link rel="icon" href="image/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/repository.css">
-    
+
     <script src="js/jquery.min.js"></script>
     <script src="js/comb.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            // search field id
-            $("p[id]").click(function () {
-                var para = "content=" + $(this).attr("id") + "&group=publication";
-                search_now = $(this).text();
-                search_type = "publication";
+            $("dd[id]").click(function () {
+                var para = "content=" + $(this).attr("id") + "&group=author";
+                search_now = $(this).attr("id");
+                search_type = "author";
                 $("#wait").show();
                 $("#main_list").hide();
+                $.ajax({
+                    url: "action/author_info",
+                    type: "post",
+                    dataType: "json",
+                    data: para,
+                    success: prepareauthor
+                });
                 $.ajax({
                     url: "action/query",
                     type: "post",
@@ -63,9 +69,9 @@
                     <div class="panel-heading"><h4>Paper List</h4></div>
                     <div class="list-group">
                         <a href="all" class="list-group-item">All</a>
-                        <a href="author" class="list-group-item">Author</a>
+                        <a href="author" class="active list-group-item">Author</a>
                         <a href="field" class="list-group-item">Research Field</a>
-                        <a href="publication" class="active list-group-item">Publication Venue</a>
+                        <a href="publication" class="list-group-item">Publication Venue</a>
                     </div>
                 </div>
             </div>
@@ -76,15 +82,21 @@
                 <div id="pa" style="display:none" class="row">
                     <div class="col-md-12">
                         <ul class="breadcrumb">
-                            <li id="pa_main">field</li>
+                            <li id="pa_main">author</li>
                             <li id="pa_name"></li>
                         </ul>
                     </div>
 
-                    <div>
-                        <div id="sta" class="col-md-6"></div>
-                        <div class="col-md-6">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div id="author_aff" class="col-md-6 col-sm-12"></div>
+                            <div id="author_contact" class="col-md-6 col-sm-12"></div>
                         </div>
+                        <br>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div id="sta"></div>
                     </div>
                 </div>
 
@@ -92,44 +104,46 @@
                 <div id="wait" style="display:none" class="row">
                     <div class="col-md-12 text-center">
                         <h1><i class="fa fa-spinner fa-pulse fa-lg"></i></h1><br>
-                        <h4>keep calm and data is loading ...</h4>
+                        <h4><h4>keep calm and data is loading ...</h4></h4>
                     </div>
                 </div>
 
+                <!-- main list -->
+                <%
+                var index = "A";
+                var first = false;
+                %>
                 <div id="main_list" class="row">
-                    <div class="col-md-12">
-                        <h4>Main Journals</h4>
-                        <hr>
-                        <% article.forEach(function(each) { %>
-                        <p id="<%=each.Abbr%>"><a href='#'><%=each.Publication%> (<%=each.Abbr%>)</a></p>
-                        <% }); %>
-                        <br/><br/>
-
-                        <h4>Main Conferences</h4>
-                        <hr>
-                        <% inproceeding.forEach(function(each) { %>
-                        <p id="<%=each.Abbr%>"><a href='#'><%=each.Publication%> (<%=each.Abbr%>)</a></p>
-                        <% }); %>
-                        <br/><br/>
-
-                        <h4>Others</h4>
-                        <hr>
-                        <p id="phd"><a href="#">Ph.D. Dissertation</a></p>
-                        <p id="book"><a href="#">Book or Chapter</a></p>
-                        <p id="tech"><a href="#">Technical Report</a></p>
-                        <br/><br/>
+                    <p>
+                        <strong>Now we only present the authors who have been listed
+                            as the first author in this page. The data is continuously updating. </strong>
+                    </p>
+                    <div class='col-md-4'><h2><span class='label label-success index-label'>A</span></h2>
+                    <%
+                    author.forEach(function(each) {
+                        var name = each.author ;
+                        while ( name.charAt(0) != index ) {
+                            index = name.charAt(0) ;
+                            if (first) { %>
+                                </div>
+                            <% } %>
+                            <div class='col-md-4'><h2><span class='label label-success indexlabel'><%=index%></span></h2>
+                        <% } %>
+                        <dd id="<%=name%>"><a href='#'><%=name%></a></dd>
+                        <%
+                        first = true;
+                    }); %>
                     </div>
                 </div>
-                <!-- main_list -->
 
-                <!-- result list -->
+                <!-- paper list -->
                 <div id="result_list" style="display:none" class="row">
                     <div class="col-md-12">
                         <table id='rstable' class='table listtable'>
+                            <!--<tr><th>author</th><th>title</th><th>pub</th><th>year</th></tr> -->
                         </table>
                     </div>
                 </div>
-                <!-- result -->
 
                 <!-- pagination -->
                 <div id="search_page" style="display:none;text-align:center">

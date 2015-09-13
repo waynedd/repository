@@ -162,20 +162,23 @@ function showpagecount() {
 	}
 }
 
-
 /*
  *	dealing with authors
  */
 function prepareauthor(author) {
-	var ja = eval( "("+author+")" );
+	var ja = eval( author );
 
-	$("#author_aff").html("<p>" + ja.full_affiliation + "</p>");
+    var full = ja[0].affiliation + ", " + ja[0].country ;
+    var email = ja[0].email == null ? "" : ja[0].email ;
+    var homepage = ja[0].homepage == null ? "" : ja[0].homepage ;
+
+	$("#author_aff").html("<p>" + full + "</p>");
 	var str = "";
-	if( ja.email != "" ) {
-		str += "<i class='fa fa-envelope-o fa-fw'></i> " + ja.email ;
+	if( email != "" ) {
+		str += "<i class='fa fa-envelope-o fa-fw'></i> " + email ;
 	}
-	if( ja.homepage != "" ) {
-		str += "&nbsp; | &nbsp;<a href='" + ja.homepage + "' target = '_blank'>homepage</a>";
+	if( homepage != "" ) {
+		str += "&nbsp; | &nbsp;<a href='" + homepage + "' target = '_blank'>homepage</a>";
 	}
 	$("#author_contact").html("<p class='pull-right'>" + str + "</p>");
 }

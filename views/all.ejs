@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -6,31 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="combinatorial testing repository is a web based application to collect works that address the topic of combinatorial testing.">
     <meta name="keywords" content="repository, combinatorial testing, software testing, publication, research, paper">
-    <meta name="author" content="Huayao">
+    <meta name="author" content="huayao">
 
-    <title>Search</title>
-    <link rel="shortcut icon" href=".mage/favicon.ico" type="image/x-icon">
+    <title>All List</title>
+    <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon">
     <link rel="icon" href="image/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/repository.css">
 
-
     <script src="js/jquery.min.js"></script>
     <script src="js/comb.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            var para = "content=<%=content%>";
-            search_now = "<%=content%>";
-            search_type = "index";
             $("#wait").show();
-            $("#sh1").hide();
-            $("#sh2").hide();
             $.ajax({
-                url: "action/search",
+                url: "action/all",
                 type: "post",
                 dataType: "json",
-                data: para,
                 success: showsearh
             });
         });
@@ -52,43 +45,51 @@
             <!-- list part -->
             <div class="col-md-2">
                 <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
-                    <li><a href="#"><i class="fa fa-bars"></i>&nbsp;&nbsp;Statistic</a></li>
-                    <li><a href="#"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
+                    <li><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
+                    <li><a href="statistic"><i class="fa fa-bars"></i>&nbsp;&nbsp;Statistic</a></li>
+                    <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
                 </ul>
                 <br>
 
                 <div class="panel panel-success">
                     <div class="panel-heading"><h4>Paper List</h4></div>
                     <div class="list-group">
-                        <a href="./all.jsp" class="list-group-item">All</a>
-                        <a href="./author.jsp" class="list-group-item">Author</a>
-                        <a href="./field.jsp" class="list-group-item">Research Field</a>
-                        <a href="publication.ejs" class="list-group-item">Publication Venue</a>
+                        <a href="all" class="active list-group-item">All</a>
+                        <a href="author" class="list-group-item">Author</a>
+                        <a href="field" class="list-group-item">Research Field</a>
+                        <a href="publication" class="list-group-item">Publication Venue</a>
                     </div>
                 </div>
             </div>
 
-            <!-- data part -->
+            <!-- show -->
             <div class="col-md-10">
                 <!-- bread crumb -->
                 <!-- only display sta -->
-                <div id="pa" style="display:none" class="row-fluid">
-                    <div id="sta" class="col-md-12"></div>
+                <div id="pa" style="display:none" class="row">
+                    <div class="row">
+                        <div id="sta" class="col-md-12">
+                        </div>
+                        <!--<div class="col-md-6">
+                        button id="downbtn" class="btn btn-xs btn-info pull-right">Cite Export</button>
+                        </div>-->
+                    </div>
                 </div>
 
                 <!-- waiting -->
                 <div id="wait" style="display:none" class="row">
                     <div class="col-md-12 text-center">
                         <h1><i class="fa fa-spinner fa-pulse fa-lg"></i></h1><br>
-                        <h4><h4>keep calm and data is loading ...</h4></h4>
+                        <h4>keep calm and data is loading ...</h4>
                     </div>
                 </div>
 
-                <!-- table -->
+                <!-- all list -->
                 <div id="result_list" style="display:none" class="row">
                     <div class="col-md-12">
-                        <table id='rstable' class='table listtable'></table>
+                        <table id='rstable' class='table listtable'>
+                            <!--<tr><th>author</th><th>title</th><th>pub</th><th>year</th></tr>-->
+                        </table>
                     </div>
                 </div>
 
@@ -100,43 +101,19 @@
                     </ul>
                 </div>
 
-                <!-- none -->
-                <div id="search_none" style="display:none;padding-left:60px" class="row">
-                    <div class="alert alert-warning">
-                        <h4 class="alert-heading">No relevant papers are found in our database</h4>
-                        <p>please change your key words, or click <em>All</em> for the whole paper list<p>
-                    </div>
-                </div>
-
             </div>
             <!-- span10 -->
         </div>
+
     </div>
     <!-- /container -->
 
+    <div id="push"></div>
 </div>
 <!-- /wrap -->
 
 <!-- footer -->
 <%- include template_bottom.ejs %>
-
-<!-- modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Attention</h4>
-            </div>
-            <div class="modal-body">
-                <p>The input text of search form cannot be empty</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn btn-danger" data-dismiss="modal">OK</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="./js/bootstrap.min.js"></script>
 </body>
