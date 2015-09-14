@@ -126,7 +126,6 @@ router.get('/statistic', function(req, res) {
     });
 });
 
-
 /* GET rank list (rank button) */
 router.get('/rank', function(req, res) {
     Info.getRank( function(err, results) {
