@@ -10,16 +10,18 @@
     <meta name="author" content="Huayao">
 
     <title>Combinatorial Testing Repository</title>
-    <link rel="shortcut icon" href="image/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="image/favicon.ico" type="image/x-icon">
 
     <link rel="stylesheet" href="http://gist.nju.edu.cn/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/button.css">
     <link rel="stylesheet" href="css/repository.css">
+    <style type="text/css">
+        html {
+            overflow-y: auto;
+        }
+    </style>
 
     <script src="http://gist.nju.edu.cn/js/jquery.min.js"></script>
-    <script src="http://gist.nju.edu.cn/js/bootstrap.min.js"></script>
     <script>
         $(document).ready(function () {
             $("#showLess").hide();
@@ -32,6 +34,14 @@
                 $('#more').fadeOut(600);
                 $(this).hide();
                 $("#showMore").show();
+            });
+            $('#search').click(function () {
+                var cc = $('#content').val().trim();
+                if( cc.length == 0 ) {
+                    $('#empty-text').modal('show');
+                    return false;
+                }
+                return true;
             });
         });
     </script>
@@ -93,38 +103,6 @@
         </div>
     </header>
 
-
-    <!-- main container
-    <div id="feature" class="container">
-        <div class="row my-center">
-            <div class="col-sm-6 col-md-3">
-                <h3><img src="image/index1.ico"/></h3>
-                <h3>Publication</h3>
-                <p>all research papers that are related to combinatorial testing are collected</p>
-            </div>
-
-            <div class="col-sm-6 col-md-3">
-                <h3><img src="image/index2.ico"/></h3>
-                <h3>Statistic</h3>
-                <p>different charts are organized to show the development of combinatorial testing</p>
-            </div>
-
-            <div class="col-sm-6 col-md-3">
-                <h3><img src="image/index3.ico"/></h3>
-                <h3>Paper List</h3>
-                <p>lists that are indexed by authors, research fields and
-                    publication venues are provided</p>
-            </div>
-
-            <div class="col-sm-6 col-md-3">
-                <h3><img src="image/index4.ico"/></h3>
-                <h3>BibTex Citation</h3>
-                <p>bibTex citations are available for all papers</p>
-            </div>
-        </div>
-    </div>
-    -->
-
     <!-- contact -->
     <div id="contact" class="container contact">
         <div class="text-center">
@@ -160,5 +138,22 @@
         </div>
     </div>
 
+    <!-- modal -->
+    <div class="modal fade" id="empty-text">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title text-warning"><strong>Warning!</strong>
+                </div>
+                <div class="modal-body">
+                    <p>Better check your input, it's not looking too good.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
+<script src="http://gist.nju.edu.cn/js/bootstrap.min.js"></script>

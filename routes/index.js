@@ -8,6 +8,7 @@ router.get('/', function(req, res) {
     Paper.getWholeNum(function (err, result) {
         if( err ) {
             console.log('SYSTEM ERROR AT START');
+            res.render('error', {message: "start error"});
         }
         else {
             res.render('index', { num: result });
@@ -18,11 +19,11 @@ router.get('/', function(req, res) {
 /* GET search list (search button) */
 router.get('/search', function(req, res) {
     var c = req.query.content.trim() ;
-    if( c != "" ) {
+    if(c.length != 0 ) {
         res.render('search', {content: c});
     }
     else {
-        res.send("bad request");
+        res.render('error', {main: "Please check your behaviour."});
     }
 });
 
@@ -36,6 +37,7 @@ router.get('/author', function(req, res) {
     Info.getAuthor( function(err, results) {
         if( err ) {
             console.log('SYSTEM ERROR AT AUTHOR');
+            res.render('error', {message: "author error"});
         }
         else {
             console.log(results);
@@ -54,6 +56,7 @@ router.get('/publication', function(req, res) {
     Info.getVenue( function(err, results1, results2) {
         if( err ) {
             console.log('SYSTEM ERROR AT PUBLICATION');
+            res.render('error', {message: "publication error"});
         }
         else {
             res.render('publication', {article: results1, inproceeding: results2});
@@ -66,6 +69,7 @@ router.get('/statistic', function(req, res) {
     Info.getStatistic( function(err, nums, field, top) {
         if( err ) {
             console.log('SYSTEM ERROR AT STATISTIC');
+            res.render('error', {message: "statistic error"});
         }
         else {
             console.log(nums);
@@ -131,6 +135,7 @@ router.get('/rank', function(req, res) {
     Info.getRank( function(err, results) {
         if( err ) {
             console.log('SYSTEM ERROR AT RANK');
+            res.render('error', {message: "rank error"});
         }
         else {
             res.render('rank', {ranking: results});

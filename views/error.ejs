@@ -1,3 +1,9 @@
-<h1><%= message %></h1>
-<h2><%= error.status %></h2>
-<pre><%= error.stack %></pre>
+<h1>Opps.</h1>
+<% if(main) { %>
+<h2><%= main %></h2>
+<% } else { %>
+<h2>The System is unavailable temporarily, please try again later.</h2>
+<hr>
+<p><%= message %></p>
+<% } %>
+

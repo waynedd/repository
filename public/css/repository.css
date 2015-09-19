@@ -2,7 +2,7 @@
  * repository css file
  */
 html {
-    overflow-y:scroll;
+    overflow-y: scroll;
     width: 100%;
     height: 100%;
 }
@@ -27,18 +27,11 @@ hr.small {
     max-width: 600px;
     border-top: 1px solid #dddddd;
 }
-
 .my-center {
     padding-top: 40px;
     padding-bottom: 30px;
 }
-/*
-.my-center h3 {
-    text-align: center;
-}
-.my-center p {
-    font-size: 15px;
-}*/
+
 /* repository general */
 .navbar-inverse {
     background-color: #2a3440;
@@ -77,6 +70,7 @@ a.none_dec:link {
     font-size: 23px;
     padding: 5px 15px 5px;
 }
+
 /* banner */
 .banner {
     position: relative; overflow: auto;
@@ -94,6 +88,7 @@ a.none_dec:link {
 #author_contact {
     color: #777777;
 }
+
 /* new header */
 header {
     display: table;
@@ -269,23 +264,5 @@ hr.small {
         padding-top: 10px;
     }
 }
-
-/*
-.nav-poly {
-    padding-top: 20px;
-    padding-right: 20px;
-}
-.nav-poly > li {
-    padding-left: 10px;
-}
-.nav-poly > li > a {
-    text-decoration: none;
-    font-weight: bold;
-    color: #ffffff;
-}
-.nav-poly > li > a:hover {
-    color: #fed136;
-}
-*/
 
 
