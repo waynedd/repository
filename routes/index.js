@@ -72,9 +72,9 @@ router.get('/statistic', function(req, res) {
             res.render('error', {message: "statistic error"});
         }
         else {
-            console.log(nums);
-            console.log(field);
-            console.log(top);
+            //console.log(nums);
+            //console.log(field);
+            //console.log(top);
 
             // prepare yearIndex, numA, numC for chart-1
             var yearIndex = [] ;
