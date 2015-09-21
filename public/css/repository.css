@@ -103,7 +103,7 @@ header {
 }
 header .floater {
     float: left;
-    height: 30%;
+    height: 27%;
 }
 header .intro-text {
     text-align: center;
@@ -161,9 +161,7 @@ pre {
     border: none;
     border-radius: 10px;
 }
-.intro-list-group {
-    padding-top: 0;
-}
+
 hr.small {
     max-width: 300px;
 }
@@ -202,7 +200,7 @@ hr.small {
         font-size: 20px;
         height: 50px;
         line-height: 50px;
-        padding: 0 50px;
+        padding: 0 40px;
     }
 }
 
@@ -259,9 +257,6 @@ hr.small {
     pre {
         font-size: 13pt;
         line-height: 1.5;
-    }
-    .intro-list-group {
-        padding-top: 10px;
     }
 }
 
