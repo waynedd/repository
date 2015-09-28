@@ -8,7 +8,7 @@ router.get('/', function(req, res) {
     Paper.getWholeNum(function (err, result) {
         if( err ) {
             console.log('SYSTEM ERROR AT START');
-            res.render('error', {message: "start error"});
+            res.render('error', {message: "get start page error"});
         }
         else {
             res.render('index', { num: result });
@@ -23,24 +23,23 @@ router.get('/search', function(req, res) {
         res.render('search', {content: c});
     }
     else {
-        res.render('error', {main: "Please check your behaviour."});
+        res.render('error', {main: "please check your behaviour"});
     }
 });
 
 /* GET all list (all button) */
 router.get('/all', function(req, res) {
     res.render('all');
-})
+});
 
 /* GET author list (author button) */
 router.get('/author', function(req, res) {
     Info.getAuthor( function(err, results) {
         if( err ) {
             console.log('SYSTEM ERROR AT AUTHOR');
-            res.render('error', {message: "author error"});
+            res.render('error', {message: "get author page error"});
         }
         else {
-            console.log(results);
             res.render('author', {author: results});
         }
     });
@@ -56,7 +55,7 @@ router.get('/publication', function(req, res) {
     Info.getVenue( function(err, results1, results2) {
         if( err ) {
             console.log('SYSTEM ERROR AT PUBLICATION');
-            res.render('error', {message: "publication error"});
+            res.render('error', {message: "get publication page error"});
         }
         else {
             res.render('publication', {article: results1, inproceeding: results2});
@@ -69,7 +68,7 @@ router.get('/statistic', function(req, res) {
     Info.getStatistic( function(err, nums, field, top) {
         if( err ) {
             console.log('SYSTEM ERROR AT STATISTIC');
-            res.render('error', {message: "statistic error"});
+            res.render('error', {message: "get statistic page error"});
         }
         else {
             //console.log(nums);
@@ -135,7 +134,7 @@ router.get('/rank', function(req, res) {
     Info.getRank( function(err, results) {
         if( err ) {
             console.log('SYSTEM ERROR AT RANK');
-            res.render('error', {message: "rank error"});
+            res.render('error', {message: "get rank page error"});
         }
         else {
             res.render('rank', {ranking: results});

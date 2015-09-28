@@ -24,6 +24,7 @@
     <script src="http://gist.nju.edu.cn/js/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
+            /*
             $("#showLess").hide();
             $("#showMore").click(function () {
                 $('#more').fadeIn(600);
@@ -35,6 +36,7 @@
                 $(this).hide();
                 $("#showMore").show();
             });
+            */
             $('#search').click(function () {
                 var cc = $('#content').val().trim();
                 if( cc.length == 0 ) {
@@ -55,7 +57,7 @@
             <div class="intro-heading">Combinatorial Testing Repository</div>
             <div class="intro-lead-in">
                 all <span class="label label-success main-label"><%=num%></span>
-                publications are included (Sep. 2015)
+                publications (Sep. 2015)
             </div>
 
             <!-- search form -->
@@ -67,9 +69,7 @@
                                 <input class="form-control input-lg" id="content" name="content" size="16" type="text">
                             </div>
                             <div class="form-group">
-                                <button id="search" type="submit" class="button button-caution button-large">Search</button>
-                                <button id="showMore" type="button" class="button button-square button-large"><i class="fa fa-chevron-down"></i></button>
-                                <button id="showLess" type="button" class="button button-square button-large"><i class="fa fa-chevron-up"></i></button>
+                                <button id="search" type="submit" class="button button-caution button-large my-button-large">Search</button>
                             </div>
                         </form>
                     </div>
@@ -77,27 +77,64 @@
             </div>
 
             <!-- more buttons -->
-            <div id="more" style="display: none;" class="row">
+            <div id="more" class="row">
                 <hr class="small">
-                <div class="visible-lg visible-md visible-sm">
-                    <a href="statistic" class="button button-plain button-border button-rounded">Statistic</a>
-                    <a href="rank" class="button button-plain button-border button-rounded">Rank</a>
-                    <a href="all" class="button button-plain button-border button-rounded">All</a>
-                    <a href="author" class="button button-plain button-border button-rounded">Author</a>
-                    <a href="field" class="button button-plain button-border button-rounded">Field</a>
-                    <a href="publication" class="button button-plain button-border button-rounded">Venue</a>
-                </div>
-                <div class="visible-xs">
-                    <a href="statistic" class="button button-plain button-border button-rounded button-small">Statistic</a>
-                    <a href="rank" class="button button-plain button-border button-rounded button-small">Rank</a>
-                    <br><br>
-                    <a href="all" class="button button-plain button-border button-rounded button-small">All</a>
-                    <a href="author" class="button button-plain button-border button-rounded button-small">Author</a>
-                    <a href="field" class="button button-plain button-border button-rounded button-small">Field</a>
-                    <a href="publication" class="button button-plain button-border button-rounded button-small">Venue</a>
-                </div>
-            </div>
+                <ul class="list-inline visible-sm visible-md visible-lg">
+                    <li><a data-tooltip="Statistic Charts" id="showMore" type="button" href="statistic"
+                           class="tooltip-bottom button button-large button-plain button-border button-circle">
+                            <i class="fa fa-area-chart"></i></a>
+                    </li>
+                    <li><a data-tooltip="Scholar Rank (beta)" id="showMore" type="button" href="rank"
+                                class="tooltip-bottom button button-large button-plain button-border button-circle">
+                            <i class="fa fa-star"></i></a>
+                    </li>
 
+                    <li><a data-tooltip="All Paper List" id="showMore" type="button" href="all"
+                           class="tooltip-bottom button button-large button-plain button-border button-circle">
+                            <i class="fa fa-bars"></i></a>
+                    </li>
+                    <li><a data-tooltip="Authors" id="showMore" type="button" href="author"
+                           class="tooltip-bottom button button-large button-plain button-border button-circle">
+                            <i class="fa fa-user"></i></a>
+                    </li>
+                    <li><a data-tooltip="Research Fields" id="showMore" type="button" href="field"
+                           class="tooltip-bottom button button-large button-plain button-border button-circle">
+                            <i class="fa fa-bookmark"></i></a>
+                    </li>
+                    <li><a data-tooltip="Publication Venues" id="showMore" type="button" href="publication"
+                           class="tooltip-bottom button button-large button-plain button-border button-circle">
+                            <i class="fa fa-book"></i></a>
+                    </li>
+                </ul>
+
+                <ul class="list-inline visible-xs">
+                    <li><a data-tooltip="Statistic Charts" id="showMore" type="button" href="statistic"
+                           class="tooltip-bottom button button-plain button-border button-circle">
+                            <i class="fa fa-area-chart"></i></a>
+                    </li>
+                    <li><a data-tooltip="Scholar Rank (beta)" id="showMore" type="button" href="rank"
+                           class="tooltip-bottom button button-plain button-border button-circle">
+                            <i class="fa fa-star"></i></a>
+                    </li>
+
+                    <li><a data-tooltip="All Paper List" id="showMore" type="button" href="all"
+                           class="tooltip-bottom button button-plain button-border button-circle">
+                            <i class="fa fa-bars"></i></a>
+                    </li>
+                    <li><a data-tooltip="Authors" id="showMore" type="button" href="author"
+                           class="tooltip-bottom button button-plain button-border button-circle">
+                            <i class="fa fa-user"></i></a>
+                    </li>
+                    <li><a data-tooltip="Research Fields" id="showMore" type="button" href="field"
+                           class="tooltip-bottom button button-plain button-border button-circle">
+                            <i class="fa fa-bookmark"></i></a>
+                    </li>
+                    <li><a data-tooltip="Publication Venues" id="showMore" type="button" href="publication"
+                           class="tooltip-bottom button button-plain button-border button-circle">
+                            <i class="fa fa-book"></i></a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </header>
 
@@ -124,8 +161,11 @@
     note = {gist.nju.edu.cn/ct_repository},
 }</pre>
             <p>Thanks.</p>
+
         </div>
     </div>
+
+
 
     <!-- footer -->
     <div id="footer">
@@ -143,7 +183,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title text-warning"><strong>Warning!</strong>
+                    <h4 class="modal-title text-warning"><strong>Warning!</strong></h4>
                 </div>
                 <div class="modal-body">
                     <p>Better check your input, it's not looking too good.</p>

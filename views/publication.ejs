@@ -52,7 +52,7 @@
             <div class="col-md-2">
                 <ul class="nav nav-pills nav-stacked">
                     <li><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
-                    <li><a href="statistic"><i class="fa fa-bars"></i>&nbsp;&nbsp;Statistic</a></li>
+                    <li><a href="statistic"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Statistic</a></li>
                     <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
                 </ul>
                 <br>
@@ -96,14 +96,14 @@
 
                 <div id="main_list" class="row">
                     <div class="col-md-12">
-                        <h4>Main Journals</h4>
+                        <h4>Refereed Journals</h4>
                         <hr>
                         <% article.forEach(function(each) { %>
                         <p id="<%=each.Abbr%>"><a href='#'><%=each.Publication%> (<%=each.Abbr%>)</a></p>
                         <% }); %>
                         <br/><br/>
 
-                        <h4>Main Conferences</h4>
+                        <h4>Refereed Conferences</h4>
                         <hr>
                         <% inproceeding.forEach(function(each) { %>
                         <p id="<%=each.Abbr%>"><a href='#'><%=each.Publication%> (<%=each.Abbr%>)</a></p>
@@ -112,8 +112,8 @@
 
                         <h4>Others</h4>
                         <hr>
-                        <p id="phd"><a href="#">Ph.D. Dissertation</a></p>
-                        <p id="book"><a href="#">Book or Chapter</a></p>
+                        <p id="phd"><a href="#">Ph.D. / Master Dissertation</a></p>
+                        <p id="book"><a href="#">Book / Chapter</a></p>
                         <p id="tech"><a href="#">Technical Report</a></p>
                         <br/><br/>
                     </div>
