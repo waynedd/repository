@@ -291,7 +291,7 @@ function getFullPublication( jn ) {
 	var pages = jn.pages ;
 	var year = jn.year ;
 
-	if( abbr != "" && abbr != "phd" && abbr != "book" && abbr != "tech" )
+	if( abbr != null && abbr != "Phd" && abbr != "Book" && abbr != "Tech" && abbr != "Computer" && abbr != "Software")
 		publication += " (" +  abbr + ")" ;
 
 	if( type == "article" ) {
@@ -307,7 +307,7 @@ function getFullPublication( jn ) {
 		return publication + ", " + no + ", " + year ;
 	}
 	else {
-		return publication ;
+		return publication + ", " + year ;
 	}
 }
 
