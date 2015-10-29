@@ -64,6 +64,9 @@ a.none_dec:link {
 .img-thumbnail {
     border: none ;
 }
+.charts {
+    padding-bottom: 10px;
+}
 
 /* author list page */
 .index-label {

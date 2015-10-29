@@ -55,7 +55,7 @@
 
         <div class="row">
             <!-- list part -->
-            <div class="col-md-2">
+            <div class="col-md-2 col-sm-3">
                 <ul class="nav nav-pills nav-stacked">
                     <li><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
                     <li><a href="statistic"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Statistic</a></li>
@@ -75,7 +75,7 @@
             </div>
 
             <!-- show -->
-            <div class="col-md-10 list_col">
+            <div class="col-md-10 col-sm-9 list_col">
                 <!-- bread crumb -->
                 <div id="pa" style="display:none" class="row">
                     <div class="col-md-12">
@@ -116,7 +116,7 @@
                         <strong>Now we only present the authors who have been listed
                             as the first author in this page. The data is continuously updating. </strong>
                     </p>
-                    <div class='col-md-4'><h2><span class='label label-success index-label'>A</span></h2>
+                    <div class='col-md-4 col-sm-6'><h2><span class='label label-success index-label'>A</span></h2>
                     <%
                     author.forEach(function(each) {
                         var name = each.author ;
@@ -125,12 +125,13 @@
                             if (first) { %>
                                 </div>
                             <% } %>
-                            <div class='col-md-4'><h2><span class='label label-success indexlabel'><%=index%></span></h2>
+                            <div class='col-md-4 col-sm-6'><h2><span class='label label-success indexlabel'><%=index%></span></h2>
                         <% } %>
                         <dd id="<%=name%>"><a href='#'><%=name%></a></dd>
                         <%
                         first = true;
                     }); %>
+                    <br>
                     </div>
                 </div>
 
