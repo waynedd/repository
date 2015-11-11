@@ -81,7 +81,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
 
 /*
  *  get paper list according to
- *  group = author | field | publication
+ *  group = author | field | subfield | publication
  *  content
  */
 Paper.searchByContent = function searchByContent(group, content, callback) {
@@ -92,6 +92,9 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
         }
         if( group == "field" ) {
             sql = "select * from paper.list where field = ?";
+        }
+        if( group == "subfield" ) {
+            sql = "select * from paper.list where subfield = ?"
         }
         if( group == "publication" ) {
             if( content == "phd" ) {

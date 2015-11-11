@@ -24,12 +24,13 @@ router.post('/all', function(req, res) {
 
 /*
  *  POST query list
- *  group = author | field | publication
+ *  group = author | field | subfield | publication
  *  content
  */
 router.post('/query', function(req, res) {
     var group = req.body.group ;
     var content = req.body.content ;
+
     Paper.searchByContent(group, content, function (err, results) {
         res.send(JSON.stringify(results));
     });

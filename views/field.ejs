@@ -17,7 +17,7 @@
     <script src="js/comb.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            // search field id
+            // search field by id
             $("h3[id]").click(function () {
                 var para = "content=" + $(this).attr("id") + "&group=field";
                 search_now = $(this).attr("id");
@@ -32,6 +32,23 @@
                     success: showsearh
                 });
             });
+
+            $("h4[id]").click(function () {
+                var para = "content=" + $(this).attr("id") + "&group=subfield";
+                search_now = $(this).attr("id");
+                search_type = "field";
+                $("#wait").show();
+                $("#main_list").hide();
+                $.ajax({
+                    url: "action/query",
+                    type: "post",
+                    dataType: "json",
+                    data: para,
+                    success: showsearh
+                });
+            });
+
+
         });
     </script>
 </head>
@@ -96,13 +113,13 @@
 
                 <div id="main_list">
                     <div class="row">
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <h3 id="model"><a href='#' class="none_dec">Model</a></h3>
                             <p> Modeling focuses on identifying parameters, values, interactions and relations
                                 of software under test. It is the fundamental activity of combinatorial testing.</p>
                             <br>
                         </div>
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <h3 id="generation"><a href='#' class="none_dec">Generation</a></h3>
                             <p> Generation is the most popular field in combinatorial testing.
                                 There are three sub topics:
@@ -111,30 +128,43 @@
                                 and 3) the constraint solving techniques. </p>
                             <br>
                         </div>
-                        <div class="col-md-4 col-sm-6">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
                             <h3 id="optimization"><a href='#' class="none_dec">Optimization</a></h3>
+                            <ul class="list-inline">
+                                <li><h4>>></h4></li>
+                                <li><h4 id="prioritization"><a href='#' class="none_dec">Prioritization</a></h4></li>
+                                <li><h4>|</h4></li>
+                                <li><h4 id="minimization"><a href='#' class="none_dec">Minimization</a></h4></li>
+                                <li><h4>|</h4></li>
+                                <li><h4 id="selection"><a href='#' class="none_dec">Selection</a></h4></li>
+                            </ul>
                             <p> Optimization aims to further improve test suite by
                                 prioritization, minimization, and selection techniques.
                             </p>
                             <br>
                         </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <h3 id="diagnosis"><a href='#' class="none_dec">Fault diagnosis</a></h3>
                             <p> When a failure is exposed, the diagnosis process is desired
                                 to locate and then remove the fault.</p>
                             <br>
                         </div>
-                        <div class="col-md-4 col-sm-6">
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
                             <h3 id="evaluation"><a href='#' class="none_dec">Evaluation</a></h3>
                             <p> Evaluation studies on measuring the effectiveness of combinatorial testing,
                                 and the degree to which combinatorial testing contributes
                                 to the improvement of software quality. </p>
                             <br>
                         </div>
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <h3 id="application"><a href='#' class="none_dec">Application</a></h3>
                             <p> Application contains practical testing procedures on different types of software systems.
                                 The introductions and demos of CT tools are also included.
@@ -143,10 +173,15 @@
                         </div>
                     </div>
 
-
                     <div class="row">
-                        <div class="col-md-4 col-sm-6">
+                        <div class="col-md-6 col-sm-12">
                             <h3 id="other"><a href='#' class="none_dec">Other</a></h3>
+                            <ul class="list-inline">
+                                <li><h4>>></h4></li>
+                                <li><h4 id="survey"><a href='#' class="none_dec">Survey</a></h4></li>
+                                <li><h4>|</h4></li>
+                                <li><h4 id="oracle"><a href='#' class="none_dec">Oracle</a></h4></li>
+                            </ul>
                             <p>The survey of combinatorial testing, and the oracle problem.</p>
                             <br>
                         </div>

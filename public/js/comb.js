@@ -232,7 +232,7 @@ function showpage(json, num) {
     var doi_text = "" ;
 
 	for(var i = start ; i < start + pagesize && i < json.length ; i++ ) {
-        if( json[i].doi != "" ) {
+        if( json[i].doi != null ) {
 			doi_text = "<a class='red_link' href='http://dx.doi.org/" + json[i].doi + "' target='_blank'>DOI</a>" ;
 		}
         else {
@@ -281,7 +281,9 @@ function showpage(json, num) {
     $("#result_list").fadeIn("slow") ;
 }
 
+//
 // get full publication text
+//
 function getFullPublication( jn ) {
 	var type = jn.type ;
 	var publication = jn.publication ;
@@ -291,11 +293,20 @@ function getFullPublication( jn ) {
 	var pages = jn.pages ;
 	var year = jn.year ;
 
-	if( abbr != null && abbr != "Phd" && abbr != "Book" && abbr != "Tech" && abbr != "Computer" && abbr != "Software")
+    // add the abbreviation of journal or conference
+	if (abbr != null && abbr != "Phd" && abbr != "Book" && abbr != "Tech" && abbr != "Computer" && abbr != "Software")
 		publication += " (" +  abbr + ")" ;
 
-	if( type == "article" ) {
-		return publication + ", " + vol + "(" + no + "): " + pages + ", " + year ;
+    // different cases
+    if (type == "article") {
+        var suffix = ", " ;
+        if ( vol != null ) {
+            if( no != null )
+                suffix += vol + " (" + no + "), "
+            else
+                suffix += "vol. " + vol + ", ";
+        }
+        return publication + suffix + "pp." + pages + ", " + year ;
 	}
 	else if( type == "inproceedings" ) {
 		return publication + ", pp." + pages + ", " + year ;
@@ -304,14 +315,16 @@ function getFullPublication( jn ) {
 		return publication + ", " + year ;
 	}
 	else if( type == "techreport" ) {
-		return publication + ", " + no + ", " + year ;
-	}
-	else {
-		return publication + ", " + year ;
+        if( no != null )
+		    return publication + ", " + no + ", " + year ;
+        else
+            return publication + ", " + year ;
 	}
 }
 
-// get bib entry for html
+//
+// get bib entry as html code
+//
 function getBibEntry( jn ) {
 	var re = "" ;
 	/*
