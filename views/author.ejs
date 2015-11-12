@@ -69,7 +69,7 @@
                         <a href="all" class="list-group-item">All</a>
                         <a href="author" class="active list-group-item">Author</a>
                         <a href="field" class="list-group-item">Research Field</a>
-                        <a href="publication" class="list-group-item">Publication Venue</a>
+                        <a href="venue" class="list-group-item">Publication Venue</a>
                     </div>
                 </div>
             </div>
@@ -119,7 +119,7 @@
                     <div class='col-md-4 col-sm-6'><h2><span class='label label-success index-label'>A</span></h2>
                     <%
                     author.forEach(function(each) {
-                        var name = each.author ;
+                        var name = each.name ;
                         while ( name.charAt(0) != index ) {
                             index = name.charAt(0) ;
                             if (first) { %>

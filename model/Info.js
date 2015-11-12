@@ -44,7 +44,7 @@ Info.getStatistic = function getStatistic(callback) {
  */
 Info.getAuthor = function getAuthor(callback) {
     pool.getConnection(function (err, connection) {
-        var sql = "select author from paper.listauthor order by author";
+        var sql = "select name from paper.listauthor order by name";
         connection.query(sql, function(err, results) {
             if (err) {
                 console.log("[!!!!] [getAuthor] Error: " + err.message);
@@ -61,7 +61,7 @@ Info.getAuthor = function getAuthor(callback) {
  */
 Info.getAuthorInfo = function getAuthorInfo(input, callback) {
     pool.getConnection(function (err, connection) {
-        var sql = "select * from paper.listauthor where author = ?";
+        var sql = "select * from paper.listauthor where name = ?";
         connection.query(sql, [input], function(err, result) {
             if (err) {
                 console.log("[!!!!] [getAuthorInfo] Error: " + err.message);
@@ -74,7 +74,7 @@ Info.getAuthorInfo = function getAuthorInfo(input, callback) {
 };
 
 /*
- *  get the list of all publication venues
+ *  get the list of all booktitle venues
  *  results1 = article list
  *  results2 = inproceeding list
  */

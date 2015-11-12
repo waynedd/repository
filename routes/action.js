@@ -24,7 +24,7 @@ router.post('/all', function(req, res) {
 
 /*
  *  POST query list
- *  group = author | field | subfield | publication
+ *  group = author | field | subfield | booktitle
  *  content
  */
 router.post('/query', function(req, res) {

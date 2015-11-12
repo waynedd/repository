@@ -50,15 +50,15 @@ router.get('/field', function(req, res) {
     res.render('field');
 });
 
-/* GET publication venue list (venue button) */
-router.get('/publication', function(req, res) {
+/* GET venue list (venue button) */
+router.get('/venue', function(req, res) {
     Info.getVenue( function(err, results1, results2) {
         if( err ) {
             console.log('SYSTEM ERROR AT PUBLICATION');
-            res.render('error', {message: "get publication page error"});
+            res.render('error', {message: "get booktitle page error"});
         }
         else {
-            res.render('publication', {article: results1, inproceeding: results2});
+            res.render('venue', {article: results1, inproceeding: results2});
         }
     });
 });

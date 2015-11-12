@@ -25,7 +25,7 @@ var current ;        // current page
 
 $(document).ready(function() {
 	/*
-	 * clear result table for author, field and publication
+	 * clear result table for author, field and booktitle
 	 */
 	$("#pa_main").click(function() { 
 		$("#pa").hide();
@@ -185,10 +185,10 @@ function prepareauthor(author) {
 
 /*
  * make the result show
- * for all | index | author | field | publication
+ * for all | index | author | field | booktitle
  */
 var search_now = "" ;   // search content
-var search_type = "" ;  // all | index | author | field | publication
+var search_type = "" ;  // all | index | author | field | booktitle
 
 function showsearh(data) {
 
@@ -250,8 +250,8 @@ function showpage(json, num) {
             "<div class='row'>" +
                 "<div class='col-md-12'>" +
                     "<p class='pull-right' id='accordion'>" +
-                    "<a class='red_link' data-toggle='collapse' data-parent='#accordion' href='#b_collapse" + i + "'>BibTex</a>&nbsp;&nbsp;|&nbsp;&nbsp;" +
-                    doi_text + "</p>" +
+                    "<a class='red_link' data-toggle='collapse' data-parent='#accordion' href='#b_collapse"
+                    + i + "'>BibTex</a>&nbsp;&nbsp;|&nbsp;&nbsp;" + doi_text + "</p>" +
                 "</div>" +
             "</div>" +
             "<div class='row'>" +
@@ -282,20 +282,21 @@ function showpage(json, num) {
 }
 
 //
-// get full publication text
+// get full booktitle text
 //
 function getFullPublication( jn ) {
 	var type = jn.type ;
-	var publication = jn.publication ;
+	var booktitle = jn.booktitle ;
 	var abbr = jn.abbr ;
 	var vol = jn.vol ;
 	var no = jn.no ;
 	var pages = jn.pages ;
 	var year = jn.year ;
+    var publisher = jn.publisher ;
 
     // add the abbreviation of journal or conference
 	if (abbr != null && abbr != "Phd" && abbr != "Book" && abbr != "Tech" && abbr != "Computer" && abbr != "Software")
-		publication += " (" +  abbr + ")" ;
+        booktitle += " (" +  abbr + ")" ;
 
     // different cases
     if (type == "article") {
@@ -306,19 +307,25 @@ function getFullPublication( jn ) {
             else
                 suffix += "vol. " + vol + ", ";
         }
-        return publication + suffix + "pp." + pages + ", " + year ;
+        return booktitle + suffix + "pp." + pages + ", " + year ;
 	}
-	else if( type == "inproceedings" ) {
-		return publication + ", pp." + pages + ", " + year ;
+	else if( type == "inproceedings" || type == "incollection" ) {
+		return booktitle + ", pp." + pages + ", " + year ;
 	}
-	else if( type == "phdthesis" || type == "book" ) {
-		return publication + ", " + year ;
+	else if( type == "phdthesis" ) {
+		return booktitle + ", " + year ;
 	}
+    else if( type == "book" ) {
+        return publisher + ", " + year ;
+    }
+    else if( type == "inbook" ) {
+        return booktitle + ", " + publisher + ", " + year ;
+    }
 	else if( type == "techreport" ) {
         if( no != null )
-		    return publication + ", " + no + ", " + year ;
+		    return booktitle + ", " + no + ", " + year ;
         else
-            return publication + ", " + year ;
+            return booktitle + ", " + year ;
 	}
 }
 
@@ -327,11 +334,11 @@ function getFullPublication( jn ) {
 //
 function getBibEntry( jn ) {
 	var re = "" ;
-	/*
+    /*
 	@article{$bib,
 		author = {$author},
 		title = {$title},
-		journal = {$publication},
+		journal = {$booktitle},
 		volume = {$vol},
 		number = {$no},
 		pages = {$pages},
@@ -343,7 +350,7 @@ function getBibEntry( jn ) {
 		re += "@article{" + jn.bib + ",<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author = {" + jn.author + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;journal = {" + jn.publication + "},<br/>" +
+		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;journal = {" + jn.booktitle + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;volume = {" + jn.vol + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + jn.pages + "},<br/>" +
@@ -355,7 +362,7 @@ function getBibEntry( jn ) {
 	@inproceedings{$bib,
 		author = {$author},
 		title = {$title},
-		booktitle = {$publication},
+		booktitle = {$booktitle},
 		pages = {$pages},
 		year = {$year},
 		doi = {$doi}
@@ -365,17 +372,39 @@ function getBibEntry( jn ) {
 		re += "@inproceedings{" + jn.bib + ",<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author = {" + jn.author + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.publication + "},<br/>" +
+		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + jn.pages + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + jn.doi + "}<br/>" +
 		"}";
 	}
+    /*
+     @incollection{$bib,
+        author = {$author},
+        title = {$title},
+        booktitle = {$booktitle},
+        publisher = {$publisher},
+        pages = {$pages},
+        year = {$year},
+        doi = {$doi}
+     }
+     */
+    else if( jn.type == "incollection" ) {
+        re += "@inproceedings{" + jn.bib + ",<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author = {" + jn.author + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + jn.pages + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + jn.doi + "}<br/>" +
+        "}";
+    }
 	/*
-	@inproceedings{$bib,
+	@phdthesis{$bib,
 		author = {$author},
 		title = {$title},
-		school = {$publication},
+		school = {$booktitle},
 		year = {$year}
 	}
 	*/
@@ -383,7 +412,7 @@ function getBibEntry( jn ) {
 		re += "@phdthesis{" + jn.bib + ",<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author = {" + jn.author + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;school = {" + jn.publication + "},<br/>" +
+		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;school = {" + jn.booktitle + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
 		"}";
 	}
@@ -391,7 +420,7 @@ function getBibEntry( jn ) {
 	@techreport{$bib,
 		author = {$author},
 		title = {$title},
-		institution = {$publication},
+		institution = {$booktitle},
 		number = {$no},
 		year = {$year}
 	}
@@ -400,11 +429,45 @@ function getBibEntry( jn ) {
 		re += "@techreport{" + jn.bib + ",<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author = {" + jn.author + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;institution = {" + jn.publication + "},<br/>" +
+		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;institution = {" + jn.booktitle + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
 		"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
 		"}";
 	}
+    /*
+     @book{$bib,
+        author = {$author},
+        title = {$title},
+        publisher = {$publisher},
+        year = {$year}
+     }
+     */
+    else if( jn.type == "book" ) {
+        re += "@book{" + jn.bib + ",<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author = {" + jn.author + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
+        "}";
+    }
+    /*
+     @inbook{$bib,
+        author = {$author},
+        title = {$title},
+        chapter = {$booktitle}
+        publisher = {$publisher},
+        year = {$year}
+     }
+     */
+    else if( jn.type == "inbook" ) {
+        re += "@inbook{" + jn.bib + ",<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;author = {" + jn.author + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;chapter = {" + jn.booktitle + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
+        "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
+        "}";
+    }
 	else {
 		re = "no bib citation" ;
 	}

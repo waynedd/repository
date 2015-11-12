@@ -8,11 +8,12 @@ function Paper(paper) {
     this.year = paper.year;
     this.author = paper.author;
     this.title = paper.title;
-    this.publication = paper.publication;
+    this.booktitle = paper.booktitle;
     this.abbr = paper.abbr;
     this.vol = paper.vol;
     this.no = paper.no;
     this.pages = paper.pages;
+    this.publisher = paper.publisher;
     this.field = paper.field;
     this.doi = paper.doi;
 }
@@ -64,7 +65,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
     pool.getConnection(function (err, connection) {
         var sql = "SELECT * FROM paper.list WHERE (author like ? OR " +
                                                   "title like ? OR " +
-                                                  "publication like ? OR " +
+                                                  "booktitle like ? OR " +
                                                   "year like ?) " +
                                                   "order by year DESC, author ASC";
 
@@ -81,7 +82,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
 
 /*
  *  get paper list according to
- *  group = author | field | subfield | publication
+ *  group = author | field | subfield | booktitle
  *  content
  */
 Paper.searchByContent = function searchByContent(group, content, callback) {
@@ -96,7 +97,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
         if( group == "subfield" ) {
             sql = "select * from paper.list where subfield = ?"
         }
-        if( group == "publication" ) {
+        if( group == "booktitle" ) {
             if( content == "phd" ) {
                 sql = "select * from paper.list where type = 'phdthesis'" ;
             }
