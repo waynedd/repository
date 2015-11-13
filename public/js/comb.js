@@ -168,7 +168,10 @@ function showpagecount() {
 function prepareauthor(author) {
 	var ja = eval( author );
 
-    var full = ja[0].affiliation + ", " + ja[0].country ;
+    var s1 = ja[0].affiliation == null ? "" : ja[0].affiliation ;
+    var s2 = ja[0].country == null ? "" : ", " + ja[0].country ;
+    var full = s1 + s2 ;
+
     var email = ja[0].email == null ? "" : ja[0].email ;
     var homepage = ja[0].homepage == null ? "" : ja[0].homepage ;
 
