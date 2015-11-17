@@ -24,7 +24,7 @@ router.post('/all', function(req, res) {
 
 /*
  *  POST query list
- *  group = author | field | subfield | booktitle
+ *  group = author | affiliation | country | field | subfield | booktitle
  *  content
  */
 router.post('/query', function(req, res) {
@@ -45,5 +45,23 @@ router.post('/author_info', function(req, res) {
         res.send(JSON.stringify(result));
     });
 });
+
+
+/*
+ *  POST: request author list
+router.post('/list_author', function(req, res) {
+    console.log("here");
+    Info.getAuthor( function(err, results) {
+        if( err ) {
+            console.log('SYSTEM ERROR AT AUTHOR');
+            res.render('error', {message: "get author list error"});
+        }
+        else {
+            console.log('send results');
+            res.send(JSON.stringify(results));
+        }
+    });
+});
+*/
 
 module.exports = router;

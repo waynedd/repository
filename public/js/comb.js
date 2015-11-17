@@ -7,18 +7,18 @@
  * #pa : 头部导航条
  * 
  * .added : 表格加入项
- * .pagecadd : 分页数加入项
+ * .page_add : 分页数加入项
  * 
  * #main_list : 主要显示列表
- * #result_list : 结果列表
+ * #result_paper : 结果列表
  * #rstable : 显示结果的表格
  * 
- * #search_page : 分页列表
- * #search_page_pre, #search_page_net : 上一页，下一页
+ * #result_page : 分页列表
+ * #result_page_pre, #search_page_net : 上一页，下一页
  */
 var json ;
-var json_data ;
-var pagesize = 15 ;  // the size of each page
+var jsonData ;
+var pageSize = 15 ;  // the size of each page
 var page ;           // the number of pages
 var count = 5 ;      // page interval
 var current ;        // current page
@@ -27,51 +27,51 @@ $(document).ready(function() {
 	/*
 	 * clear result table for author, field and booktitle
 	 */
-	$("#pa_main").click(function() { 
-		$("#pa").hide();
-		$(".added").empty();
-		$(".pagecadd").empty();
-		$("#result_list").hide();
-		$("#search_page").hide();
-		$("#main_list").show();
-	});
+	$("#result_info_type").click(function () {
+        $("#result_info").hide();
+        $(".added").empty();
+        $(".page_add").empty();
+        $("#result_paper").hide();
+        $("#result_page").hide();
+        $("#main_list").show();
+    });
 	
 	$("#left_back").click(function() {
-		$("#pa").hide();
+		$("#result_info").hide();
 		$(".added").empty();
-		$(".pagecadd").empty();
-		$("#result_list").hide();
-		$("#search_page").hide();
+		$(".page_add").empty();
+		$("#result_paper").hide();
+		$("#result_page").hide();
 		$("#main_list").show();
 	});
 	
 	/*
-	 * previous and next page
+	 *  click previous and next page
 	 */
-	$("#search_page_pre").click(function() {
+	$("#result_page_pre").click(function() {
 		if( $(this).hasClass("disabled") ) {
 			event.preventDefault();
 		}
 		else {
 			current = parseInt(current) - 1 ;
-			showpagecount();
+			showPageCount();
 		}
 	});
 	
-	$("#search_page_nxt").click(function() {
+	$("#result_page_next").click(function() {
 		if( $(this).hasClass("disabled") ) {
 			event.preventDefault();
 		}
 		else {
 			current = parseInt(current) + 1 ;
-			showpagecount();
+			showPageCount();
 		}
 	});
 	
 	/*
-	 * page click
+	 *  click page
 	 */
-	$(document).on("click", ".pagecadd", function() {
+	$(document).on("click", ".page_add", function() {
 		//alert(current);
 		if( parseInt($(this).attr("id")) == current ) {
 			//alert('User clicked on "foo ' + $(this).attr("id") );
@@ -79,124 +79,86 @@ $(document).ready(function() {
 		}
 		else {
 			current = $(this).attr("id") ;
-			showpagecount();
+			showPageCount();
 		}
 	});
-	
-	/*
-	 * Cite Download
-	$("#downbtn").click(function() { 
-		//alert(json_data);
-		json_data = json_data.replace(/\&/g,"%26"); 
-		$.ajax({
-			url : "citeAction.action",
-			type : "post",
-			data: "jsda=" + json_data ,
-			success : function() {
-				//location.href = "CiteList.txt";
-				location.href = "downAction.action" ; 
-			}
-		}); 	
-	});*/
 });
 
 /*
- * current - 当前页码
- * count - 最大显示页码数
- * pagecadd - 分页显示Class属性
- * search_page_pre ， search_page_nxt - 上一页，下一页
+ *  current: current page number
+ *  count: the maximum page number to show
+ *  page_add: (class) the new items that have been added
+ *  result_page_pre
+ *  result_page_next
  */
-function showpagecount() {
-	if( parseInt(current) < count-1 || page <= count - 1 ) {
-		$(".pagecadd").empty();
+function showPageCount() {
+    // condition 1
+    if( parseInt(current) < count-1 || page <= count - 1 ) {
+        $(".page_add").empty();
 		if( parseInt(current) == 1 ) {
-			$("#search_page_pre").after("<li id='1' class='active pagecadd'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>");
-			$("#search_page_pre").addClass("disabled");
+			$("#result_page_pre").after("<li id='1' class='active page_add'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>")
+                                 .addClass("disabled");
 		}
 		else {
-			$("#search_page_pre").after("<li id='1' class='pagecadd'><a href='#'>1</a></li>");
-			$("#search_page_pre").removeClass("disabled");
-		}	
-		for( var i=2 ; i<=page && i<=count ; i++ ) {
-			if( i == parseInt(current) ) 
-				$("#search_page_nxt").before("<li id='"+i+"' class='active pagecadd'><a href='#'>"+i+" <span class='sr-only'>(current)</span></a></li>");
+			$("#result_page_pre").after("<li id='1' class='page_add'><a href='#'>1</a></li>")
+                                 .removeClass("disabled");
+		}
+		for( var k1=2 ; k1<=page && k1<=count ; k1++ ) {
+			if( k1 == parseInt(current) )
+                $("#result_page_next").before("<li id='"+k1+"' class='active page_add'><a href='#'>"+k1+" <span class='sr-only'>(current)</span></a></li>");
 			else
-				$("#search_page_nxt").before("<li id='"+i+"' class='pagecadd'><a href='#'>"+i+"</a></li>");
+				$("#result_page_next").before("<li id='"+k1+"' class='page_add'><a href='#'>"+k1+"</a></li>");
 		}
-		if( page > count ) {
-			$("#search_page_nxt").before("<li id='"+page+"' class='pagecadd'><a href='#'>Last</a></li>");
-		}
+		if( page > count )
+			$("#result_page_next").before("<li id='"+page+"' class='page_add'><a href='#'>Last</a></li>");
 		if( current == page )
-			$("#search_page_nxt").addClass("disabled");
+			$("#result_page_next").addClass("disabled");
 		else
-			$("#search_page_nxt").removeClass("disabled");
-		showpage(json,current);
+			$("#result_page_next").removeClass("disabled");
+		showPage(json,current);
 	}
-	else if( parseInt(current) >= count-1 && parseInt(current) <= page-parseInt(count/2)-1 ){		
-		$(".pagecadd").empty();
-		$("#search_page_pre").after("<li id='1' class='pagecadd'><a href='#'>First</a></li>");
-		for( var i=parseInt(current)-parseInt(count/2) ; i<=parseInt(current)+parseInt(count/2) ; i++ ) {
-			if( i == parseInt(current) ) 
-				$("#search_page_nxt").before("<li id='"+i+"' class='active pagecadd'><a href='#'>"+i+" <span class='sr-only'>(current)</span></a></li>");
+    // condition 2
+	else if( parseInt(current) >= count-1 && parseInt(current) <= page-parseInt(count/2)-1 ){
+        $(".page_add").empty();
+		$("#result_page_pre").after("<li id='1' class='page_add'><a href='#'>First</a></li>");
+		for( var k2=parseInt(current)-parseInt(count/2) ; k2<=parseInt(current)+parseInt(count/2) ; k2++ ) {
+			if( k2 == parseInt(current) )
+				$("#result_page_next").before("<li id='"+k2+"' class='active page_add'><a href='#'>"+k2+" <span class='sr-only'>(current)</span></a></li>");
 			else	
-			    $("#search_page_nxt").before("<li id='"+i+"' class='pagecadd'><a href='#'>"+i+"</a></li>");
+			    $("#result_page_next").before("<li id='"+k2+"' class='page_add'><a href='#'>"+k2+"</a></li>");
 		}
-		$("#search_page_nxt").before("<li id='"+page+"' class='pagecadd'><a href='#'>Last</a></li>");
-		$("#search_page_nxt").removeClass("disabled");
-		showpage(json,current);
+		$("#result_page_next").before("<li id='"+page+"' class='page_add'><a href='#'>Last</a></li>")
+                              .removeClass("disabled");
+		showPage(json,current);
 	}
+    // condition 3
 	else {
-		$(".pagecadd").empty();
-		$("#search_page_pre").after("<li id='1' class='pagecadd'><a href='#'>First</a></li>");
-		for( var i=parseInt(page-count)+1 ; i<=parseInt(page) ; i++ ) {
-			if( i == parseInt(current) ) 
-				$("#search_page_nxt").before("<li id='"+i+"' class='active pagecadd'><a href='#'>"+i+" <span class='sr-only'>(current)</span></a></li>");
-			else	
-			    $("#search_page_nxt").before("<li id='"+i+"' class='pagecadd'><a href='#'>"+i+"</a></li>");
+		$(".page_add").empty();
+		$("#result_page_pre").after("<li id='1' class='page_add'><a href='#'>First</a></li>");
+		for( var k3=parseInt(page-count)+1 ; k3<=parseInt(page) ; k3++ ) {
+			if( k3 == parseInt(current) )
+				$("#result_page_next").before("<li id='"+k3+"' class='active page_add'><a href='#'>"+k3+" <span class='sr-only'>(current)</span></a></li>");
+			else
+			    $("#result_page_next").before("<li id='"+k3+"' class='page_add'><a href='#'>"+k3+"</a></li>");
 		}
 		if( current == page )
-			$("#search_page_nxt").addClass("disabled");
+			$("#result_page_next").addClass("disabled");
 		else
-			$("#search_page_nxt").removeClass("disabled");
-		showpage(json,current);
+			$("#result_page_next").removeClass("disabled");
+		showPage(json,current);
 	}
 }
 
 /*
- *	dealing with authors
+ *  make the result show
  */
-function prepareauthor(author) {
-	var ja = eval( author );
-
-    var s1 = ja[0].affiliation == null ? "" : ja[0].affiliation ;
-    var s2 = ja[0].country == null ? "" : ", " + ja[0].country ;
-    var full = s1 + s2 ;
-
-    var email = ja[0].email == null ? "" : ja[0].email ;
-    var homepage = ja[0].homepage == null ? "" : ja[0].homepage ;
-
-	$("#author_aff").html("<p>" + full + "</p>");
-	var str = "";
-	if( email != "" ) {
-		str += "<i class='fa fa-envelope-o fa-fw'></i> " + email ;
-	}
-	if( homepage != "" ) {
-		str += "&nbsp; | &nbsp;<a href='" + homepage + "' target = '_blank'>homepage</a>";
-	}
-	$("#author_contact").html("<p class='pull-right'>" + str + "</p>");
-}
-
-/*
- * make the result show
- * for all | index | author | field | booktitle
- */
-var search_now = "" ;   // search content
 var search_type = "" ;  // all | index | author | field | booktitle
+var search_content = "" ;   // search content
 
-function showsearh(data) {
+function showSearchResult(data) {
 
     json = eval( data );
-	json_data = data ;
+	jsonData = data ;
 
     // waiting end
 	$("#wait").hide();
@@ -211,30 +173,30 @@ function showsearh(data) {
         }
     }
 
-	page = parseInt(( json.length + pagesize - 1 ) / pagesize) ;
+	page = parseInt(( json.length + pageSize - 1 ) / pageSize) ;
 	current = 1 ;
 
-	showpage(json, current);
+	showPage(json, current);
 	
 	if( page > 1 ) {
-		$("#search_page_pre").addClass("disabled");	
-		$("#search_page_pre").after("<li id='1' class='active pagecadd'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>");
+		$("#result_page_pre").addClass("disabled");
+        $("#result_page_pre").after("<li id='1' class='active page_add'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>");
 		for( var i=2 ; i<=page && i<=count ; i++ ) {
-			$("#search_page_nxt").before("<li id='"+i+"' class='pagecadd'><a href='#'>"+i+"</a></li>");
+			$("#result_page_next").before("<li id='"+i+"' class='page_add'><a href='#'>"+i+"</a></li>");
 		}
 		if( page > count ) {
-			$("#search_page_nxt").before("<li id='"+page+"' class='pagecadd'><a href='#'>Last</a></li>");
+			$("#result_page_next").before("<li id='"+page+"' class='page_add'><a href='#'>Last</a></li>");
 		}
-		$("#search_page").show("slow");	
+		$("#result_page").show("slow");
 	}
 }
 
-function showpage(json, num) {
+function showPage(json, num) {
 	$(".added").empty();
-	var start = ( num - 1 ) *  pagesize ;
+	var start = ( num - 1 ) *  pageSize ;
     var doi_text = "" ;
 
-	for(var i = start ; i < start + pagesize && i < json.length ; i++ ) {
+	for(var i = start ; i < start + pageSize && i < json.length ; i++ ) {
         if( json[i].doi != null ) {
 			doi_text = "<a class='red_link' href='http://dx.doi.org/" + json[i].doi + "' target='_blank'>DOI</a>" ;
 		}
@@ -268,20 +230,21 @@ function showpage(json, num) {
 	// show result
     // search whole paper and index will not run followings
 	if( search_type != "all" || search_type != "index") {
-		$("#pa_main").html("<a href='#'>" + search_type + "</a>");
-		$("#pa_name").html(search_now);
+		$("#result_info_type").html("<a href='#'>" + search_type + "</a>");
+		$("#result_info_name").html(search_content);
 	}
 	
-	$("#pa").fadeIn("slow");
-    // if searching index, the sta will show the search content, else, the content has been shown in main_list
+	$("#result_info").fadeIn("slow");
+    // if searching index, the sta will show the search content,
+    // else, the content has been shown in main_list
     if( search_type == "index" ) {
-        $("#sta").html("<p>searching for <strong class='text-success'>" + search_now +
+        $("#result_sta").html("<p>searching for <strong class='text-success'>" + search_content +
         "</strong>, and <span class='label label-success'>" + json.length + "</span> papers included</p>");
     }
     else {
-        $("#sta").html("<p><span class='label label-success'>" + json.length + "</span> papers included</p>");
+        $("#result_sta").html("<p><span class='label label-success'>" + json.length + "</span> papers included</p>");
     }
-    $("#result_list").fadeIn("slow") ;
+    $("#result_paper").fadeIn("slow") ;
 }
 
 //

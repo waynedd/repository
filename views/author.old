@@ -8,7 +8,7 @@
     <meta name="keywords" content="repository, combinatorial testing, software testing, publication, research, paper">
     <meta name="author" content="Huayao">
 
-    <title>Author List</title>
+    <title>Author</title>
     <link rel="stylesheet" href="http://gist.nju.edu.cn/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.css">
     <link rel="stylesheet" href="css/repository.css">
@@ -35,7 +35,7 @@
                     type: "post",
                     dataType: "json",
                     data: para,
-                    success: showsearh
+                    success: showSearchResult
                 });
             });
         });
@@ -54,25 +54,8 @@
         <br/><br/>
 
         <div class="row">
-            <!-- list part -->
-            <div class="col-md-2 col-sm-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
-                    <li><a href="statistic"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Statistic</a></li>
-                    <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
-                </ul>
-                <br>
-
-                <div class="panel panel-success">
-                    <div class="panel-heading"><h4>Paper List</h4></div>
-                    <div class="list-group">
-                        <a href="all" class="list-group-item">All</a>
-                        <a href="author" class="active list-group-item">Author</a>
-                        <a href="field" class="list-group-item">Research Field</a>
-                        <a href="venue" class="list-group-item">Publication Venue</a>
-                    </div>
-                </div>
-            </div>
+            <!-- sidebar -->
+            <%- include template_sidebar.ejs %>
 
             <!-- show -->
             <div class="col-md-10 col-sm-9 list_col">

@@ -1,0 +1,44 @@
+<div id="result_list">
+    <% if( page == "author" || page == "affiliation" || page == "country" ) { %>
+    <br>
+    <% } %>
+
+    <!-- result info -->
+    <div id="result_info" style="display:none" class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li id="result_info_type"></li>
+                <li id="result_info_name"></li>
+            </ul>
+        </div>
+
+        <% if( page == "author") { %>
+        <div class="col-md-12">
+            <div class="row">
+                <div id="author_aff" class="col-md-6 col-sm-12"></div>
+                <div id="author_contact" class="col-md-6 col-sm-12"></div>
+            </div>
+            <br>
+        </div>
+        <% } %>
+
+        <div>
+            <div id="result_sta" class="col-md-6"></div>
+        </div>
+    </div>
+
+    <!-- result paper list -->
+    <div id="result_paper" style="display:none" class="row">
+        <div class="col-md-12">
+            <table id='rstable' class='table'></table>
+        </div>
+    </div>
+
+    <!-- pagination -->
+    <div id="result_page" style="display:none;text-align:center">
+        <ul class="pagination">
+            <li id="result_page_pre" class="disabled"><a href="#">&laquo;</a></li>
+            <li id="result_page_next"><a href="#">&raquo;</a></li>
+        </ul>
+    </div>
+</div>

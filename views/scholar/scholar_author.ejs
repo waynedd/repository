@@ -1,0 +1,44 @@
+<!-- Scholar Author -->
+<ul class="nav nav-tabs">
+    <li role="presentation" class="active"><a href="#">Author &nbsp;<span class="label label-info"># <%=num%></span></a></li>
+    <li role="presentation"><a href="scholar?r=affiliation">Affiliation</a></li>
+    <li role="presentation"><a href="scholar?r=country">Country</a></li>
+    <!-- search in page
+    <div class="form-inline pull-right">
+        <div class="form-group"><input type="text" class="form-control" id="searchText"></div>
+        <button id="searchScholarButton" class="btn btn-info">Search in Page</button>
+    </div> -->
+</ul>
+<!-- list part -->
+<div id="main_list" class="row scholar-content">
+    <%
+        var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        var currentLetter ;
+        var index = 0 ;
+        for( var l=0 ; l<letters.length ; l++ ) {
+            currentLetter = letters[l] ;
+    %>
+        <div class="row">
+            <div class="col-sm-1 col-xs-12">
+                <p class="pull-right">
+                    <span class='label label-success scholar-author-label'><%=currentLetter%></span>
+                </p>
+            </div>
+            <div class="col-sm-11 col-xs-12">
+            <div class="table-responsive">
+                <table class="table table-condensed scholar-table-unbordered">
+    <%  while( index<num && result[index].name.charAt(0) == currentLetter ) { %>
+                <tr>
+            <% for(var i=0 ; i<4 && index<num && result[index].name.charAt(0)==currentLetter ; i++, index++ ) { %>
+                    <td class="auTD"><a id="<%=result[index].name%>" href="#"><%=result[index].name%></a></td>
+            <% } %>
+                </tr>
+        <% } %>
+               </table>
+            </div>
+            </div>
+        </div>
+    <br><br>
+    <% } %>
+</div>

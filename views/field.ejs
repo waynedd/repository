@@ -17,10 +17,10 @@
     <script src="js/comb.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            // search field by id
-            $("h3[id]").click(function () {
+            // search field or sub field by id
+            $("h3 a[id]").click(function () {
                 var para = "content=" + $(this).attr("id") + "&group=field";
-                search_now = $(this).attr("id");
+                search_content = $(this).attr("id");
                 search_type = "field";
                 $("#wait").show();
                 $("#main_list").hide();
@@ -29,13 +29,12 @@
                     type: "post",
                     dataType: "json",
                     data: para,
-                    success: showsearh
+                    success: showSearchResult
                 });
             });
-
-            $("h4[id]").click(function () {
+            $("h4 a[id]").click(function () {
                 var para = "content=" + $(this).attr("id") + "&group=subfield";
-                search_now = $(this).attr("id");
+                search_content = $(this).attr("id");
                 search_type = "field";
                 $("#wait").show();
                 $("#main_list").hide();
@@ -44,11 +43,9 @@
                     type: "post",
                     dataType: "json",
                     data: para,
-                    success: showsearh
+                    success: showSearchResult
                 });
             });
-
-
         });
     </script>
 </head>
@@ -58,47 +55,92 @@
 <div id="wrap">
 
     <!-- top navigation -->
-    <%- include template_top.ejs %>
+    <%- include template/template_top.ejs %>
 
     <div class="container">
         <br/><br/>
         <br/><br/>
 
         <div class="row">
-            <!-- list part -->
-            <div class="col-md-2 col-sm-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
-                    <li><a href="statistic"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Statistic</a></li>
-                    <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
-                </ul>
-                <br>
-
-                <div class="panel panel-success">
-                    <div class="panel-heading"><h4>Paper List</h4></div>
-                    <div class="list-group">
-                        <a href="all" class="list-group-item">All</a>
-                        <a href="author" class="list-group-item">Author</a>
-                        <a href="field" class="active list-group-item">Research Field</a>
-                        <a href="venue" class="list-group-item">Publication Venue</a>
-                    </div>
-                </div>
-            </div>
+            <!-- sidebar -->
+            <%- include template/template_sidebar.ejs %>
 
             <!-- show -->
             <div class="col-md-10 col-sm-9 list_col">
-                <!-- bread crumb -->
-                <div id="pa" style="display:none" class="row">
-                    <div class="col-md-12">
-                        <ul class="breadcrumb">
-                            <li id="pa_main">field</li>
-                            <li id="pa_name"></li>
-                        </ul>
+                <!-- main list -->
+                <div id="main_list">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <h3><a id="model" href='#' class="none_dec">Model</a></h3>
+                            <p> Modeling focuses on identifying parameters, values, interactions and relations
+                                of software under test. It is the fundamental activity of combinatorial testing.</p>
+                            <br>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <h3><a id="generation" href='#' class="none_dec">Generation</a></h3>
+                            <p> Generation is the most popular field in combinatorial testing.
+                                There are three sub topics:
+                                1) various types of covering arrays,
+                                2) generation techniques to construct covering arrays,
+                                and 3) the constraint solving techniques. </p>
+                            <br>
+                        </div>
                     </div>
 
-                    <div>
-                        <div id="sta" class="col-md-6"></div>
-                        <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <h3><a id="optimization" href='#' class="none_dec">Optimization</a></h3>
+                            <ul class="list-inline">
+                                <li><h4>>></h4></li>
+                                <li><h4><a id="prioritization" href='#' class="none_dec">Prioritization</a></h4></li>
+                                <li><h4>|</h4></li>
+                                <li><h4><a id="minimization" href='#' class="none_dec">Minimization</a></h4></li>
+                                <li><h4>|</h4></li>
+                                <li><h4><a id="selection" href='#' class="none_dec">Selection</a></h4></li>
+                            </ul>
+                            <p> Optimization aims to further improve test suite by
+                                prioritization, minimization, and selection techniques.
+                            </p>
+                            <br>
+                        </div>
+
+                        <div class="col-md-6 col-sm-12">
+                            <h3><a id="diagnosis" href='#' class="none_dec">Fault diagnosis</a></h3>
+                            <p> When a failure is exposed, the diagnosis process is desired
+                                to locate and then remove the fault.</p>
+                            <br>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <h3><a id="evaluation" href='#' class="none_dec">Evaluation</a></h3>
+                            <p> Evaluation studies on measuring the effectiveness of combinatorial testing,
+                                and the degree to which combinatorial testing contributes
+                                to the improvement of software quality. </p>
+                            <br>
+                        </div>
+                        <div class="col-md-6 col-sm-12">
+                            <h3><a id="application" href='#' class="none_dec">Application</a></h3>
+                            <p> Application contains practical testing procedures on different types of software systems.
+                                The introductions and demos of CT tools are also included.
+                            </p>
+                            <br>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12">
+                            <h3><a id="other" href='#' class="none_dec">Other</a></h3>
+                            <ul class="list-inline">
+                                <li><h4>>></h4></li>
+                                <li><h4><a id="survey" href='#' class="none_dec">Survey</a></h4></li>
+                                <li><h4>|</h4></li>
+                                <li><h4><a id="oracle" href='#' class="none_dec">Oracle</a></h4></li>
+                            </ul>
+                            <p>The survey of combinatorial testing, and the oracle problem.</p>
+                            <br>
                         </div>
                     </div>
                 </div>
@@ -111,108 +153,11 @@
                     </div>
                 </div>
 
-                <div id="main_list">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3 id="model"><a href='#' class="none_dec">Model</a></h3>
-                            <p> Modeling focuses on identifying parameters, values, interactions and relations
-                                of software under test. It is the fundamental activity of combinatorial testing.</p>
-                            <br>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <h3 id="generation"><a href='#' class="none_dec">Generation</a></h3>
-                            <p> Generation is the most popular field in combinatorial testing.
-                                There are three sub topics:
-                                1) various types of covering arrays,
-                                2) generation techniques to construct covering arrays,
-                                and 3) the constraint solving techniques. </p>
-                            <br>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3 id="optimization"><a href='#' class="none_dec">Optimization</a></h3>
-                            <ul class="list-inline">
-                                <li><h4>>></h4></li>
-                                <li><h4 id="prioritization"><a href='#' class="none_dec">Prioritization</a></h4></li>
-                                <li><h4>|</h4></li>
-                                <li><h4 id="minimization"><a href='#' class="none_dec">Minimization</a></h4></li>
-                                <li><h4>|</h4></li>
-                                <li><h4 id="selection"><a href='#' class="none_dec">Selection</a></h4></li>
-                            </ul>
-                            <p> Optimization aims to further improve test suite by
-                                prioritization, minimization, and selection techniques.
-                            </p>
-                            <br>
-                        </div>
-
-                        <div class="col-md-6 col-sm-12">
-                            <h3 id="diagnosis"><a href='#' class="none_dec">Fault diagnosis</a></h3>
-                            <p> When a failure is exposed, the diagnosis process is desired
-                                to locate and then remove the fault.</p>
-                            <br>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3 id="evaluation"><a href='#' class="none_dec">Evaluation</a></h3>
-                            <p> Evaluation studies on measuring the effectiveness of combinatorial testing,
-                                and the degree to which combinatorial testing contributes
-                                to the improvement of software quality. </p>
-                            <br>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <h3 id="application"><a href='#' class="none_dec">Application</a></h3>
-                            <p> Application contains practical testing procedures on different types of software systems.
-                                The introductions and demos of CT tools are also included.
-                            </p>
-                            <br>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3 id="other"><a href='#' class="none_dec">Other</a></h3>
-                            <ul class="list-inline">
-                                <li><h4>>></h4></li>
-                                <li><h4 id="survey"><a href='#' class="none_dec">Survey</a></h4></li>
-                                <li><h4>|</h4></li>
-                                <li><h4 id="oracle"><a href='#' class="none_dec">Oracle</a></h4></li>
-                            </ul>
-                            <p>The survey of combinatorial testing, and the oracle problem.</p>
-                            <br>
-                        </div>
-                    </div>
-
-                </div>
-                <!-- main_list -->
-
                 <!-- result list -->
-                <div id="result_list" style="display:none" class="row">
-                    <div class="col-md-12">
-                        <table id='rstable' class='table listtable'>
-                            <!--<tr><th>author</th><th>title</th><th>pub</th><th>year</th></tr>-->
-                        </table>
-                    </div>
-                </div>
-                <!-- result -->
-
-                <!-- pagination -->
-                <div id="search_page" style="display:none;text-align:center">
-                    <ul class="pagination">
-                        <li id="search_page_pre" class="disabled"><a href="#">&laquo;</a></li>
-                        <li id="search_page_nxt"><a href="#">&raquo;</a></li>
-                    </ul>
-                </div>
-
+                <%- include template/template_result.ejs %>
             </div>
             <!-- span10 -->
-
         </div>
-
     </div>
     <!-- /container -->
 
@@ -221,7 +166,7 @@
 <!-- /wrap -->
 
 <!-- footer -->
-<%- include template_bottom.ejs %>
+<%- include template/template_bottom.ejs %>
 
 <script src="http://gist.nju.edu.cn/js/bootstrap.min.js"></script>
 </body>

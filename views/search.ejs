@@ -29,7 +29,7 @@
                 type: "post",
                 dataType: "json",
                 data: para,
-                success: showsearh
+                success: showSearchResult
             });
         });
     </script>
@@ -40,41 +40,18 @@
 <div id="wrap">
 
     <!-- top navigation -->
-    <%- include template_top.ejs %>
+    <%- include template/template_top.ejs %>
 
     <div class="container">
         <br/><br/>
         <br/><br/>
 
         <div class="row">
-            <!-- list part -->
-            <div class="col-md-2 col-sm-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li class="active"><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
-                    <li><a href="statistic"><i class="fa fa-bars"></i>&nbsp;&nbsp;Statistic</a></li>
-                    <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
-                </ul>
-                <br>
-
-                <div class="panel panel-success">
-                    <div class="panel-heading"><h4>Paper List</h4></div>
-                    <div class="list-group">
-                        <a href="all" class="list-group-item">All</a>
-                        <a href="author" class="list-group-item">Author</a>
-                        <a href="field" class="list-group-item">Research Field</a>
-                        <a href="venue" class="list-group-item">Publication Venue</a>
-                    </div>
-                </div>
-            </div>
+            <!-- sidebar -->
+            <%- include template/template_sidebar.ejs %>
 
             <!-- data part -->
             <div class="col-md-10 col-sm-9">
-                <!-- bread crumb -->
-                <!-- only display sta -->
-                <div id="pa" style="display:none" class="row-fluid">
-                    <div id="sta" class="col-md-12"></div>
-                </div>
-
                 <!-- waiting -->
                 <div id="wait" style="display:none" class="row">
                     <div class="col-md-12 text-center">
@@ -83,18 +60,23 @@
                     </div>
                 </div>
 
+                <!-- only display sta -->
+                <div id="result_info" style="display:none" class="row-fluid">
+                    <div id="result_sta" class="col-md-12"></div>
+                </div>
+
                 <!-- table -->
-                <div id="result_list" style="display:none" class="row">
+                <div id="result_paper" style="display:none" class="row">
                     <div class="col-md-12">
                         <table id='rstable' class='table listtable'></table>
                     </div>
                 </div>
 
                 <!-- pagination -->
-                <div id="search_page" style="display:none;text-align:center">
+                <div id="result_page" style="display:none;text-align:center">
                     <ul class="pagination">
-                        <li id="search_page_pre" class="disabled"><a href="#">&laquo;</a></li>
-                        <li id="search_page_nxt"><a href="#">&raquo;</a></li>
+                        <li id="result_page_pre" class="disabled"><a href="#">&laquo;</a></li>
+                        <li id="result_page_next"><a href="#">&raquo;</a></li>
                     </ul>
                 </div>
 
@@ -116,7 +98,7 @@
 <!-- /wrap -->
 
 <!-- footer -->
-<%- include template_bottom.ejs %>
+<%- include template/template_bottom.ejs %>
 
 <!-- modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

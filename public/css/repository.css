@@ -68,12 +68,6 @@ a.none_dec:link {
     padding-bottom: 10px;
 }
 
-/* author list page */
-.index-label {
-    font-size: 23px;
-    padding: 5px 15px 5px;
-}
-
 /* banner */
 .banner {
     position: relative; overflow: auto;
@@ -90,6 +84,27 @@ a.none_dec:link {
 #author_aff,
 #author_contact {
     color: #777777;
+}
+
+/* scholar page */
+.scholar-content {
+    padding-top: 20px;
+}
+.scholar-author-label {
+    font-size: 20px;
+    padding: 5px 15px 5px;
+}
+.scholar-table-unbordered,
+.scholar-table-unbordered tr,
+.scholar-table-unbordered th,
+.scholar-table-unbordered td,
+.scholar-table-unbordered > thead > tr > th,
+.scholar-table-unbordered > tbody > tr > th,
+.scholar-table-unbordered > tfoot > tr > th,
+.scholar-table-unbordered > thead > tr > td,
+.scholar-table-unbordered > tbody > tr > td,
+.scholar-table-unbordered > tfoot > tr > td {
+    border-top: 0;
 }
 
 /* new header */

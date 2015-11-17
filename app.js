@@ -11,7 +11,7 @@ var action = require('./routes/action');
 var app = express();
 
 // environment
-var mode = 'deploy';
+var mode = 'development';
 app.set('env', mode);
 if (mode === 'development') {
     app.use(logger('dev'));
@@ -20,6 +20,7 @@ if (mode === 'development') {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.set('view options', { pretty: false });
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(bodyParser.json());

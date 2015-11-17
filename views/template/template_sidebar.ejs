@@ -1,0 +1,52 @@
+<!-- sidebar -->
+<div class="col-md-2 col-sm-3">
+    <ul class="nav nav-pills nav-stacked">
+        <% if( page == "search") {%>
+        <li class="active"><a href="../"><i class="active fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
+        <% } else {%>
+        <li><a href="../"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
+        <% }%>
+
+        <% if( page == "statistic") {%>
+        <li class="active"><a href="statistic"><i class="active fa fa-area-chart"></i>&nbsp;&nbsp;Statistic</a></li>
+        <% } else {%>
+        <li><a href="statistic"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Statistic</a></li>
+        <% }%>
+
+        <% if( page == "rank") {%>
+        <li class="active"><a href="rank"><i class="active fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
+        <% } else {%>
+        <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
+        <% }%>
+    </ul>
+    <br>
+
+    <div class="panel panel-success">
+        <div class="panel-heading"><h4>Paper List</h4></div>
+        <div class="list-group">
+            <% if( page == "all") {%>
+            <a href="all" class="active list-group-item">All</a>
+            <% } else {%>
+            <a href="all" class="list-group-item">All</a>
+            <% }%>
+
+            <% if( page == "author" || page == "affiliation" || page == "country" ) {%>
+            <a href="../scholar?r=author" class="active list-group-item">Scholar</a>
+            <% } else {%>
+            <a href="../scholar?r=author" class="list-group-item">Scholar</a>
+            <% }%>
+
+            <% if( page == "field") {%>
+            <a href="field" class="active list-group-item">Research Field</a>
+            <% } else {%>
+            <a href="field" class="list-group-item">Research Field</a>
+            <% }%>
+
+            <% if( page == "venue") {%>
+            <a href="venue" class="active list-group-item">Publication Venue</a>
+            <% } else {%>
+            <a href="venue" class="list-group-item">Publication Venue</a>
+            <% }%>
+        </div>
+    </div>
+</div>

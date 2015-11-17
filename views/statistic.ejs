@@ -96,7 +96,7 @@
                         plotShadow: false
                     },
                     title: {
-                        text: 'The Distribution of CT Research Fields'
+                        text: 'The Distribution of Combinatorial Testing Research Fields'
                     },
                     tooltip: {
                         pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -150,51 +150,48 @@
                         type: 'column'
                     },
                     title: {
-                        text: 'The Annual Publication Number of the Top Three Research Fields'
+                        text: 'The Changing Ratio of Combinatorial Testing Research Fields'
                     },
                     xAxis: {
-                        categories: [<%-c3_yearIndex%>],
-                        title: {
-                            text: 'year'
-                        }
+                        categories: [<%-c1_yearIndex%>]
                     },
                     yAxis: {
                         min: 0,
                         title: {
-                            text: '# of publications'
-                        },
-                        stackLabels: {
-                            enabled: false
+                            text: 'Total fruit consumption'
                         }
                     },
                     tooltip: {
-                        formatter: function () {
-                            return '<b>' + this.x + '</b><br/>' +
-                                    this.series.name + ': ' + this.y;
-                        }
+                        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                        shared: true
                     },
                     plotOptions: {
                         column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: false
-                            }
+                            stacking: 'percent'
                         }
                     },
-                    series: [
-                        {
-                            name: 'Generation',
-                            data: [<%=c3_gen%>]
-                        },
-                        {
-                            name: 'Application',
-                            data: [<%=c3_app%>]
-                        },
-                        {
-                            name: 'Fault Diagnosis',
-                            data: [<%=c3_loc%>]
-                        }
-                    ]
+                    series: [{
+                        name: 'Generation',
+                        data: [<%=c3_generation%>]
+                    }, {
+                        name: 'Application',
+                        data: [<%=c3_application%>]
+                    }, {
+                        name: 'Model',
+                        data: [<%=c3_model%>]
+                    }, {
+                        name: 'Evaluation',
+                        data: [<%=c3_evaluation%>]
+                    }, {
+                        name: 'Optimization',
+                        data: [<%=c3_optimization%>]
+                    }, {
+                        name: 'Diagnosis',
+                        data: [<%=c3_diagnosis%>]
+                    }, {
+                        name: 'Other',
+                        data: [<%=c3_other%>]
+                    }]
                 });
             }); // end $(#show_c3)
 
@@ -276,32 +273,15 @@
 <div id="wrap">
 
     <!-- top navigation -->
-    <%- include template_top.ejs %>
+    <%- include template/template_top.ejs %>
 
     <div class="container">
         <br/><br/>
         <br/><br/>
 
         <div class="row">
-            <!-- list part -->
-            <div class="col-md-2 col-sm-3">
-                <ul class="nav nav-pills nav-stacked">
-                    <li><a href="./"><i class="fa fa-search"></i>&nbsp;&nbsp;Search</a></li>
-                    <li class="active"><a href="statistic"><i class="fa fa-area-chart"></i>&nbsp;&nbsp;Statistic</a></li>
-                    <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
-                </ul>
-                <br>
-
-                <div class="panel panel-success">
-                    <div class="panel-heading"><h4>Paper List</h4></div>
-                    <div class="list-group">
-                        <a href="all" class="list-group-item">All</a>
-                        <a href="author" class="list-group-item">Author</a>
-                        <a href="field" class="list-group-item">Research Field</a>
-                        <a href="venue" class="list-group-item">Publication Venue</a>
-                    </div>
-                </div>
-            </div>
+            <!-- sidebar -->
+            <%- include template/template_sidebar.ejs %>
 
             <!-- show -->
             <div class="col-md-10 col-sm-9">
@@ -326,13 +306,13 @@
                         <div class="col-md-3 col-sm-6 charts">
                             <div id="show_c2"><a href="#" class="img-thumbnail"><img src="image/chart2.ico"/></a></div>
                             <h4>Distribution of Field</h4>
-                            <p>The distribution of different CT research fields</p>
+                            <p>The distribution of different combinatorial testing research fields</p>
                         </div>
 
                         <div class="col-md-3 col-sm-6 charts">
                             <div id="show_c3"><a href="#" class="img-thumbnail"><img src="image/chart3.ico"/></a></div>
-                            <h4>Annual Publication</h4>
-                            <p>The annual publication number of the top three research fields</p>
+                            <h4>Changing Ratio of Field</h4>
+                            <p>The changing ratio of different combinatorial testing research fields</p>
                         </div>
 
                         <div class="col-md-3 col-sm-6 charts">
@@ -363,7 +343,7 @@
 <!-- /wrap -->
 
 <!-- footer -->
-<%- include template_bottom.ejs %>
+<%- include template/template_bottom.ejs %>
 
 <script src="http://gist.nju.edu.cn/js/bootstrap.min.js"></script>
 <script src="js/highcharts.js"></script>

@@ -1,0 +1,65 @@
+<!-- Scholar Affiliation -->
+<ul class="nav nav-tabs">
+    <li role="presentation"><a href="scholar?r=author">Author</a></li>
+    <li role="presentation" class="active"><a href="#">Affiliation &nbsp;<span class="label label-info"># <%=num%></span></a></li>
+    <li role="presentation"><a href="scholar?r=country">Country</a></li>
+</ul>
+<!-- list part -->
+<div id="main_list" class="row scholar-content">
+    <%
+        // pre processing
+        var academia = [] ;
+        var industry = [] ;
+        for( var ii=0 ; ii<result.length ; ii++ ) {
+            if (result[ii].category == "Academia")
+                academia.push(result[ii]);
+            else
+                industry.push(result[ii]);  // DEV: the null item is pushed into industry[]
+        }
+     %>
+
+    <div class="row">
+        <div class="col-sm-2 text-center">
+            <p class="pull-right">
+                <span class='label label-success scholar-author-label'>Academia</span>
+            </p>
+        </div>
+        <div class="col-sm-10">
+            <table class="table table-condensed scholar-table-unbordered">
+                <%
+                    var index = 0 ;
+                    var count = 2 ;
+                    while( index < academia.length ) { %>
+                        <tr>
+                    <%  for( var i = 0 ; i < count && index < academia.length ; i++, index++) { %>
+                            <td class="afTD"><a href="#" id="<%=academia[index].affiliation%>">
+                                    <%=academia[index].affiliation%></a></td>
+                    <%  } %>
+                        </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+    <br><br>
+    <div class="row">
+        <div class="col-sm-2 text-center">
+            <p class="pull-right">
+                <span class='label label-success scholar-author-label'>Industry</span>
+            </p>
+        </div>
+        <div class="col-sm-10">
+            <table class="table table-condensed scholar-table-unbordered">
+                <%
+                    index = 1 ;
+                    while( index < industry.length ) { %>
+                        <tr>
+                    <%  for( var j=0 ; j<count && index<industry.length ; j++, index++) { %>
+                            <td class="afTD"><a href="#" id="<%=industry[index].affiliation%>">
+                                    <%=industry[index].affiliation%></a></td>
+                    <%  } %>
+                        </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+</div>

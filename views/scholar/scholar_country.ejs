@@ -1,0 +1,27 @@
+<!-- Scholar Country -->
+<ul class="nav nav-tabs">
+    <li role="presentation"><a href="scholar?r=author">Author</a></li>
+    <li role="presentation"><a href="scholar?r=affiliation">Affiliation</a></li>
+    <li role="presentation" class="active"><a href="#">Country  &nbsp;<span class="label label-info"># <%=num%></span></a></li>
+</ul>
+<!-- list part -->
+<div id="main_list" class="row scholar-content">
+    <div class="row">
+        <div class="col-xs-12 col-sm-11 col-sm-offset-1">
+            <table class="table table-condensed scholar-table-unbordered">
+                <%
+                var index = 1 ; // there are empty rows in DB
+                var count = 5 ;
+                        while( index < num ) { %>
+                <tr>
+                    <% for( var i=0 ; i<count && index<num ; i++, index++) { %>
+                    <td class="coTD"><a id="<%=result[index].country%>" href="#">
+                            <%=result[index].country%></a></td>
+                    <% } %>
+                </tr>
+                <% } %>
+            </table>
+        </div>
+    </div>
+
+</div>

@@ -82,7 +82,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
 
 /*
  *  get paper list according to
- *  group = author | field | subfield | booktitle
+ *  group = author | affiliation | country | field | subfield | booktitle
  *  content
  */
 Paper.searchByContent = function searchByContent(group, content, callback) {
@@ -91,13 +91,23 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
         if( group == "author" ) {
             sql = "select * from paper.list where author LIKE ?";
         }
-        if( group == "field" ) {
+        else if( group == "affiliation" ) {
+            sql = "select distinct id, bib, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, field, subfield, doi " +
+                "from (select name, affiliation from paper.scholar where affiliation = ?) p " +
+                "left join paper.list q on q.author like CONCAT('%', p.name, '%')";
+        }
+        else if( group == "country" ) {
+            sql = "select distinct id, bib, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, field, subfield, doi " +
+                "from (select name, country from paper.scholar where country = ?) p " +
+                "left join paper.list q on q.author like CONCAT('%', p.name, '%')";
+        }
+        else if( group == "field" ) {
             sql = "select * from paper.list where field = ?";
         }
-        if( group == "subfield" ) {
+        else if( group == "subfield" ) {
             sql = "select * from paper.list where subfield = ?"
         }
-        if( group == "booktitle" ) {
+        else if( group == "booktitle" ) {
             if( content == "phd" ) {
                 sql = "select * from paper.list where type = 'phdthesis'" ;
             }
@@ -108,14 +118,19 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
                 sql = "select * from paper.list where abbr = ?" ;
             }
         }
+        else {
+            console.log("[!!!!] [searchByContent] Error: invalid parameter");
+            return;
+        }
         sql += " order by year DESC" ;
 
-        // there is ?
+        // if there is a ? in sql
         if( sql.indexOf('?') != -1 ) {
             var re = content ;
             if( group == "author") {
                 re = "%"+content+"%" ;
             }
+            console.log(content);
             connection.query(sql, [re], function(err, results) {
                 if (err) {
                     console.log("[!!!!] [searchByContent-1] Error: " + err.message);
@@ -125,7 +140,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
                 callback(err, results);
             });
         }
-        // there is no ?
+        // else
         else {
             connection.query(sql, function(err, results) {
                 if (err) {

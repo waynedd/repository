@@ -20,110 +20,72 @@ router.get('/', function(req, res) {
 router.get('/search', function(req, res) {
     var c = req.query.content.trim() ;
     if(c.length != 0 ) {
-        res.render('search', {content: c});
+        res.render('search', {
+            page: "search",
+            content: c
+        });
     }
     else {
-        res.render('error', {main: "please check your behaviour"});
+        res.render('error', {message: "please check your behaviour"});
     }
-});
-
-/* GET all list (all button) */
-router.get('/all', function(req, res) {
-    res.render('all');
-});
-
-/* GET author list (author button) */
-router.get('/author', function(req, res) {
-    Info.getAuthor( function(err, results) {
-        if( err ) {
-            console.log('SYSTEM ERROR AT AUTHOR');
-            res.render('error', {message: "get author page error"});
-        }
-        else {
-            res.render('author', {author: results});
-        }
-    });
-});
-
-/* GET research field list (field button) */
-router.get('/field', function(req, res) {
-    res.render('field');
-});
-
-/* GET venue list (venue button) */
-router.get('/venue', function(req, res) {
-    Info.getVenue( function(err, results1, results2) {
-        if( err ) {
-            console.log('SYSTEM ERROR AT PUBLICATION');
-            res.render('error', {message: "get booktitle page error"});
-        }
-        else {
-            res.render('venue', {article: results1, inproceeding: results2});
-        }
-    });
 });
 
 /* GET statistic charts (statistic button) */
 router.get('/statistic', function(req, res) {
-    Info.getStatistic( function(err, nums, field, top) {
+    Info.getStatistic( function(err, nums, fieldCount, fieldAnnual) {
         if( err ) {
             console.log('SYSTEM ERROR AT STATISTIC');
             res.render('error', {message: "get statistic page error"});
         }
         else {
-            //console.log(nums);
-            //console.log(field);
-            //console.log(top);
-
-            // prepare yearIndex, numA, numC for chart-1
+            // prepare yearIndex
+            // prepare numA, numC for chart-1
             var yearIndex = [] ;
             var numA = [] ;
             var numC = [] ;
-            for( var i=0 ; i<nums.length ; i++ ) {
-                yearIndex[i] = "'" + nums[i].year + "'";
-                numA[i] = nums[i].num;
-                numC[i] = nums[i].count;
+            for( var k=0 ; k<nums.length ; k++ ) {
+                yearIndex[k] = "'" + nums[k].year + "'";
+                numA[k] = nums[k].num;
+                numC[k] = nums[k].count;
             }
             yearIndex = yearIndex.join(',') ;
             numA = numA.join(',') ;
             numC = numC.join(',') ;
 
-            // prepare yearIndex3, app, gen, loc for chart-3
-            var yearIndex3 = [] ;
-            var app = [] ;
-            var gen = [] ;
-            var loc = [] ;
-            for( var i=0 ; i<top.length ; i++ ) {
-                yearIndex3[i] = "'" + top[i].year + "'";
-                app[i] = top[i].app == null ? 0 : top[i].app ;
-                gen[i] = top[i].gen == null ? 0 : top[i].gen ;
-                loc[i] = top[i].loc == null ? 0 : top[i].loc ;
+            // prepare generation, application, model, evaluation, optimization, diagnosis, other for chart-3
+            var gen = [], app = [], mod = [], eva = [], opt = [], dig = [], oth = [] ;
+            for( var i=0 ; i<fieldAnnual.length ; i++ ) {
+                gen[i] = fieldAnnual[i].generation == null ? 0 : fieldAnnual[i].generation ;
+                app[i] = fieldAnnual[i].application == null ? 0 : fieldAnnual[i].application ;
+                mod[i] = fieldAnnual[i].model == null ? 0 : fieldAnnual[i].model ;
+                eva[i] = fieldAnnual[i].evaluation == null ? 0 : fieldAnnual[i].evaluation ;
+                opt[i] = fieldAnnual[i].optimization == null ? 0 : fieldAnnual[i].optimization ;
+                dig[i] = fieldAnnual[i].diagnosis == null ? 0 : fieldAnnual[i].diagnosis ;
+                oth[i] = fieldAnnual[i].other == null ? 0 : fieldAnnual[i].other ;
             }
-            yearIndex3 = yearIndex3.join(',') ;
-            app = app.join(',') ;
             gen = gen.join(',') ;
-            loc = loc.join(',') ;
-
-            //console.log(yearIndex);
-            //console.log(numA);
-            //console.log(numC);
-
-            //console.log(yearIndex3);
-            //console.log(app);
-            //console.log(gen);
-            //console.log(loc);
+            app = app.join(',') ;
+            mod = mod.join(',') ;
+            eva = eva.join(',') ;
+            opt = opt.join(',') ;
+            dig = dig.join(',') ;
+            oth = oth.join(',') ;
 
             res.render('statistic', {
+                page: "statistic",
                 c1_start : nums[0].year,
                 c1_end : nums[nums.length-1].year,
                 c1_yearIndex : yearIndex,
                 c1_numA : numA,
                 c1_numC : numC,
-                c2_field: field,
-                c3_yearIndex: yearIndex3,
-                c3_app: app,
-                c3_gen: gen,
-                c3_loc: loc
+                c2_field: fieldCount,
+                c3_generation: gen,
+                c3_application: app,
+                c3_model: mod,
+                c3_evaluation: eva,
+                c3_optimization: opt,
+                c3_diagnosis: dig,
+                c3_other: oth
             });
         }
     });
@@ -137,7 +99,71 @@ router.get('/rank', function(req, res) {
             res.render('error', {message: "get rank page error"});
         }
         else {
-            res.render('rank', {ranking: results});
+            res.render('rank', {
+                page: "rank",
+                ranking: results
+            });
+        }
+    });
+});
+
+
+/* GET all list (all button) */
+router.get('/all', function(req, res) {
+    res.render('all', {page: "all"});
+});
+
+/* GET author list (author button)
+router.get('/author', function(req, res) {
+    Info.getAuthor( function(err, results) {
+        if( err ) {
+            console.log('SYSTEM ERROR AT AUTHOR');
+            res.render('error', {message: "get author page error"});
+        }
+        else {
+            res.render('author', {
+                page: "author",
+                author: results
+            });
+        }
+    });
+});*/
+
+/* GET scholar page with url request parameters (schoalr button) */
+router.get('/scholar', function(req, res) {
+    Info.getScholar(req.query.r, function(err, result) {
+        if (err) {
+            console.log('SYSTEM ERROR AT SCHOLAR');
+            res.render('error', {message: "get scholar page error"});
+        }
+        else {
+            res.render('scholar', {
+                page: req.query.r,
+                result: result,
+                num: result.length
+            });
+        }
+    });
+});
+
+/* GET research field list (field button) */
+router.get('/field', function(req, res) {
+    res.render('field', {page: "field"});
+});
+
+/* GET venue list (venue button) */
+router.get('/venue', function(req, res) {
+    Info.getVenue( function(err, results1, results2) {
+        if( err ) {
+            console.log('SYSTEM ERROR AT PUBLICATION');
+            res.render('error', {message: "get booktitle page error"});
+        }
+        else {
+            res.render('venue', {
+                page: "venue",
+                article: results1,
+                inproceeding: results2
+            });
         }
     });
 });
