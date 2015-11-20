@@ -32,14 +32,14 @@ router.get('/search', function(req, res) {
 
 /* GET statistic charts (statistic button) */
 router.get('/statistic', function(req, res) {
-    Info.getStatistic( function(err, nums, fieldCount, fieldAnnual) {
+    Info.getStatistic( function(err, nums, fieldCount, fieldAnnual, firstJoin) {
         if( err ) {
             console.log('SYSTEM ERROR AT STATISTIC');
             res.render('error', {message: "get statistic page error"});
         }
         else {
-            // prepare yearIndex
-            // prepare numA, numC for chart-1
+            // chart 1: number of publication
+            // yearIndex, numA, numC
             var yearIndex = [] ;
             var numA = [] ;
             var numC = [] ;
@@ -52,7 +52,10 @@ router.get('/statistic', function(req, res) {
             numA = numA.join(',') ;
             numC = numC.join(',') ;
 
-            // prepare generation, application, model, evaluation, optimization, diagnosis, other for chart-3
+            // chart 2: distribution of field
+
+            // chart 3: changing ratio of field
+            // generation, application, model, evaluation, optimization, diagnosis, other
             var gen = [], app = [], mod = [], eva = [], opt = [], dig = [], oth = [] ;
             for( var i=0 ; i<fieldAnnual.length ; i++ ) {
                 gen[i] = fieldAnnual[i].generation == null ? 0 : fieldAnnual[i].generation ;
@@ -71,6 +74,26 @@ router.get('/statistic', function(req, res) {
             dig = dig.join(',') ;
             oth = oth.join(',') ;
 
+            // chart 4: people
+
+            // chart 5: number of new affiliation
+            // prepare yearIndexFP, numFP, numFPC
+            var yearIndexFP = [] ;
+            var numFP = [] ;
+            var numFPC = [] ;
+            for( k=0 ; k<firstJoin.length ; k++ ) {
+                yearIndexFP[k] = "'" + firstJoin[k].year + "'";
+                numFP[k] = firstJoin[k].num;
+                numFPC[k] = firstJoin[k].count;
+            }
+            yearIndexFP = yearIndexFP.join(',') ;
+            numFP = numFP.join(',') ;
+            numFPC = numFPC.join(',') ;
+
+            console.log(yearIndexFP);
+            console.log(numFP);
+            console.log(numFPC);
+
             res.render('statistic', {
                 page: "statistic",
                 c1_start : nums[0].year,
@@ -85,7 +108,10 @@ router.get('/statistic', function(req, res) {
                 c3_evaluation: eva,
                 c3_optimization: opt,
                 c3_diagnosis: dig,
-                c3_other: oth
+                c3_other: oth,
+                c5_yearIndex : yearIndexFP,
+                c5_numA : numFP,
+                c5_numC : numFPC
             });
         }
     });
@@ -93,15 +119,26 @@ router.get('/statistic', function(req, res) {
 
 /* GET rank list (rank button) */
 router.get('/rank', function(req, res) {
-    Info.getRank( function(err, results) {
+    // do the first query
+    Info.getRank("author", function(err, results1) {
         if( err ) {
             console.log('SYSTEM ERROR AT RANK');
             res.render('error', {message: "get rank page error"});
         }
         else {
-            res.render('rank', {
-                page: "rank",
-                ranking: results
+            // do the second query
+            Info.getRank("affiliation", function(err, results2) {
+                if( err ) {
+                    console.log('SYSTEM ERROR AT RANK');
+                    res.render('error', {message: "get rank page error"});
+                }
+                else {
+                    res.render('rank', {
+                        page: "rank",
+                        rankAuthor: results1,
+                        rankAffiliation: results2
+                    });
+                }
             });
         }
     });

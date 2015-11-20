@@ -78,11 +78,13 @@ a.none_dec:link {
 .banner ul li {
     float: left;
 }
-#author_aff {
+#author_aff
+#author_field {
     padding-left: 27px;
 }
 #author_aff,
-#author_contact {
+#author_contact,
+#author_field {
     color: #777777;
 }
 

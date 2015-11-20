@@ -130,7 +130,6 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
             if( group == "author") {
                 re = "%"+content+"%" ;
             }
-            console.log(content);
             connection.query(sql, [re], function(err, results) {
                 if (err) {
                     console.log("[!!!!] [searchByContent-1] Error: " + err.message);

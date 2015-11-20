@@ -41,8 +41,11 @@ router.post('/query', function(req, res) {
  */
 router.post('/author_info', function(req, res) {
     var content = req.body.content ;
-    Info.getAuthorInfo(content, function (err, result) {
-        res.send(JSON.stringify(result));
+    Info.getAuthorInfo(content, function (err, result1, result2) {
+        res.send({
+            basicInfo: JSON.stringify(result1),
+            focusField: JSON.stringify(result2)
+        });
     });
 });
 

@@ -239,10 +239,10 @@ function showPage(json, num) {
     // else, the content has been shown in main_list
     if( search_type == "index" ) {
         $("#result_sta").html("<p>searching for <strong class='text-success'>" + search_content +
-        "</strong>, and <span class='label label-success'>" + json.length + "</span> papers included</p>");
+        "</strong>, and <span class='label label-success'>" + json.length + "</span> papers found</p>");
     }
     else {
-        $("#result_sta").html("<p><span class='label label-success'>" + json.length + "</span> papers included</p>");
+        $("#result_sta").html("<p><span class='label label-success'>" + json.length + "</span> papers found</p>");
     }
     $("#result_paper").fadeIn("slow") ;
 }

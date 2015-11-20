@@ -71,9 +71,11 @@ $(document).ready(function () {
 /*
  *	dealing with author's affiliation and country
  */
-function prepareAuthor(author) {
-    var ja = eval( author );
+function prepareAuthor(data) {
+    var ja = eval( data.basicInfo );
+    var jb = eval( data.focusField );
 
+    // basicInfo
     var s1 = ja[0].affiliation == null ? "" : ja[0].affiliation ;
     var s2 = ja[0].country == null ? "" : ", " + ja[0].country ;
     var full = s1 + s2 ;
@@ -81,14 +83,21 @@ function prepareAuthor(author) {
     var email = ja[0].email == null ? "" : ja[0].email ;
     var homepage = ja[0].homepage == null ? "" : ja[0].homepage ;
 
-    var str = "";
+    var jaStr = "";
     if( email != "" )
-        str += "<i class='fa fa-envelope-o fa-fw'></i> " + email ;
+        jaStr += '<i class="fa fa-envelope-o fa-fw"></i> ' + email ;
     if( homepage != "" )
-        str += "&nbsp; | &nbsp;<a href='" + homepage + "' target = '_blank'>homepage</a>";
+        jaStr += '&nbsp; | &nbsp;<a href="' + homepage + '" target = "_blank">homepage</a>';
+
+    // focusField
+    $("#author_field").children().attr("class","label label-default");
+    jb.forEach( function(each) {
+        $("#af_"+each.field).attr("class", "label label-warning");
+    });
+
     $("#author_aff").html("<p>" + full + "</p>");
-    $("#author_contact").html("<p class='pull-right'>" + str + "</p>");
-    $("#author_aff").show();
-    $("#author_contact").show();
+    $("#author_contact").html("<p class='pull-right'>" + jaStr + "</p>");
+
+    $("#author_info").show();
 
 }

@@ -19,7 +19,7 @@
             $("#show_c1").click(function () {
                 $("#btn_group").hide();
                 $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>number of booktitle");
+                $("#current").html("<span class='divider'></span>number of publication");
                 $("#pbread").fadeIn("slow");
                 $("#container-chart").fadeIn("slow");
 
@@ -141,7 +141,7 @@
             $("#show_c3").click(function () {
                 $("#btn_group").hide();
                 $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>annual booktitle");
+                $("#current").html("<span class='divider'></span>changging ratio of field");
                 $("#pbread").fadeIn("slow");
                 $("#container-chart").fadeIn("slow");
 
@@ -158,7 +158,7 @@
                     yAxis: {
                         min: 0,
                         title: {
-                            text: 'Total fruit consumption'
+                            text: 'ratio of publications'
                         }
                     },
                     tooltip: {
@@ -196,7 +196,6 @@
             }); // end $(#show_c3)
 
 
-
             $("#show_c4").click(function () {
                 var data = [
                     {"code": "AU", "value": 2, "name": "Australia"},
@@ -231,9 +230,10 @@
 
                 $("#btn_group").hide();
                 $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>researchers in the world");
+                $("#current").html("<span class='divider'></span>people in the world");
                 $("#pbread").fadeIn("slow");
                 $("#container-chart").fadeIn("slow");
+
                 $('#container-chart').highcharts('Map', {
                     title : {
                         text : 'The Distribution of Researchers across the World'
@@ -263,6 +263,52 @@
                     }]
                 });
             }); // end $(#show_c4)
+
+
+            $("#show_c5").click(function () {
+                $("#btn_group").hide();
+                $("#back_home").html("<a href='statistic'>statistic</a>");
+                $("#current").html("<span class='divider'></span>number of new affiliation");
+                $("#pbread").fadeIn("slow");
+                $("#container-chart").fadeIn("slow");
+
+                $('#container-chart').highcharts({
+                    chart: {
+                        type: 'column'
+                    },
+                    title: {
+                        text: 'Number of New Affiliations'
+                    },
+                    xAxis: {
+                        categories: [<%-c5_yearIndex%>],
+                        crosshair: true
+                    },
+                    yAxis: {
+                        min: 0,
+                        title: {
+                            text: '# of affiliations'
+                        }
+                    },
+                    tooltip: {
+                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                        pointFormat: '<tr><td style="color:{series.color};padding:0">new affiliation: </td>' +
+                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                        footerFormat: '</table>',
+                        shared: true,
+                        useHTML: true
+                    },
+                    plotOptions: {
+                        column: {
+                            pointPadding: 0.2,
+                            borderWidth: 0
+                        }
+                    },
+                    series: [{
+                        name: 'Annual',
+                        data: [<%=c5_numA%>]
+                    }]
+                });
+            }); // end $(#show_c5)
 
         });
     </script>
@@ -306,23 +352,30 @@
                         <div class="col-md-3 col-sm-6 charts">
                             <div id="show_c2"><a href="#" class="img-thumbnail"><img src="image/chart2.ico"/></a></div>
                             <h4>Distribution of Field</h4>
-                            <p>The distribution of different combinatorial testing research fields</p>
+                            <p>The distribution of different research fields</p>
                         </div>
 
                         <div class="col-md-3 col-sm-6 charts">
                             <div id="show_c3"><a href="#" class="img-thumbnail"><img src="image/chart3.ico"/></a></div>
                             <h4>Changing Ratio of Field</h4>
-                            <p>The changing ratio of different combinatorial testing research fields</p>
+                            <p>The changing ratio of different research fields</p>
                         </div>
 
                         <div class="col-md-3 col-sm-6 charts">
                             <div id="show_c4"><a href="#" class="img-thumbnail"><img src="image/chart4.ico"/></a></div>
-                            <h4>People in the World (beta)</h4>
+                            <h4>People in the World (under construnction)</h4>
                             <p>The distribution of researchers across the world</p>
                         </div>
                     </div>
                     <br>
 
+                    <div class = "row">
+                        <div class="col-md-3 col-sm-6 charts">
+                            <div id="show_c5"><a href="#" class="img-thumbnail"><img src="image/chart5.ico"/></a></div>
+                            <h4>Number of New Affiliations (under construnction)</h4>
+                            <p>The number of new affiliations that join the combinatorial testing community</p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="row">

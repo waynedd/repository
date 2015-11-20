@@ -11,7 +11,7 @@ var action = require('./routes/action');
 var app = express();
 
 // environment
-var mode = 'development';
+var mode = 'deploy';
 app.set('env', mode);
 if (mode === 'development') {
     app.use(logger('dev'));
