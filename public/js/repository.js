@@ -1,50 +1,55 @@
-/*
- * 控制分页
- * 用于search, author, field , pub
- *
- * #top_main : 头部导航返回
- * #left_back : 左侧导航返回
- * #pa : 头部导航条
- * 
- * .added : 表格加入项
- * .page_add : 分页数加入项
- * 
- * #main_list : 主要显示列表
- * #result_paper : 结果列表
- * #rstable : 显示结果的表格
- * 
- * #result_page : 分页列表
- * #result_page_pre, #search_page_net : 上一页，下一页
+/**
+ *  the main javascript file
  */
-var json ;
-var jsonData ;
-var pageSize = 15 ;  // the size of each page
-var page ;           // the number of pages
-var count = 5 ;      // page interval
-var current ;        // current page
 
+/*
+ * global parameters to control pagination
+ * they will be used in search, all, scholar, field, and venue pages
+ */
+
+var json ;           // interpreted json data
+var pageSize = 15 ;  // the maximum items in each page
+var page ;           // the number of pages
+var count = 5 ;      // page interval in pagination
+var current ;        // current page
+var search_type = "" ;    // type = all | index (search button) | author | field | subfield | booktitle
+var search_content = "" ; // content to be searched
+
+/*
+ * basic layout of content part:
+ * | main list
+ * | wait
+ * | result_list
+ *      | result_info
+ *          | bread nav: #result_info_type / #result_info_name
+ *          | author_info (only in author page)
+ *          | result_sta
+ *      | result_paper: paper list is shown in #rstable
+ *      | result_page: previous and next button #result_page_pre and #search_page_net
+ *
+ * basic css classes:
+ * .added : the new added elements of table
+ * .page_added : the new added elements of pagination
+ */
+
+/*
+ *  ajax
+ */
 $(document).ready(function() {
-	/*
-	 * clear result table for author, field and booktitle
-	 */
+    /*
+     *  click the bread nav to go back to the main list
+     *  #result_info_type / #result_info_name
+     */
 	$("#result_info_type").click(function () {
+        // clear result table for author, field and booktitle
         $("#result_info").hide();
         $(".added").empty();
-        $(".page_add").empty();
+        $(".page_added").empty();
         $("#result_paper").hide();
         $("#result_page").hide();
         $("#main_list").show();
     });
-	
-	$("#left_back").click(function() {
-		$("#result_info").hide();
-		$(".added").empty();
-		$(".page_add").empty();
-		$("#result_paper").hide();
-		$("#result_page").hide();
-		$("#main_list").show();
-	});
-	
+
 	/*
 	 *  click previous and next page
 	 */
@@ -57,7 +62,7 @@ $(document).ready(function() {
 			showPageCount();
 		}
 	});
-	
+
 	$("#result_page_next").click(function() {
 		if( $(this).hasClass("disabled") ) {
 			event.preventDefault();
@@ -69,9 +74,9 @@ $(document).ready(function() {
 	});
 	
 	/*
-	 *  click page
+	 *  click a particular page
 	 */
-	$(document).on("click", ".page_add", function() {
+	$(document).on("click", ".page_added", function() {
 		//alert(current);
 		if( parseInt($(this).attr("id")) == current ) {
 			//alert('User clicked on "foo ' + $(this).attr("id") );
@@ -85,32 +90,31 @@ $(document).ready(function() {
 });
 
 /*
- *  current: current page number
- *  count: the maximum page number to show
- *  page_add: (class) the new items that have been added
- *  result_page_pre
- *  result_page_next
+ *  pagination controller
+ *  parameter:
+ *      current - current page number
+ *      count - the maximum page number to show
  */
 function showPageCount() {
     // condition 1
     if( parseInt(current) < count-1 || page <= count - 1 ) {
-        $(".page_add").empty();
+        $(".page_added").empty();
 		if( parseInt(current) == 1 ) {
-			$("#result_page_pre").after("<li id='1' class='active page_add'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>")
+			$("#result_page_pre").after("<li id='1' class='active page_added'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>")
                                  .addClass("disabled");
 		}
 		else {
-			$("#result_page_pre").after("<li id='1' class='page_add'><a href='#'>1</a></li>")
+			$("#result_page_pre").after("<li id='1' class='page_added'><a href='#'>1</a></li>")
                                  .removeClass("disabled");
 		}
 		for( var k1=2 ; k1<=page && k1<=count ; k1++ ) {
 			if( k1 == parseInt(current) )
-                $("#result_page_next").before("<li id='"+k1+"' class='active page_add'><a href='#'>"+k1+" <span class='sr-only'>(current)</span></a></li>");
+                $("#result_page_next").before("<li id='"+k1+"' class='active page_added'><a href='#'>"+k1+" <span class='sr-only'>(current)</span></a></li>");
 			else
-				$("#result_page_next").before("<li id='"+k1+"' class='page_add'><a href='#'>"+k1+"</a></li>");
+				$("#result_page_next").before("<li id='"+k1+"' class='page_added'><a href='#'>"+k1+"</a></li>");
 		}
 		if( page > count )
-			$("#result_page_next").before("<li id='"+page+"' class='page_add'><a href='#'>Last</a></li>");
+			$("#result_page_next").before("<li id='"+page+"' class='page_added'><a href='#'>Last</a></li>");
 		if( current == page )
 			$("#result_page_next").addClass("disabled");
 		else
@@ -119,27 +123,27 @@ function showPageCount() {
 	}
     // condition 2
 	else if( parseInt(current) >= count-1 && parseInt(current) <= page-parseInt(count/2)-1 ){
-        $(".page_add").empty();
-		$("#result_page_pre").after("<li id='1' class='page_add'><a href='#'>First</a></li>");
+        $(".page_added").empty();
+		$("#result_page_pre").after("<li id='1' class='page_added'><a href='#'>First</a></li>");
 		for( var k2=parseInt(current)-parseInt(count/2) ; k2<=parseInt(current)+parseInt(count/2) ; k2++ ) {
 			if( k2 == parseInt(current) )
-				$("#result_page_next").before("<li id='"+k2+"' class='active page_add'><a href='#'>"+k2+" <span class='sr-only'>(current)</span></a></li>");
+				$("#result_page_next").before("<li id='"+k2+"' class='active page_added'><a href='#'>"+k2+" <span class='sr-only'>(current)</span></a></li>");
 			else	
-			    $("#result_page_next").before("<li id='"+k2+"' class='page_add'><a href='#'>"+k2+"</a></li>");
+			    $("#result_page_next").before("<li id='"+k2+"' class='page_added'><a href='#'>"+k2+"</a></li>");
 		}
-		$("#result_page_next").before("<li id='"+page+"' class='page_add'><a href='#'>Last</a></li>")
+		$("#result_page_next").before("<li id='"+page+"' class='page_added'><a href='#'>Last</a></li>")
                               .removeClass("disabled");
 		showPage(json,current);
 	}
     // condition 3
 	else {
-		$(".page_add").empty();
-		$("#result_page_pre").after("<li id='1' class='page_add'><a href='#'>First</a></li>");
+		$(".page_added").empty();
+		$("#result_page_pre").after("<li id='1' class='page_added'><a href='#'>First</a></li>");
 		for( var k3=parseInt(page-count)+1 ; k3<=parseInt(page) ; k3++ ) {
 			if( k3 == parseInt(current) )
-				$("#result_page_next").before("<li id='"+k3+"' class='active page_add'><a href='#'>"+k3+" <span class='sr-only'>(current)</span></a></li>");
+				$("#result_page_next").before("<li id='"+k3+"' class='active page_added'><a href='#'>"+k3+" <span class='sr-only'>(current)</span></a></li>");
 			else
-			    $("#result_page_next").before("<li id='"+k3+"' class='page_add'><a href='#'>"+k3+"</a></li>");
+			    $("#result_page_next").before("<li id='"+k3+"' class='page_added'><a href='#'>"+k3+"</a></li>");
 		}
 		if( current == page )
 			$("#result_page_next").addClass("disabled");
@@ -152,45 +156,46 @@ function showPageCount() {
 /*
  *  make the result show
  */
-var search_type = "" ;  // all | index | author | field | booktitle
-var search_content = "" ;   // search content
-
 function showSearchResult(data) {
-
     json = eval( data );
-	jsonData = data ;
 
-    // waiting end
+    // wait can be ended
 	$("#wait").hide();
 
-    // when searching index, it may return nothing
-    if (search_type == "index" ) {
+    /* when searching index, it may return nothing
+    if ( search_type == "index" ) {
         if (json == "") {
             $("#sh1").hide();
             $("#sh2").hide();
             $("#search_none").fadeIn("slow");
             return;
         }
-    }
+    }*/
 
+    // compute total number of pages
 	page = parseInt(( json.length + pageSize - 1 ) / pageSize) ;
 	current = 1 ;
 
+    // show current page
 	showPage(json, current);
-	
+
+    // show pagination
 	if( page > 1 ) {
 		$("#result_page_pre").addClass("disabled");
-        $("#result_page_pre").after("<li id='1' class='active page_add'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>");
+        $("#result_page_pre").after("<li id='1' class='active page_added'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>");
 		for( var i=2 ; i<=page && i<=count ; i++ ) {
-			$("#result_page_next").before("<li id='"+i+"' class='page_add'><a href='#'>"+i+"</a></li>");
+			$("#result_page_next").before("<li id='"+i+"' class='page_added'><a href='#'>"+i+"</a></li>");
 		}
 		if( page > count ) {
-			$("#result_page_next").before("<li id='"+page+"' class='page_add'><a href='#'>Last</a></li>");
+			$("#result_page_next").before("<li id='"+page+"' class='page_added'><a href='#'>Last</a></li>");
 		}
 		$("#result_page").show("slow");
 	}
 }
 
+/*
+ *  show a particular page
+ */
 function showPage(json, num) {
 	$(".added").empty();
 	var start = ( num - 1 ) *  pageSize ;
@@ -228,15 +233,15 @@ function showPage(json, num) {
     }
 
 	// show result
-    // search whole paper and index will not run followings
+    // search whole paper and index will not run the followings
 	if( search_type != "all" || search_type != "index") {
 		$("#result_info_type").html("<a href='#'>" + search_type + "</a>");
 		$("#result_info_name").html(search_content);
 	}
 	
 	$("#result_info").fadeIn("slow");
-    // if searching index, the sta will show the search content,
-    // else, the content has been shown in main_list
+    // if searching index, the sta will show the search content
+    // for the others, the content has been shown in bread nav
     if( search_type == "index" ) {
         $("#result_sta").html("<p>searching for <strong class='text-success'>" + search_content +
         "</strong>, and <span class='label label-success'>" + json.length + "</span> papers found</p>");
@@ -247,9 +252,9 @@ function showPage(json, num) {
     $("#result_paper").fadeIn("slow") ;
 }
 
-//
-// get full booktitle text
-//
+/*
+ *  get the complete booktitle as a string
+ */
 function getFullPublication( jn ) {
 	var type = jn.type ;
 	var booktitle = jn.booktitle ;
@@ -295,9 +300,9 @@ function getFullPublication( jn ) {
 	}
 }
 
-//
-// get bib entry as html code
-//
+/*
+ *  get bib entry as html code
+ */
 function getBibEntry( jn ) {
 	var re = "" ;
     /*
@@ -439,7 +444,3 @@ function getBibEntry( jn ) {
 	}
 	return re ;
 }
-
-
-
-

@@ -1,7 +1,6 @@
 /**
  * control the view of scholar page
  */
-
 $(document).ready(function () {
     // search paper by author
     $(".auTD a[id]").click(function () {
@@ -55,17 +54,6 @@ $(document).ready(function () {
             success: showSearchResult
         });
     });
-    // search in page
-    $("#searchScholarButton").click(function () {
-        var c = $("#searchText").val();
-        alert(c);
-        $("td").each( function(index) {
-            //alert($(this).text());
-            if( $(this).text() == c ) {
-                alert("find " + c);
-            }
-        });
-    });
 });
 
 /*
@@ -97,7 +85,5 @@ function prepareAuthor(data) {
 
     $("#author_aff").html("<p>" + full + "</p>");
     $("#author_contact").html("<p class='pull-right'>" + jaStr + "</p>");
-
     $("#author_info").show();
-
 }

@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var minify = require('express-minify');
+//var compression = require('compression');
 
 var index = require('./routes/index');
 var action = require('./routes/action');
@@ -20,12 +22,15 @@ if (mode === 'development') {
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.set('view options', { pretty: false });
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(minify({
+    css_match: /text\/css/
+}));
+////app.use(compression());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);

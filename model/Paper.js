@@ -36,7 +36,7 @@ Paper.getWholeNum = function getWholeNum(callback) {
         var sql = "select count(*) as num from paper.list";
         connection.query(sql, function(err, result) {
             if (err) {
-                console.log("[!!!!] [getWholeNum] Error: " + err.message);
+                console.error("[getWholeNum] Error: " + err.message);
                 return;
             }
             connection.release();
@@ -51,7 +51,7 @@ Paper.getPaperAll = function getPaperAll(callback) {
         var sql = "SELECT * FROM paper.list order by year DESC";
         connection.query(sql, function(err, results) {
             if (err) {
-                console.log("[!!!!] [getPaperAll] Error: " + err.message);
+                console.error("[getPaperAll] Error: " + err.message);
                 return;
             }
             connection.release();
@@ -71,7 +71,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
 
         connection.query(sql, ["%"+input+"%", "%"+input+"%", "%"+input+"%", "%"+input+"%"], function(err, results) {
             if (err) {
-                console.log("[!!!!] [searchByInput] Error: " + err.message);
+                console.error("[searchByInput] Error: " + err.message);
                 return;
             }
             connection.release();
@@ -119,7 +119,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
             }
         }
         else {
-            console.log("[!!!!] [searchByContent] Error: invalid parameter");
+            console.error("[searchByContent] Error: invalid parameter");
             return;
         }
         sql += " order by year DESC" ;
@@ -132,7 +132,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
             }
             connection.query(sql, [re], function(err, results) {
                 if (err) {
-                    console.log("[!!!!] [searchByContent-1] Error: " + err.message);
+                    console.error("[searchByContent-1] Error: " + err.message);
                     return;
                 }
                 connection.release();
@@ -143,7 +143,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
         else {
             connection.query(sql, function(err, results) {
                 if (err) {
-                    console.log("[!!!!] [searchByContent-2] Error: " + err.message);
+                    console.error("[searchByContent-2] Error: " + err.message);
                     return;
                 }
                 connection.release();

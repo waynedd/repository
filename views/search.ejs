@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -10,20 +10,17 @@
 
     <title>Search</title>
     <link rel="stylesheet" href="http://gist.nju.edu.cn/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/repository.css">
 
-
     <script src="http://gist.nju.edu.cn/js/jquery.min.js"></script>
-    <script src="js/comb.js"></script>
+    <script src="js/repository.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
             var para = "content=<%=content%>";
-            search_now = "<%=content%>";
+            search_content = "<%=content%>";
             search_type = "index";
             $("#wait").show();
-            $("#sh1").hide();
-            $("#sh2").hide();
             $.ajax({
                 url: "action/search",
                 type: "post",

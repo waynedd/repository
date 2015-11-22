@@ -16,40 +16,44 @@ pool.on('connection', function(connection) {
     connection.query('SET SESSION auto_increment_increment=1');
 });
 
-
 /*
  *  get the statistic data
- *  return (sql1) annual & cumulative number of publications
- *         (sql2) total number of each field
- *         (sql3) annual number of each filed
- *         (sql4) the number of new affiliations that join the CT community
+ *  no = 1 : annual & cumulative number of publications
+ *  no = 2 : total number of each field
+ *  no = 3 : annual number of each filed
+ *  no = 5 : the number of new affiliations that join the CT community
  */
-Info.getStatistic = function getStatistic(callback) {
+Info.getStatistics = function getStatistics(no, callback) {
     pool.getConnection(function (err, connection) {
-        // year, num, count
-        var sql1 = "select * from paper.count_cumulative";
-        // field, count
-        var sql2 = "select * from paper.count_field order by count DESC";
-        // year, generation, application, model, evaluation, optimization, diagnosis, other
-        var sql3 = "select * from paper.count_field_annual";
-        // year, num, count
-        var sql4 = "select a.year, a.num, sum(b.num) as count from paper.first_annual a " +
-            "join paper.first_annual b where b.year <= a.year group by a.year";
-        connection.query(sql1, function(err, results1) {
-            connection.query(sql2, function(err, results2) {
-                connection.query(sql3, function(err, results3) {
-                    connection.query(sql4, function(err, results4) {
-                        if(err) {
-                            console.log("[!!!!]");
-                            return;
-                        }
-                        else {
-                            connection.release();
-                            callback(err, results1, results2, results3, results4);
-                        }
-                    });
-                });
-            });
+        var sql = "" ;
+        switch ( no ) {
+            case 1 :
+                sql = "select year, num, count from paper.count_cumulative";
+                break ;
+            case 2 :
+                sql = "select field, count from paper.count_field order by count DESC";
+                break ;
+            case 3 :
+                // year, num, generation, application, model, evaluation, optimization, diagnosis, other
+                sql = "select * from paper.count_field_annual";
+                break ;
+            case 5 :
+                sql = "select a.year, a.num, sum(b.num) as count from paper.first_annual a " +
+                    "join paper.first_annual b where b.year <= a.year group by a.year";
+                break ;
+            default :
+                console.error("Error when getStatisticPublication, invalid Parameter");
+                break ;
+        } // end switch
+        connection.query(sql, function (err, results) {
+            if (err) {
+                console.error("Error when getStatisticField");
+                return;
+            }
+            else {
+                connection.release();
+                callback(err, results);
+            }
         });
     });
 };
@@ -68,12 +72,12 @@ Info.getScholar = function getScholar(para, callback) {
         else if( para == "country" )
             sql = "select distinct country from paper.scholar order by country";
         else {
-            console.log("[!!!!] [getScholar] Error: para is invalid");
+            console.error("[getScholar] Error: para is invalid");
             return;
         }
         connection.query(sql, function(err, results) {
             if (err) {
-                console.log("[!!!!] [getScholar] Error: " + err.message);
+                console.error("[getScholar] Error: " + err.message);
                 return;
             }
             connection.release();
@@ -110,7 +114,7 @@ Info.getAuthorInfo = function getAuthorInfo(input, callback) {
         connection.query(sql1, [input], function(err, result1) {
             connection.query(sql2, [input], function(err, result2) {
                 if (err) {
-                    console.log("[!!!!] [getAuthorInfo] Error: " + err.message);
+                    console.error("[getAuthorInfo] Error: " + err.message);
                     return;
                 }
                 connection.release();
@@ -131,12 +135,12 @@ Info.getVenue = function getVenue(callback) {
         var sql2 = "select * from paper.venue where type = 'inproceedings'";
         connection.query(sql1, function(err, results1) {
             if (err) {
-                console.log("[!!!!] [getVenueArticle] Error: " + err.message);
+                console.error("[getVenueArticle] Error: " + err.message);
                 return;
             }
             connection.query(sql2, function(err, results2) {
                 if (err) {
-                    console.log("[!!!!] [getVenueInproceeding] Error: " + err.message);
+                    console.error("[getVenueInproceeding] Error: " + err.message);
                     return;
                 }
                 connection.release();
@@ -165,7 +169,7 @@ Info.getRank = function getRank(para, callback) {
     pool.getConnection(function (err, connection) {
         connection.query(sql, function(err, results) {
             if (err) {
-                console.log("[!!!!] [getRank] Error: " + err.message);
+                console.error("[getRank] Error: " + err.message);
                 return;
             }
             connection.release();

@@ -10,308 +10,12 @@
 
     <title>Statistic</title>
     <link rel="stylesheet" href="http://gist.nju.edu.cn/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/font-awesome.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/repository.css">
 
     <script src="http://gist.nju.edu.cn/js/jquery.min.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("#show_c1").click(function () {
-                $("#btn_group").hide();
-                $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>number of publication");
-                $("#pbread").fadeIn("slow");
-                $("#container-chart").fadeIn("slow");
-
-                $('#container-chart').highcharts({
-                    title: {
-                        text: 'The Number of Publications from <%=c1_start%> to <%=c1_end%>',
-                        x: -20 //center
-                    },
-                    xAxis: {
-                        title: {
-                            text: 'year'
-                        },
-                        categories: [<%-c1_yearIndex%>]
-                    },
-                    yAxis: {
-                        title: {
-                            text: '# of publications'
-                        },
-                        plotLines: [
-                            {
-                                value: 0,
-                                width: 1,
-                                color: '#808080'
-                            }
-                        ],
-                        min: 0
-                    },
-                    tooltip: {
-                        formatter: function () {
-                            return '<b>' + this.series.name + '</b><br/>' +
-                                    this.x + ' num: ' + this.y;
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Annual',
-                            data: [<%=c1_numA%>]
-                        },
-                        {
-                            name: 'Cumulative',
-                            data: [<%=c1_numC%>]
-                        }
-                    ]
-                });
-            }); // end $(#show_c1)
-
-
-            $("#show_c2").click(function () {
-                $("#btn_group").hide();
-                $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>distribution of field");
-                $("#pbread").fadeIn("slow");
-                $("#container-chart").fadeIn("slow");
-
-                // Make monochrome colors and set them as default for all pies
-                Highcharts.getOptions().plotOptions.pie.colors = (function () {
-                    var colors = [],
-                            base = Highcharts.getOptions().colors[0],
-                            i
-
-                    for (i = 0; i < 8; i++) {
-                        // Start out with a darkened base color (negative brighten), and end
-                        // up with a much brighter color
-                        colors.push(Highcharts.Color(base).brighten((i - 3) / 7).get());
-                    }
-                    return colors;
-                }());
-
-                // Build the chart
-                $('#container-chart').highcharts({
-                    chart: {
-                        plotBackgroundColor: null,
-                        plotBorderWidth: null,
-                        plotShadow: false
-                    },
-                    title: {
-                        text: 'The Distribution of Combinatorial Testing Research Fields'
-                    },
-                    tooltip: {
-                        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-                    },
-                    plotOptions: {
-                        pie: {
-                            allowPointSelect: true,
-                            cursor: 'pointer',
-                            dataLabels: {
-                                enabled: true,
-                                format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-                                style: {
-                                    color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-                                }
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            type: 'pie',
-                            name: 'Field ratio',
-                            data: [
-                                {
-                                    name: '<%=c2_field[0].field%>',
-                                    y: <%=c2_field[0].count%>,
-                                    sliced: true,
-                                    selected: true
-                                },
-                                <%
-                                var k = 1 ;
-                                for( ; k<c2_field.length-1; k++ ) { %>
-                                    ['<%=c2_field[k].field%>', <%=c2_field[k].count%>],
-                                <% } %>
-                                ['<%=c2_field[k].field%>', <%=c2_field[k].count%>]
-                            ]
-                        }
-                    ]
-                });
-            });// end $(#show_c2)
-
-
-            $("#show_c3").click(function () {
-                $("#btn_group").hide();
-                $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>changging ratio of field");
-                $("#pbread").fadeIn("slow");
-                $("#container-chart").fadeIn("slow");
-
-                $('#container-chart').highcharts({
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: 'The Changing Ratio of Combinatorial Testing Research Fields'
-                    },
-                    xAxis: {
-                        categories: [<%-c1_yearIndex%>]
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: 'ratio of publications'
-                        }
-                    },
-                    tooltip: {
-                        pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
-                        shared: true
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'percent'
-                        }
-                    },
-                    series: [{
-                        name: 'Generation',
-                        data: [<%=c3_generation%>]
-                    }, {
-                        name: 'Application',
-                        data: [<%=c3_application%>]
-                    }, {
-                        name: 'Model',
-                        data: [<%=c3_model%>]
-                    }, {
-                        name: 'Evaluation',
-                        data: [<%=c3_evaluation%>]
-                    }, {
-                        name: 'Optimization',
-                        data: [<%=c3_optimization%>]
-                    }, {
-                        name: 'Diagnosis',
-                        data: [<%=c3_diagnosis%>]
-                    }, {
-                        name: 'Other',
-                        data: [<%=c3_other%>]
-                    }]
-                });
-            }); // end $(#show_c3)
-
-
-            $("#show_c4").click(function () {
-                var data = [
-                    {"code": "AU", "value": 2, "name": "Australia"},
-                    {"code": "AT", "value": 1, "name": "Austria"},
-                    {"code": "BR", "value": 1, "name": "Brazil"},
-                    {"code": "CA", "value": 9, "name": "Canada"},
-                    {"code": "CN", "value": 31, "name": "China"},
-                    {"code": "HR", "value": 1, "name": "Croatia"},
-                    {"code": "DK", "value": 2, "name": "Denmark"},
-                    {"code": "FI", "value": 2, "name": "Finland"},
-                    {"code": "DE", "value": 3, "name": "Germany"},
-                    {"code": "IN", "value": 5, "name": "India"},
-                    {"code": "IE", "value": 1, "name": "Ireland"},
-                    {"code": "IL", "value": 4, "name": "Israel"},
-                    {"code": "IT", "value": 4, "name": "Italy"},
-                    {"code": "JP", "value": 6, "name": "Japan"},
-                    {"code": "JO", "value": 1, "name": "Jordan"},
-                    {"code": "LU", "value": 2, "name": "Luxembourg"},
-                    {"code": "MY", "value": 8, "name": "Malaysia"},
-                    {"code": "MX", "value": 7, "name": "Mexico"},
-                    {"code": "NO", "value": 2, "name": "Norway"},
-                    {"code": "RO", "value": 1, "name": "Romania"},
-                    {"code": "SA", "value": 1, "name": "Saudi Arabia"},
-                    {"code": "RS", "value": 1, "name": "Serbia"},
-                    {"code": "ES", "value": 3, "name": "Spain"},
-                    {"code": "SE", "value": 2, "name": "Sweden"},
-                    {"code": "TR", "value": 3, "name": "Turkey"},
-                    {"code": "GB", "value": 2, "name": "United Kingdom"},
-                    {"code": "US", "value": 65, "name": "United States of America"},
-                    {"code": "VN", "value": 1, "name": "Vietnam"}
-                ]
-
-                $("#btn_group").hide();
-                $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>people in the world");
-                $("#pbread").fadeIn("slow");
-                $("#container-chart").fadeIn("slow");
-
-                $('#container-chart').highcharts('Map', {
-                    title : {
-                        text : 'The Distribution of Researchers across the World'
-                    },
-                    mapNavigation: {
-                        enabled: true,
-                        enableDoubleClickZoomTo: true
-                    },
-                    colorAxis: {
-                        min: 0,
-                        max: 75,
-                        type: 'linear'
-                    },
-                    series : [{
-                        data : data,
-                        mapData: Highcharts.maps['custom/world'],
-                        joinBy: ['iso-a2', 'code'],
-                        name: 'The number of authors',
-                        states: {
-                            hover: {
-                                color: '#BADA55'
-                            }
-                        },
-                        tooltip: {
-                            valueSuffix: ''
-                        }
-                    }]
-                });
-            }); // end $(#show_c4)
-
-
-            $("#show_c5").click(function () {
-                $("#btn_group").hide();
-                $("#back_home").html("<a href='statistic'>statistic</a>");
-                $("#current").html("<span class='divider'></span>number of new affiliation");
-                $("#pbread").fadeIn("slow");
-                $("#container-chart").fadeIn("slow");
-
-                $('#container-chart').highcharts({
-                    chart: {
-                        type: 'column'
-                    },
-                    title: {
-                        text: 'Number of New Affiliations'
-                    },
-                    xAxis: {
-                        categories: [<%-c5_yearIndex%>],
-                        crosshair: true
-                    },
-                    yAxis: {
-                        min: 0,
-                        title: {
-                            text: '# of affiliations'
-                        }
-                    },
-                    tooltip: {
-                        headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                        pointFormat: '<tr><td style="color:{series.color};padding:0">new affiliation: </td>' +
-                        '<td style="padding:0"><b>{point.y}</b></td></tr>',
-                        footerFormat: '</table>',
-                        shared: true,
-                        useHTML: true
-                    },
-                    plotOptions: {
-                        column: {
-                            pointPadding: 0.2,
-                            borderWidth: 0
-                        }
-                    },
-                    series: [{
-                        name: 'Annual',
-                        data: [<%=c5_numA%>]
-                    }]
-                });
-            }); // end $(#show_c5)
-
-        });
-    </script>
+    <script src="js/repository.js"></script>
+    <script src="js/chartControl.js"></script>
 </head>
 
 <body>
@@ -333,7 +37,7 @@
             <div class="col-md-10 col-sm-9">
 
                 <div class="row">
-                    <div id="pbread" style="display:none" class="col-md-12">
+                    <div id="chart_info" style="display:none" class="col-md-12">
                         <ul class="breadcrumb">
                             <li id="back_home">statistic</li>
                             <li id="current"></li>
@@ -346,7 +50,7 @@
                         <div class="col-md-3 col-sm-6 charts">
                             <div id="show_c1"><a href="#" class="img-thumbnail"><img src="image/chart1.ico"/></a></div>
                             <h4>Number of Publication</h4>
-                            <p>The number of publications from <%=c1_start%> to <%=c1_end%></p>
+                            <p>The number of publications annually and cumulatively</p>
                         </div>
 
                         <div class="col-md-3 col-sm-6 charts">
@@ -373,16 +77,15 @@
                         <div class="col-md-3 col-sm-6 charts">
                             <div id="show_c5"><a href="#" class="img-thumbnail"><img src="image/chart5.ico"/></a></div>
                             <h4>Number of New Affiliations (under construnction)</h4>
-                            <p>The number of new affiliations that join the combinatorial testing community</p>
+                            <p>The number of new affiliations that join combinatorial testing community</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-12" id="container-chart"
+                    <div class="col-md-12" id="container_chart"
                          style="display:none; min-width: 400px; height: 400px; margin: 0 auto"></div>
                 </div>
-
                 <div id="container2"></div>
 
             </div>
