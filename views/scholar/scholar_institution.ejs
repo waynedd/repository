@@ -1,7 +1,7 @@
 <!-- Scholar Affiliation -->
 <ul class="nav nav-tabs">
     <li role="presentation"><a href="scholar?r=author">Author</a></li>
-    <li role="presentation" class="active"><a href="#">Affiliation &nbsp;<span class="label label-info"># <%=num%></span></a></li>
+    <li role="presentation" class="active"><a href="#">Institution &nbsp;<span class="label label-info"># <%=num%></span></a></li>
     <li role="presentation"><a href="scholar?r=country">Country</a></li>
 </ul>
 <!-- list part -->
@@ -34,8 +34,8 @@
                     while( index < academia.length ) { %>
                         <tr>
                     <%  for( var i = 0 ; i < count && index < academia.length ; i++, index++) { %>
-                            <td class="afTD"><a href="#" id="<%=academia[index].affiliation%>">
-                                    <%=academia[index].affiliation%></a></td>
+                            <td class="afTD"><a href="#" id="<%=academia[index].institution%>">
+                                    <%=academia[index].institution%></a></td>
                     <%  } %>
                         </tr>
                 <% } %>
@@ -56,8 +56,8 @@
                     while( index < industry.length ) { %>
                         <tr>
                     <%  for( var j=0 ; j<count && index<industry.length ; j++, index++) { %>
-                            <td class="afTD"><a href="#" id="<%=industry[index].affiliation%>">
-                                    <%=industry[index].affiliation%></a></td>
+                            <td class="afTD"><a href="#" id="<%=industry[index].institution%>">
+                                    <%=industry[index].institution%></a></td>
                     <%  } %>
                         </tr>
                 <% } %>

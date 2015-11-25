@@ -48,7 +48,7 @@ router.get('/rank', Hooks.miniHTML, function(req, res) {
         }
         else {
             // do the affiliation query
-            Info.getRank("affiliation", function(err, results2) {
+            Info.getRank("institution", function(err, results2) {
                 if( err ) {
                     console.error('SYSTEM ERROR AT RANK');
                     res.render('error', {message: "get rank page error"});

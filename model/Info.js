@@ -21,7 +21,7 @@ pool.on('connection', function(connection) {
  *  no = 1 : annual & cumulative number of publications
  *  no = 2 : total number of each field
  *  no = 3 : annual number of each filed
- *  no = 5 : the number of new affiliations that join the CT community
+ *  no = 5 : the number of new institutions that join the CT community
  */
 Info.getStatistics = function getStatistics(no, callback) {
     pool.getConnection(function (err, connection) {
@@ -60,15 +60,15 @@ Info.getStatistics = function getStatistics(no, callback) {
 
 /*
  *  get the required list from scholar table
- *  para = author | affiliation | country
+ *  para = author | institution | country
  */
 Info.getScholar = function getScholar(para, callback) {
     pool.getConnection(function (err, connection) {
         var sql = "" ;
         if( para == "author" )
             sql = "select name from paper.scholar order by name";
-        else if( para == "affiliation" )
-            sql = "select distinct affiliation, category from paper.scholar order by affiliation";
+        else if( para == "institution" )
+            sql = "select distinct institution, category from paper.scholar order by institution";
         else if( para == "country" )
             sql = "select distinct country from paper.scholar order by country";
         else {
@@ -156,7 +156,7 @@ Info.getVenue = function getVenue(callback) {
  */
 Info.getRank = function getRank(para, callback) {
     var table = "" ;
-    if( para == "author" || para == "affiliation" )
+    if( para == "author" || para == "institution" )
         table = "rank_" + para + "_archive" ;
     else {
         console.log("[!!!!] [getRank] Error: invalid parameters");

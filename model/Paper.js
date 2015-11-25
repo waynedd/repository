@@ -82,7 +82,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
 
 /*
  *  get paper list according to
- *  group = author | affiliation | country | field | subfield | booktitle
+ *  group = author | institution | country | field | subfield | booktitle
  *  content
  */
 Paper.searchByContent = function searchByContent(group, content, callback) {
@@ -91,9 +91,9 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
         if( group == "author" ) {
             sql = "select * from paper.list where author LIKE ?";
         }
-        else if( group == "affiliation" ) {
+        else if( group == "institution" ) {
             sql = "select distinct id, bib, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, field, subfield, doi " +
-                "from (select name, affiliation from paper.scholar where affiliation = ?) p " +
+                "from (select name, institution from paper.scholar where institution = ?) p " +
                 "left join paper.list q on q.author like CONCAT('%', p.name, '%')";
         }
         else if( group == "country" ) {

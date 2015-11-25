@@ -26,9 +26,9 @@ $(document).ready(function () {
     });
     // search paper by affiliation
     $(".afTD a[id]").click(function () {
-        var para = "content=" + escape($(this).attr("id")) + "&group=affiliation";
+        var para = "content=" + escape($(this).attr("id")) + "&group=institution";
         search_content = $(this).attr("id");
-        search_type = "affiliation";
+        search_type = "institution";
         $("#wait").show();
         $("#main_list").hide();
         $.ajax({
@@ -64,7 +64,7 @@ function prepareAuthor(data) {
     var jb = eval( data.focusField );
 
     // basicInfo
-    var s1 = ja[0].affiliation == null ? "" : ja[0].affiliation ;
+    var s1 = ja[0].institution == null ? "" : ja[0].institution ;
     var s2 = ja[0].country == null ? "" : ", " + ja[0].country ;
     var full = s1 + s2 ;
 
