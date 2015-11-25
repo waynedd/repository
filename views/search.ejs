@@ -80,8 +80,9 @@
                 <!-- none -->
                 <div id="search_none" style="display:none;padding-left:60px" class="row">
                     <div class="alert alert-warning">
-                        <h4 class="alert-heading">No relevant papers are found in our database</h4>
-                        <p>please change your key words, or click <em>All</em> for the whole paper list<p>
+                        <h4 class="alert-heading">Nothing is found in our database</h4>
+                        <p>Please change your key words, or click <strong>All</strong> for the whole list.<p>
+                        <p>If your paper is missing, please contact us.</p>
                     </div>
                 </div>
 
@@ -96,24 +97,6 @@
 
 <!-- footer -->
 <%- include template/template_bottom.ejs %>
-
-<!-- modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Attention</h4>
-            </div>
-            <div class="modal-body">
-                <p>The input text of search form cannot be empty</p>
-            </div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn btn-danger" data-dismiss="modal">OK</a>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script src="http://gist.nju.edu.cn/js/bootstrap.min.js"></script>
 </body>

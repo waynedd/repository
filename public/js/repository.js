@@ -162,15 +162,11 @@ function showSearchResult(data) {
     // wait can be ended
 	$("#wait").hide();
 
-    /* when searching index, it may return nothing
-    if ( search_type == "index" ) {
-        if (json == "") {
-            $("#sh1").hide();
-            $("#sh2").hide();
-            $("#search_none").fadeIn("slow");
-            return;
-        }
-    }*/
+    // if return nothing (only when search_type == index)
+    if ( search_type == "index" && json == "" ) {
+        $("#search_none").fadeIn("slow");
+        return;
+    }
 
     // compute total number of pages
 	page = parseInt(( json.length + pageSize - 1 ) / pageSize) ;
