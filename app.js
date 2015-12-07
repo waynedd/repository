@@ -5,14 +5,13 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var minify = require('express-minify');
-//var compression = require('compression');
 
 var index = require('./routes/index');
 var action = require('./routes/action');
 
 var app = express();
 
-// environment
+// environment setting
 var mode = 'deploy';
 app.set('env', mode);
 if (mode === 'development') {
@@ -27,10 +26,11 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+// minimize stylesheet files
 app.use(minify({
     css_match: /text\/css/
 }));
-////app.use(compression());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);

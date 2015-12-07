@@ -1,5 +1,5 @@
 /**
- * control the view of scholar page
+ *  control the view of scholar page
  */
 $(document).ready(function () {
     // search paper by author

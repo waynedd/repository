@@ -11,7 +11,6 @@ var router = express.Router();
  */
 router.post('/search', function(req, res) {
     var content = req.body.content;
-    //console.log(content);
     Paper.searchByInput(content, function (err, results) {
         res.send(JSON.stringify(results));
     });
@@ -60,7 +59,7 @@ router.post('/chart', function (req, res) {
     var no = req.body.no ;
 
     // chart 1: number of publication
-    if( no == "1" ) {
+    if( no == '1' ) {
         Info.getStatistics(1, function (err, results) {
             var yearIndex = [] ;
             var numA = [] ;
@@ -79,7 +78,7 @@ router.post('/chart', function (req, res) {
     }
 
     // chart 2: distribution of field
-    else if( no == "2" ) {
+    else if( no == '2' ) {
         Info.getStatistics(2, function (err, results) {
             var category = [];
             for( var k=0 ; k<results.length ; k++ ) {
@@ -95,7 +94,7 @@ router.post('/chart', function (req, res) {
     }
 
     // chart 3: changing ratio of field
-    else if( no == "3" ) {
+    else if( no == '3' ) {
         Info.getStatistics(3, function (err, results) {
             // year, num, generation, application, model, evaluation, optimization, diagnosis, other
             var yearIndex = [], gen = [], app = [], mod = [], eva = [], opt = [], dig = [], oth = [] ;
@@ -123,13 +122,13 @@ router.post('/chart', function (req, res) {
     }
 
     // chart 5: number of new affiliation
-    else if( no == "5" ) {
+    else if( no == '5' ) {
         Info.getStatistics(5, function (err, results) {
             var yearIndex = [] ;
             var numA = [] ;
             var numC = [] ;
             for( var k=0 ; k<results.length ; k++ ) {
-                yearIndex[k] = "'" + results[k].year + "'";
+                yearIndex[k] = '"' + results[k].year + '"';
                 numA[k] = results[k].num ;
                 numC[k] = results[k].count ;
             }
@@ -142,7 +141,7 @@ router.post('/chart', function (req, res) {
     }
 
     else {
-        res.send("Error");
+        res.send('Error');
     }
 });
 

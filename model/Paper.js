@@ -1,5 +1,8 @@
-// Paper
+/**
+ *  Get Paper List
+ */
 var mysql = require('mysql');
+var logger = require('../model/Logger');
 
 function Paper(paper) {
     this.id = paper.id;
@@ -33,11 +36,11 @@ pool.on('connection', function(connection) {
 /* get the whole number as result[0].num */
 Paper.getWholeNum = function getWholeNum(callback) {
     pool.getConnection(function (err, connection) {
-        var sql = "select count(*) as num from paper.list";
+        var sql = 'select count(*) as num from paper.list';
         connection.query(sql, function(err, result) {
             if (err) {
-                console.error("[getWholeNum] Error: " + err.message);
-                return;
+                logger.log('error', 'PAPER [Get WholeNum] Error: ' + err.message);
+                console.error('PAPER [Get WholeNum] Error: ' + err.message);
             }
             connection.release();
             callback(err, result[0].num);
@@ -48,11 +51,11 @@ Paper.getWholeNum = function getWholeNum(callback) {
 /* get all paper list as results */
 Paper.getPaperAll = function getPaperAll(callback) {
     pool.getConnection(function (err, connection) {
-        var sql = "SELECT * FROM paper.list order by year DESC";
+        var sql = 'SELECT * FROM paper.list order by year DESC, booktitle, title';
         connection.query(sql, function(err, results) {
             if (err) {
-                console.error("[getPaperAll] Error: " + err.message);
-                return;
+                logger.log('error', 'PAPER [Get PaperAll] Error: ' + err.message);
+                console.error('PAPER [Get PaperAll] Error: ' + err.message);
             }
             connection.release();
             callback(err, results);
@@ -63,16 +66,16 @@ Paper.getPaperAll = function getPaperAll(callback) {
 /* search by input */
 Paper.searchByInput = function searchByInput(input, callback) {
     pool.getConnection(function (err, connection) {
-        var sql = "SELECT * FROM paper.list WHERE (author like ? OR " +
-                                                  "title like ? OR " +
-                                                  "booktitle like ? OR " +
-                                                  "year like ?) " +
-                                                  "order by year DESC, author ASC";
+        var sql = 'SELECT * FROM paper.list WHERE (author like ? OR ' +
+                                                  'title like ? OR ' +
+                                                  'booktitle like ? OR ' +
+                                                  'year like ?) ' +
+                                                  'order by year DESC, author ASC';
 
-        connection.query(sql, ["%"+input+"%", "%"+input+"%", "%"+input+"%", "%"+input+"%"], function(err, results) {
+        connection.query(sql, ['%'+input+'%', '%'+input+'%', '%'+input+'%', '%'+input+'%'], function(err, results) {
             if (err) {
-                console.error("[searchByInput] Error: " + err.message);
-                return;
+                logger.log('error', 'PAPER [Search Input] Error: ' + err.message);
+                console.error('PAPER [Search Input] Error: ' + err.message);
             }
             connection.release();
             callback(err, results);
@@ -87,53 +90,53 @@ Paper.searchByInput = function searchByInput(input, callback) {
  */
 Paper.searchByContent = function searchByContent(group, content, callback) {
     pool.getConnection(function (err, connection) {
-        var sql = "" ;
-        if( group == "author" ) {
-            sql = "select * from paper.list where author LIKE ?";
+        var sql = '' ;
+        if( group == 'author' ) {
+            sql = 'select * from paper.list where author LIKE ?';
         }
-        else if( group == "institution" ) {
-            sql = "select distinct id, bib, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, field, subfield, doi " +
-                "from (select name, institution from paper.scholar where institution = ?) p " +
-                "left join paper.list q on q.author like CONCAT('%', p.name, '%')";
+        else if( group == 'institution' ) {
+            sql = 'select distinct id, bib, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, field, subfield, doi ' +
+                'from (select name, institution from paper.scholar where institution = ?) p ' +
+                'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
         }
-        else if( group == "country" ) {
-            sql = "select distinct id, bib, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, field, subfield, doi " +
-                "from (select name, country from paper.scholar where country = ?) p " +
-                "left join paper.list q on q.author like CONCAT('%', p.name, '%')";
+        else if( group == 'country' ) {
+            sql = 'select distinct id, bib, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, field, subfield, doi ' +
+                'from (select name, country from paper.scholar where country = ?) p ' +
+                'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
         }
-        else if( group == "field" ) {
-            sql = "select * from paper.list where field = ?";
+        else if( group == 'field' ) {
+            sql = 'select * from paper.list where field = ?';
         }
-        else if( group == "subfield" ) {
-            sql = "select * from paper.list where subfield = ?"
+        else if( group == 'subfield' ) {
+            sql = 'select * from paper.list where subfield = ?'
         }
-        else if( group == "booktitle" ) {
-            if( content == "phd" ) {
-                sql = "select * from paper.list where type = 'phdthesis'" ;
+        else if( group == 'booktitle' ) {
+            if( content == 'phd' ) {
+                sql = 'select * from paper.list where type = "phdthesis"' ;
             }
-            else if( content == "tech" ) {
-                sql = "select * from paper.list where type = 'techreport'" ;
+            else if( content == 'tech' ) {
+                sql = 'select * from paper.list where type = "techreport"' ;
             }
             else {
-                sql = "select * from paper.list where abbr = ?" ;
+                sql = 'select * from paper.list where abbr = ?' ;
             }
         }
         else {
-            console.error("[searchByContent] Error: invalid parameter");
+            logger.log('error', 'PAPER - Invalid search parameter: ' + group + ', ' + content);
             return;
         }
-        sql += " order by year DESC" ;
+        sql += ' order by year DESC' ;
 
         // if there is a ? in sql
         if( sql.indexOf('?') != -1 ) {
             var re = content ;
-            if( group == "author") {
-                re = "%"+content+"%" ;
+            if( group == 'author') {
+                re = '%'+content+'%' ;
             }
             connection.query(sql, [re], function(err, results) {
                 if (err) {
-                    console.error("[searchByContent-1] Error: " + err.message);
-                    return;
+                    logger.log('error', 'PAPER [Search C-1] Error: ' + err.message);
+                    console.error('PAPER [Search C-1] Error: ' + err.message);
                 }
                 connection.release();
                 callback(err, results);
@@ -143,8 +146,8 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
         else {
             connection.query(sql, function(err, results) {
                 if (err) {
-                    console.error("[searchByContent-2] Error: " + err.message);
-                    return;
+                    logger.log('error', 'PAPER [Search C-2] Error: ' + err.message);
+                    console.error('PAPER [Search C-2] Error: ' + err.message);
                 }
                 connection.release();
                 callback(err, results);

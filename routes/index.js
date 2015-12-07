@@ -8,11 +8,10 @@ var router = express.Router();
 router.get('/', Hooks.miniHTML, function(req, res) {
     Paper.getWholeNum(function (err, result) {
         if( err ) {
-            console.log('SYSTEM ERROR AT START');
-            res.render('error', {message: "get start page error"});
+            res.render('error', {message: 'System error at start.'});
         }
         else {
-            res.render('index', { num: result });
+            res.render('index', {num: result});
         }
     });
 });
@@ -20,45 +19,37 @@ router.get('/', Hooks.miniHTML, function(req, res) {
 /* GET search list (search button) */
 router.get('/search', Hooks.miniHTML, function(req, res) {
     var c = req.query.content.trim() ;
-    if(c.length != 0 ) {
-        res.render('search', {
-            page: "search",
-            content: c
-        });
+    if( c.length != 0 ) {
+        res.render('search', { page: 'search', content: c });
     }
     else {
-        res.render('error', {message: "please check your behaviour"});
+        res.render('error', {message: 'Please check your behaviour'});
     }
 });
 
 /* GET statistic charts (statistic button) */
 router.get('/statistic', Hooks.miniHTML, function(req, res) {
-    res.render('statistic', {
-        page: "statistic"
-    });
+    res.render('statistic', { page: 'statistic' });
 });
 
 /* GET rank list (rank button) */
 router.get('/rank', Hooks.miniHTML, function(req, res) {
-    // do the author query
-    Info.getRank("author", function(err, results1) {
+    // 1. do the author query
+    Info.getRank('author', function(err, results1) {
         if( err ) {
-            console.error('SYSTEM ERROR AT RANK');
-            res.render('error', {message: "get rank page error"});
+            res.render('error', {message: 'System error at rank for author.'});
         }
         else {
-            // do the affiliation query
-            Info.getRank("institution", function(err, results2) {
+            // 2. do the affiliation query
+            Info.getRank('institution', function(err, results2) {
                 if( err ) {
-                    console.error('SYSTEM ERROR AT RANK');
-                    res.render('error', {message: "get rank page error"});
+                    res.render('error', {message: 'System error at rank for institution.'});
                 }
                 else {
                     res.render('rank', {
-                        page: "rank",
+                        page: 'rank',
                         rankAuthor: results1,
-                        rankAffiliation: results2
-                    });
+                        rankAffiliation: results2 });
                 }
             });
         }
@@ -68,17 +59,20 @@ router.get('/rank', Hooks.miniHTML, function(req, res) {
 
 /* GET all list (all button) */
 router.get('/all', Hooks.miniHTML, function(req, res) {
-    res.render('all', {
-        page: "all"
-    });
+    res.render('all', { page: 'all' });
 });
 
-/* GET scholar page with url request parameters (schoalr button) */
+/* GET scholar page with url request parameters (scholar button) */
 router.get('/scholar', Hooks.miniHTML, function(req, res) {
-    Info.getScholar(req.query.r, function(err, result) {
+    var r = req.query.r;
+    if( r != 'author' && r != 'institution' && r != 'country' ) {
+        res.render('error', {message: 'System error at scholar: invalid parameter.'});
+        return ;
+    }
+
+    Info.getScholar(r, function(err, result) {
         if (err) {
-            console.error('SYSTEM ERROR AT SCHOLAR');
-            res.render('error', {message: "get scholar page error"});
+            res.render('error', {message: 'System error at scholar.'});
         }
         else {
             res.render('scholar', {
@@ -92,21 +86,18 @@ router.get('/scholar', Hooks.miniHTML, function(req, res) {
 
 /* GET research field list (field button) */
 router.get('/field', Hooks.miniHTML, function(req, res) {
-    res.render('field', {
-        page: "field"
-    });
+    res.render('field', { page: 'field' });
 });
 
 /* GET venue list (venue button) */
 router.get('/venue', Hooks.miniHTML, function(req, res) {
     Info.getVenue( function(err, results1, results2) {
         if( err ) {
-            console.error('SYSTEM ERROR AT PUBLICATION');
-            res.render('error', {message: "get booktitle page error"});
+            res.render('error', {message: 'System error at venue.'});
         }
         else {
             res.render('venue', {
-                page: "venue",
+                page: 'venue',
                 article: results1,
                 inproceeding: results2
             });

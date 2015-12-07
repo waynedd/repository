@@ -1,3 +1,6 @@
+/**
+ *  Hook middleware to minimize html files
+ */
 var mini = require('html-minifier');
 
 function isHtml(text) {
