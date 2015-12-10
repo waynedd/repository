@@ -25,6 +25,7 @@ pool.on('connection', function(connection) {
  *  no = 1 : annual & cumulative number of publications
  *  no = 2 : total number of each field
  *  no = 3 : annual number of each filed
+ *  no = 4 : number of scholars of each country
  *  no = 5 : the number of new institutions that join the CT community
  */
 Info.getStatistics = function getStatistics(no, callback) {
@@ -38,12 +39,16 @@ Info.getStatistics = function getStatistics(no, callback) {
                 sql = 'select field, count from paper.count_field order by count DESC';
                 break ;
             case 3 :
-                // year, num, generation, application, model, evaluation, optimization, diagnosis, other
-                sql = 'select * from paper.count_field_annual';
+                sql = 'select year, num, generation, application, model, evaluation, optimization, ' +
+                      'diagnosis, other from paper.count_field_annual';
+                break ;
+            case 4 :
+                sql = 'select code, count from paper.count_country';
                 break ;
             case 5 :
-                sql = 'select a.year, a.num, sum(b.num) as count from paper.first_annual a ' +
-                    'join paper.first_annual b where b.year <= a.year group by a.year';
+                //sql = 'select a.year, a.num, sum(b.num) as count from paper.first_annual a ' +
+                //      'join paper.first_annual b where b.year <= a.year group by a.year';
+                sql = 'select year, num from paper.count_new_institution';
                 break ;
             default :
                 logger.log('error', 'INFO - Invalid statistic parameter: ' + no);
@@ -63,12 +68,12 @@ Info.getStatistics = function getStatistics(no, callback) {
 
 /*
  *  get the required list from scholar table
- *  para = author | institution | country
+ *  para = scholar | institution | country
  */
 Info.getScholar = function getScholar(para, callback) {
     pool.getConnection(function (err, connection) {
         var sql = '' ;
-        if( para == 'author' )
+        if( para == 'scholar' )
             sql = 'select name from paper.scholar order by name';
         else if( para == 'institution' )
             sql = 'select distinct institution, category from paper.scholar order by institution';
@@ -107,20 +112,20 @@ Info.getAuthor = function getAuthor(callback) {
 }; */
 
 /*
- *  get the information of particular author
- *  result1: name, affiliation, country, email, homepage
+ *  get the information of particular scholar
+ *  result1: name, institution, country, email, homepage
  *  result2: the research fields that have been focused
  */
-Info.getAuthorInfo = function getAuthorInfo(input, callback) {
+Info.getScholarInfo = function getScholarInfo(input, callback) {
     pool.getConnection(function (err, connection) {
-        var sql1 = 'select * from paper.scholar where name = ?';
+        var sql1 = 'select name, institution, country, email, homepage from paper.scholar where name = ?';
         var sql2 = 'select distinct field from paper.list where author like concat("%", ?, "%")';
 
         connection.query(sql1, [input], function(err, result1) {
             connection.query(sql2, [input], function(err, result2) {
                 if (err) {
-                    logger.log('error', 'INFO [Get AuthorInfo] Error: ' + err.message);
-                    console.error('INFO [Get AuthorInfo] Error: ' + err.message);
+                    logger.log('error', 'INFO [Get ScholarInfo] Error: ' + err.message);
+                    console.error('INFO [Get ScholarInfo] Error: ' + err.message);
                 }
                 connection.release();
                 callback(err, result1, result2);

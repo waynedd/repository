@@ -65,7 +65,7 @@ router.get('/all', Hooks.miniHTML, function(req, res) {
 /* GET scholar page with url request parameters (scholar button) */
 router.get('/scholar', Hooks.miniHTML, function(req, res) {
     var r = req.query.r;
-    if( r != 'author' && r != 'institution' && r != 'country' ) {
+    if( r != 'scholar' && r != 'institution' && r != 'country' ) {
         res.render('error', {message: 'System error at scholar: invalid parameter.'});
         return ;
     }

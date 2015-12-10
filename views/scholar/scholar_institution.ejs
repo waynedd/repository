@@ -1,13 +1,11 @@
 <!-- Scholar Affiliation -->
 <ul class="nav nav-tabs">
-    <li role="presentation"><a href="scholar?r=author">Author</a></li>
+    <li role="presentation"><a href="scholar?r=scholar">Scholar</a></li>
     <li role="presentation" class="active"><a href="#">Institution &nbsp;<span class="label label-info"># <%=num%></span></a></li>
     <li role="presentation"><a href="scholar?r=country">Country</a></li>
 </ul>
 <!-- list part -->
 <div id="main_list" class="row scholar-content">
-    <p class="pull-right">(under construction)</p>
-    <br>
     <%
         // pre processing
         var academia = [] ;
@@ -16,15 +14,16 @@
             if (result[ii].category == "Academia")
                 academia.push(result[ii]);
             else
-                industry.push(result[ii]);  // DEV: the null item is pushed into industry[]
+                industry.push(result[ii]);
         }
      %>
 
     <div class="row">
-        <div class="col-sm-2 text-center">
+        <div class="col-sm-2">
             <p class="pull-right">
                 <span class='label label-success scholar-author-label'>Academia</span>
             </p>
+            <h4 class="text-muted pull-right"># <%=academia.length%></h4>
         </div>
         <div class="col-sm-10">
             <table class="table table-condensed scholar-table-unbordered">
@@ -48,11 +47,12 @@
             <p class="pull-right">
                 <span class='label label-success scholar-author-label'>Industry</span>
             </p>
+            <h4 class="text-muted pull-right"># <%=industry.length%></h4>
         </div>
         <div class="col-sm-10">
             <table class="table table-condensed scholar-table-unbordered">
                 <%
-                    index = 1 ;
+                    index = 0 ;
                     while( index < industry.length ) { %>
                         <tr>
                     <%  for( var j=0 ; j<count && index<industry.length ; j++, index++) { %>

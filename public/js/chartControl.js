@@ -30,7 +30,13 @@ $(document).ready(function () {
         });
     });
     $("#show_c4").click(function () {
-        showChart4();
+        $.ajax({
+            url: "action/chart",
+            type: "post",
+            dataType: "json",
+            data: "no=4",
+            success: showChart4
+        });
     });
     $("#show_c5").click(function () {
         $.ajax({
@@ -43,6 +49,7 @@ $(document).ready(function () {
     });
 });
 
+// make the chart dom display
 function chartToggle( text ) {
     $("#btn_group").hide();
     $("#back_home").html("<a href='statistic'>statistic</a>");
@@ -51,14 +58,26 @@ function chartToggle( text ) {
     $("#container_chart").fadeIn("slow");
 }
 
+// check whether there exits an error message
+function validateData( data ) {
+    if( data.error != null ) {
+        alert("The service is temporarily unavailable: " + data.error);
+        return false;
+    }
+    return true;
+}
+
 // show chart 1
 function showChart1( results ) {
     var data = eval( results );
-    chartToggle("number of publication");
+    if( !validateData(data) )
+        return;
 
+    chartToggle("number of publication");
     $('#container_chart').highcharts({
         title: {
-            text: 'The Number of Publications from 1926 to 2015',
+            text: 'The Number of Combinatorial Testing Publications from '
+                + data.yearIndex[0] + ' to ' + data.yearIndex[data.yearIndex.length-1],
             x: -20 //center
         },
         xAxis: {
@@ -69,7 +88,7 @@ function showChart1( results ) {
         },
         yAxis: {
             title: {
-                text: '# of publications'
+                text: 'number of publications'
             },
             plotLines: [
                 {
@@ -95,15 +114,20 @@ function showChart1( results ) {
                 name: 'Cumulative',
                 data: data.cumulative
             }
-        ]
+        ],
+        exporting: {
+            sourceWidth: 800
+        }
     });
 }
 
 // show chart 2
 function showChart2( results ) {
     var data = eval( results );
-    chartToggle("distribution of field");
+    if( !validateData(data) )
+        return;
 
+    chartToggle("distribution of field");
     // Make monochrome colors and set them as default for all pies
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
@@ -145,18 +169,23 @@ function showChart2( results ) {
         series: [
             {
                 type: 'pie',
-                name: 'Field ratio',
+                name: 'ratio',
                 data: data.category
             }
-        ]
+        ],
+        exporting: {
+            sourceWidth: 800
+        }
     });
 }
 
 // show chart 3
 function showChart3( results ) {
     var data = eval( results );
-    chartToggle("changging ratio of field");
+    if( !validateData(data) )
+        return;
 
+    chartToggle("changing ratio of field");
     $('#container_chart').highcharts({
         chart: {
             type: 'column'
@@ -203,48 +232,32 @@ function showChart3( results ) {
         }, {
             name: 'Other',
             data: data.other
-        }]
+        }],
+        exporting: {
+            sourceWidth: 800
+        }
     });
 
 }
 
 // show chart 4
-function showChart4() {
+function showChart4( results ) {
+    /*
     var data = [
         {"code": "AU", "value": 2, "name": "Australia"},
         {"code": "AT", "value": 1, "name": "Austria"},
         {"code": "BR", "value": 1, "name": "Brazil"},
-        {"code": "CA", "value": 9, "name": "Canada"},
-        {"code": "CN", "value": 31, "name": "China"},
-        {"code": "HR", "value": 1, "name": "Croatia"},
-        {"code": "DK", "value": 2, "name": "Denmark"},
-        {"code": "FI", "value": 2, "name": "Finland"},
-        {"code": "DE", "value": 3, "name": "Germany"},
-        {"code": "IN", "value": 5, "name": "India"},
-        {"code": "IE", "value": 1, "name": "Ireland"},
-        {"code": "IL", "value": 4, "name": "Israel"},
-        {"code": "IT", "value": 4, "name": "Italy"},
-        {"code": "JP", "value": 6, "name": "Japan"},
-        {"code": "JO", "value": 1, "name": "Jordan"},
-        {"code": "LU", "value": 2, "name": "Luxembourg"},
-        {"code": "MY", "value": 8, "name": "Malaysia"},
-        {"code": "MX", "value": 7, "name": "Mexico"},
-        {"code": "NO", "value": 2, "name": "Norway"},
-        {"code": "RO", "value": 1, "name": "Romania"},
-        {"code": "SA", "value": 1, "name": "Saudi Arabia"},
-        {"code": "RS", "value": 1, "name": "Serbia"},
-        {"code": "ES", "value": 3, "name": "Spain"},
-        {"code": "SE", "value": 2, "name": "Sweden"},
-        {"code": "TR", "value": 3, "name": "Turkey"},
-        {"code": "GB", "value": 2, "name": "United Kingdom"},
-        {"code": "US", "value": 65, "name": "United States of America"},
-        {"code": "VN", "value": 1, "name": "Vietnam"}
+       ...
     ];
-    chartToggle("people in the world");
+    */
+    var data = eval( results );
+    if( !validateData(data) )
+        return;
 
+    chartToggle("people in the world");
     $('#container_chart').highcharts('Map', {
         title : {
-            text : 'The Distribution of Researchers across the World'
+            text : 'The Distribution of Scholars across the World'
         },
         mapNavigation: {
             enabled: true,
@@ -252,14 +265,14 @@ function showChart4() {
         },
         colorAxis: {
             min: 0,
-            max: 75,
+            max: 180,
             type: 'linear'
         },
         series : [{
             data : data,
             mapData: Highcharts.maps['custom/world'],
             joinBy: ['iso-a2', 'code'],
-            name: 'The number of authors',
+            name: 'number of scholars',
             states: {
                 hover: {
                     color: '#BADA55'
@@ -268,35 +281,43 @@ function showChart4() {
             tooltip: {
                 valueSuffix: ''
             }
-        }]
+        }],
+        exporting: {
+            sourceWidth: 800
+        }
     });
 }
 
 // show chart 5
 function showChart5( results ) {
     var data = eval( results );
-    chartToggle("number of new affiliation");
+    if( !validateData(data) )
+        return;
 
+    chartToggle("number of new institutions");
     $('#container_chart').highcharts({
         chart: {
             type: 'column'
         },
         title: {
-            text: 'Number of New Affiliations'
+            text: 'The Number of New Institutions that Contribute to Combinatorial Testing'
         },
         xAxis: {
             categories: data.yearIndex,
-            crosshair: true
+            crosshair: true,
+            title: {
+                text: 'year'
+            }
         },
         yAxis: {
             min: 0,
             title: {
-                text: '# of affiliations'
+                text: 'number of institutions'
             }
         },
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-            pointFormat: '<tr><td style="color:{series.color};padding:0">new affiliation: </td>' +
+            pointFormat: '<tr><td style="color:{series.color};padding:0">new institution: </td>' +
             '<td style="padding:0"><b>{point.y}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
@@ -311,6 +332,12 @@ function showChart5( results ) {
         series: [{
             name: 'Annual',
             data: data.annual
-        }]
+        }],
+        legend: {
+            enabled: false
+        },
+        exporting: {
+            sourceWidth: 800
+        }
     });
 }

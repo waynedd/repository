@@ -4,13 +4,13 @@
 $(document).ready(function () {
     // search paper by author
     $(".auTD a[id]").click(function () {
-        var para = "content=" + $(this).attr("id") + "&group=author";
+        var para = "content=" + $(this).attr("id") + "&group=scholar";
         search_content = $(this).attr("id");
-        search_type = "author";
+        search_type = "scholar";
         $("#wait").show();
         $("#main_list").hide();
         $.ajax({
-            url: "action/author_info",
+            url: "action/scholar_info",
             type: "post",
             dataType: "json",
             data: para,

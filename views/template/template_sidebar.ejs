@@ -14,9 +14,9 @@
         <% }%>
 
         <% if( page == "rank") {%>
-        <li class="active"><a href="rank"><i class="active fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
+        <li class="active"><a href="rank"><i class="active fa fa-star"></i>&nbsp;&nbsp;Rank</a></li>
         <% } else {%>
-        <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank (beta)</a></li>
+        <li><a href="rank"><i class="fa fa-star"></i>&nbsp;&nbsp;Rank</a></li>
         <% }%>
     </ul>
     <br>
@@ -30,10 +30,10 @@
             <a href="all" class="list-group-item">All</a>
             <% }%>
 
-            <% if( page == "author" || page == "institution" || page == "country" ) {%>
-            <a href="scholar?r=author" class="active list-group-item">Scholar</a>
+            <% if( page == "scholar" || page == "institution" || page == "country" ) {%>
+            <a href="scholar?r=scholar" class="active list-group-item">Scholar</a>
             <% } else {%>
-            <a href="scholar?r=author" class="list-group-item">Scholar</a>
+            <a href="scholar?r=scholar" class="list-group-item">Scholar</a>
             <% }%>
 
             <% if( page == "field") {%>

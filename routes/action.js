@@ -27,7 +27,7 @@ router.post('/all', function(req, res) {
 
 /*
  *  return query list
- *  group = author | affiliation | country | field | subfield | booktitle
+ *  group = scholar | institution | country | field | subfield | booktitle
  *  content = the name to be searched
  */
 router.post('/query', function(req, res) {
@@ -42,9 +42,9 @@ router.post('/query', function(req, res) {
 /*
  *  return information for a particular author
  */
-router.post('/author_info', function(req, res) {
+router.post('/scholar_info', function(req, res) {
     var content = req.body.content ;
-    Info.getAuthorInfo(content, function (err, result1, result2) {
+    Info.getScholarInfo(content, function (err, result1, result2) {
         res.send({
             basicInfo: JSON.stringify(result1),
             focusField: JSON.stringify(result2)
@@ -61,6 +61,11 @@ router.post('/chart', function (req, res) {
     // chart 1: number of publication
     if( no == '1' ) {
         Info.getStatistics(1, function (err, results) {
+            if( err ) {
+                res.send({error: 'Get data error.'});
+                return;
+            }
+
             var yearIndex = [] ;
             var numA = [] ;
             var numC = [] ;
@@ -70,9 +75,9 @@ router.post('/chart', function (req, res) {
                 numC[k] = results[k].count;
             }
             var data = new Object();
-            data.yearIndex = yearIndex ;
-            data.annual = numA ;
-            data.cumulative = numC ;
+            data.yearIndex = yearIndex;
+            data.annual = numA;
+            data.cumulative = numC;
             res.send(JSON.stringify(data));
         });
     }
@@ -80,6 +85,11 @@ router.post('/chart', function (req, res) {
     // chart 2: distribution of field
     else if( no == '2' ) {
         Info.getStatistics(2, function (err, results) {
+            if( err ) {
+                res.send({error: 'Get data error.'});
+                return;
+            }
+
             var category = [];
             for( var k=0 ; k<results.length ; k++ ) {
                 var tp = [] ;
@@ -96,6 +106,11 @@ router.post('/chart', function (req, res) {
     // chart 3: changing ratio of field
     else if( no == '3' ) {
         Info.getStatistics(3, function (err, results) {
+            if( err ) {
+                res.send({error: 'Get data error.'});
+                return;
+            }
+
             // year, num, generation, application, model, evaluation, optimization, diagnosis, other
             var yearIndex = [], gen = [], app = [], mod = [], eva = [], opt = [], dig = [], oth = [] ;
             for( var i=0 ; i<results.length ; i++ ) {
@@ -121,21 +136,43 @@ router.post('/chart', function (req, res) {
         });
     }
 
+    // chart 4: distribution of scholars
+    else if( no =='4' ) {
+        Info.getStatistics(4, function (err, results) {
+            if( err ) {
+                res.send({error: 'Get data error.'});
+                return;
+            }
+
+            // add each country
+            var data = [];
+            for( var k=0 ; k<results.length ; k++ ) {
+                var each = new Object();
+                each.value = results[k].count;
+                each.code = results[k].code;
+                data.push(each);
+            }
+            res.send(JSON.stringify(data));
+        });
+    }
+
     // chart 5: number of new affiliation
     else if( no == '5' ) {
         Info.getStatistics(5, function (err, results) {
+            if( err ) {
+                res.send({error: 'Get data error.'});
+                return;
+            }
+
             var yearIndex = [] ;
             var numA = [] ;
-            var numC = [] ;
             for( var k=0 ; k<results.length ; k++ ) {
-                yearIndex[k] = '"' + results[k].year + '"';
+                yearIndex[k] = results[k].year ;
                 numA[k] = results[k].num ;
-                numC[k] = results[k].count ;
             }
             var data = new Object();
             data.yearIndex = yearIndex ;
             data.annual = numA ;
-            data.cumulative = numC ;
             res.send(JSON.stringify(data));
         });
     }

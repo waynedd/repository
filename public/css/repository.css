@@ -1,6 +1,5 @@
 /*
  *  repository css file
-
  */
 html, body {
     overflow-y: scroll;
@@ -88,6 +87,10 @@ a.none_dec:link {
 #author_contact,
 #author_field {
     color: #777777;
+}
+#author_field {
+    padding-top: 5px;
+    padding-bottom: 5px
 }
 
 /* scholar page */

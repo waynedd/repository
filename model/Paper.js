@@ -91,7 +91,7 @@ Paper.searchByInput = function searchByInput(input, callback) {
 Paper.searchByContent = function searchByContent(group, content, callback) {
     pool.getConnection(function (err, connection) {
         var sql = '' ;
-        if( group == 'author' ) {
+        if( group == 'scholar' ) {
             sql = 'select * from paper.list where author LIKE ?';
         }
         else if( group == 'institution' ) {
@@ -130,7 +130,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
         // if there is a ? in sql
         if( sql.indexOf('?') != -1 ) {
             var re = content ;
-            if( group == 'author') {
+            if( group == 'scholar') {
                 re = '%'+content+'%' ;
             }
             connection.query(sql, [re], function(err, results) {
