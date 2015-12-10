@@ -185,13 +185,13 @@ function showChart3( results ) {
     if( !validateData(data) )
         return;
 
-    chartToggle("changing ratio of field");
+    chartToggle("relative proportion of field");
     $('#container_chart').highcharts({
         chart: {
             type: 'column'
         },
         title: {
-            text: 'The Changing Ratio of Combinatorial Testing Research Fields'
+            text: 'The Relative Proportions of each Combinatorial Testing Research Field'
         },
         xAxis: {
             categories: data.yearIndex
@@ -254,10 +254,10 @@ function showChart4( results ) {
     if( !validateData(data) )
         return;
 
-    chartToggle("people in the world");
+    chartToggle("scholar in the world");
     $('#container_chart').highcharts('Map', {
         title : {
-            text : 'The Distribution of Scholars across the World'
+            text : 'The Distribution of Scholars in the World'
         },
         mapNavigation: {
             enabled: true,
