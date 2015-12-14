@@ -1,5 +1,5 @@
 /**
- *  the main javascript file
+ *  main script for combinatorial testing repository
  */
 
 /*
@@ -306,12 +306,13 @@ function getBibEntry( jn ) {
 
     // author should be joined by "and"
     var bibAuthor = jn.author.split(',').join(' and');
-
     // the "_" in doi should be replaced by "\_" (jn.doi may be null)
     var bibDOI = jn.doi ? jn.doi.replace('_', '\\_') : null;
-
     // the "--" in page should be replaced by "-" (jn.pages may be null)
     var bibPages = jn.pages ? jn.pages.replace('--', '-') : null;
+    // create bib
+    var tp = (jn.author.split(',')[0]).split(' ');
+    var bib = tp[tp.length-1] + ':' + jn.year + "." + jn.id ;
 
     /*
 	@article{$bib,
@@ -326,16 +327,16 @@ function getBibEntry( jn ) {
 	}
 	*/
 	if( jn.type == "article" ) {
-		re += "@article{" + jn.bib + ",<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;journal = {" + jn.booktitle + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;volume = {" + jn.vol + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
-		"}";
+		re += "@article{" + bib + ",<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;journal = {" + jn.booktitle + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;volume = {" + jn.vol + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
+            "}";
 	}
 	/*
 	@inproceedings{$bib,
@@ -348,14 +349,14 @@ function getBibEntry( jn ) {
 	}
 	*/
 	else if( jn.type == "inproceedings" ) {
-		re += "@inproceedings{" + jn.bib + ",<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
-		"}";
+		re += "@inproceedings{" + bib + ",<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
+            "}";
 	}
     /*
      @incollection{$bib,
@@ -369,16 +370,16 @@ function getBibEntry( jn ) {
      }
      */
     else if( jn.type == "incollection" ) {
-        re += "@inproceedings{" + jn.bib + ",<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;volume = {" + jn.vol + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
-        "}";
+        re += "@inproceedings{" + bib + ",<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;volume = {" + jn.vol + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
+            "}";
     }
 	/*
 	@phdthesis{$bib,
@@ -389,12 +390,12 @@ function getBibEntry( jn ) {
 	}
 	*/
 	else if( jn.type == "phdthesis" ) {
-		re += "@phdthesis{" + jn.bib + ",<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;school = {" + jn.booktitle + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-		"}";
+		re += "@phdthesis{" + bib + ",<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;school = {" + jn.booktitle + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
+            "}";
 	}
 	/*
 	@techreport{$bib,
@@ -406,13 +407,13 @@ function getBibEntry( jn ) {
 	}
 	*/
 	else if( jn.type == "techreport" ) {
-		re += "@techreport{" + jn.bib + ",<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;institution = {" + jn.booktitle + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
-		"&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-		"}";
+		re += "@techreport{" + bib + ",<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;institution = {" + jn.booktitle + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
+            "}";
 	}
     /*
      @book{$bib,
@@ -423,12 +424,12 @@ function getBibEntry( jn ) {
      }
      */
     else if( jn.type == "book" ) {
-        re += "@book{" + jn.bib + ",<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-        "}";
+        re += "@book{" + bib + ",<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
+            "}";
     }
     /*
      @inbook{$bib,
@@ -440,16 +441,16 @@ function getBibEntry( jn ) {
      }
      */
     else if( jn.type == "inbook" ) {
-        re += "@inbook{" + jn.bib + ",<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;chapter = {" + jn.booktitle + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
-        "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-        "}";
+        re += "@inbook{" + bib + ",<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;chapter = {" + jn.booktitle + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
+            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
+            "}";
     }
 	else {
-		re = "no bib citation" ;
-	}
+        re = "not available";
+    }
 	return re ;
 }

@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="combinatorial testing repository is a web based application to collect works that address the topic of combinatorial testing.">
-    <meta name="keywords" content="repository, combinatorial testing, software testing, publication, research, paper">
-    <meta name="author" content="huayao">
+    <meta name="description" content="Combinatorial testing repository is a web application to collect all publications that are related to combinatorial testing.">
+    <meta name="keywords" content="Repository, Combinatorial Testing, Software Testing, Publication, Research, Paper">
+    <meta name="author" content="Huayao">
 
-    <title>Field List</title>
+    <title>Research Field</title>
     <link rel="stylesheet" href="http://gist.nju.edu.cn/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/repository.css">
@@ -32,10 +32,10 @@
                     success: showSearchResult
                 });
             });
-            $("h4 a[id]").click(function () {
-                var para = "content=" + $(this).attr("id") + "&group=subfield";
+            $("#tags a[id]").click(function () {
+                var para = "content=" + $(this).attr("id") + "&group=tag";
                 search_content = $(this).attr("id");
-                search_type = "field";
+                search_type = "tag";
                 $("#wait").show();
                 $("#main_list").hide();
                 $.ajax({
@@ -69,79 +69,95 @@
             <div class="col-md-10 col-sm-9 list_col">
                 <!-- main list -->
                 <div id="main_list">
+                    <!-- research field -->
                     <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3><a id="model" href='#' class="none_dec">Model</a></h3>
-                            <p> Modeling focuses on identifying parameters, values, interactions and relations
-                                of software under test. It is the fundamental activity of combinatorial testing.</p>
-                            <br>
+                        <div class="col-md-4 col-sm-12">
+                            <h3><a id="Model" href='#' class="none_dec">Model</a></h3>
+                            <p>Studies on identifying parameters, values, and the interrelations of
+                                parameters of software under test. It is the fundamental activity
+                                of combinatorial testing.</p>
                         </div>
-                        <div class="col-md-6 col-sm-12">
-                            <h3><a id="generation" href='#' class="none_dec">Generation</a></h3>
-                            <p> Generation is the most popular field in combinatorial testing.
-                                There are three sub topics:
-                                1) various types of covering arrays,
-                                2) generation techniques to construct covering arrays,
-                                and 3) the constraint solving techniques. </p>
-                            <br>
+                        <div class="col-md-4 col-sm-12">
+                            <h3><a id="Generation" href='#' class="none_dec">Generation</a></h3>
+                            <p>Studies on generating as small test suites as possible. It is the most
+                                popular field in combinatorial testing. The many proposed techniques
+                                consist of mathematical methods, greedy methods, and search based methods.</p>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <h3><a id="Optimization" href='#' class="none_dec">Optimization</a></h3>
+                            <p>Studies on improving the test suite by prioritization, minimization
+                                and selection techniques.</p>
                         </div>
                     </div>
 
                     <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3><a id="optimization" href='#' class="none_dec">Optimization</a></h3>
-                            <ul class="list-inline">
-                                <li><h4>>></h4></li>
-                                <li><h4><a id="prioritization" href='#' class="none_dec">Prioritization</a></h4></li>
-                                <li><h4>|</h4></li>
-                                <li><h4><a id="minimization" href='#' class="none_dec">Minimization</a></h4></li>
-                                <li><h4>|</h4></li>
-                                <li><h4><a id="selection" href='#' class="none_dec">Selection</a></h4></li>
-                            </ul>
-                            <p> Optimization aims to further improve test suite by
-                                prioritization, minimization, and selection techniques.
+                        <div class="col-md-4 col-sm-12">
+                            <h3><a id="Diagnosis" href='#' class="none_dec">Fault Diagnosis</a></h3>
+                            <p>Studies on locating the concrete failure causing interactions.</p>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <h3><a id="Evaluation" href='#' class="none_dec">Evaluation</a></h3>
+                            <p>Studies on measuring the effectiveness of CT and comparing CT with other
+                                testing methods.</p>
+                        </div>
+                        <div class="col-md-4 col-sm-12">
+                            <h3><a id="Application" href='#' class="none_dec">Application</a></h3>
+                            <p>Studies on applying, improving, and popularizing CT and its procedures
+                                in real world.</p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 col-sm-12">
+                            <h3><a id="Other" href='#' class="none_dec">Other</a></h3>
+                            <p>Studies that do not belong to any of the above categories.</p>
+                        </div>
+                    </div>
+
+
+                    <!-- tags -->
+                    <br><br>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <h4><strong>Tags</strong></h4>
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div id="tags" class="col-sm-12">
+                            <p><a id="Search Based" class="label label-primary">Search Based</a>&nbsp;&nbsp;
+                                The CT problem is formulated to an optimization problem,
+                                and heuristic search based algorithms are used to find solutions.
                             </p>
-                            <br>
-                        </div>
 
-                        <div class="col-md-6 col-sm-12">
-                            <h3><a id="diagnosis" href='#' class="none_dec">Fault diagnosis</a></h3>
-                            <p> When a failure is exposed, the diagnosis process is desired
-                                to locate and then remove the fault.</p>
-                            <br>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3><a id="evaluation" href='#' class="none_dec">Evaluation</a></h3>
-                            <p> Evaluation studies on measuring the effectiveness of combinatorial testing,
-                                and the degree to which combinatorial testing contributes
-                                to the improvement of software quality. </p>
-                            <br>
-                        </div>
-                        <div class="col-md-6 col-sm-12">
-                            <h3><a id="application" href='#' class="none_dec">Application</a></h3>
-                            <p> Application contains practical testing procedures on different types of software systems.
-                                The introductions and demos of CT tools are also included.
+                            <p><a id="Constraint" class="label label-primary">Constraint</a>&nbsp;&nbsp;
+                                The invalid combinations are identified, and constraint solving techniques are
+                                applied.
                             </p>
-                            <br>
-                        </div>
-                    </div>
 
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12">
-                            <h3><a id="other" href='#' class="none_dec">Other</a></h3>
-                            <ul class="list-inline">
-                                <li><h4>>></h4></li>
-                                <li><h4><a id="survey" href='#' class="none_dec">Survey</a></h4></li>
-                                <li><h4>|</h4></li>
-                                <li><h4><a id="oracle" href='#' class="none_dec">Oracle</a></h4></li>
-                            </ul>
-                            <p>The survey of combinatorial testing, and the oracle problem.</p>
-                            <br>
+                            <p><a id="Priority" class="label label-primary">Priority</a>&nbsp;&nbsp;
+                                The order of test suite is important.
+                            </p>
+
+                            <p><a id="Adaptive CT" class="label label-primary">Adaptive CT</a>&nbsp;&nbsp;
+                                The initial testing results are used to feedback and guide next testing
+                                procedures.
+                            </p>
+
+                            <p><a id="Software Product Line" class="label label-primary">Software Product Line</a>&nbsp;&nbsp;
+                                The CT method is applied to test software product lines (SPL).
+                            </p>
+
+                            <p><a id="Tool" class="label label-primary">Tool</a>&nbsp;&nbsp;
+                                Testing tools for CT.
+                            </p>
+
+                            <p><a id="Survey" class="label label-primary">Survey</a>&nbsp;&nbsp;
+                                Survey works.
+                            </p>
                         </div>
+
                     </div>
                 </div>
 

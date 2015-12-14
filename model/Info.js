@@ -96,22 +96,6 @@ Info.getScholar = function getScholar(para, callback) {
 };
 
 /*
- *  get the list of all authors
-Info.getAuthor = function getAuthor(callback) {
-    pool.getConnection(function (err, connection) {
-        var sql = 'select name from paper.scholar order by name';
-        connection.query(sql, function(err, results) {
-            if (err) {
-                console.log('[!!!!] [getAuthor] Error: ' + err.message);
-                return;
-            }
-            connection.release();
-            callback(err, results);
-        });
-    });
-}; */
-
-/*
  *  get the information of particular scholar
  *  result1: name, institution, country, email, homepage
  *  result2: the research fields that have been focused
@@ -141,8 +125,8 @@ Info.getScholarInfo = function getScholarInfo(input, callback) {
  */
 Info.getVenue = function getVenue(callback) {
     pool.getConnection(function (err, connection) {
-        var sql1 = 'select * from paper.venue where type = "article"';
-        var sql2 = 'select * from paper.venue where type = "inproceedings"';
+        var sql1 = 'select booktitle, abbr from paper.venue where type = "article"';
+        var sql2 = 'select booktitle, abbr from paper.venue where type = "inproceedings"';
         connection.query(sql1, function(err, results1) {
             if (err) {
                 logger.log('error', 'INFO [Get Article] Error: ' + err.message);
