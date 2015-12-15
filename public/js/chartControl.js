@@ -194,7 +194,10 @@ function showChart3( results ) {
             text: 'The Relative Proportions of each Combinatorial Testing Research Field'
         },
         xAxis: {
-            categories: data.yearIndex
+            categories: data.yearIndex,
+            title: {
+                text: 'year'
+            }
         },
         yAxis: {
             min: 0,

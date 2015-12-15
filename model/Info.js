@@ -157,9 +157,9 @@ Info.getRank = function getRank(para, callback) {
         return;
     }
 
-    var sql = 'select *, TSE*2.5 + TOSEM*2.5 + IST*1.3 + JSS*1.3 + STVR*1.3 + FSE*2.5 + ICSE*2.5 ' +
-        '+ ASE*1.3 + ISSRE*1 + ISSTA*1 + Other*0.8 as Score from paper.' + table +
-        ' order by score desc limit 30';
+    var sql = 'select *, TSE*3.0 + TOSEM*3.0 + JSS*1.8 + IST*1.8 + EMSE*1.8 + STVR*1.8 + ' +
+        'ICSE*2.5 + FSE*2.5 + ASE*1.5 + ISSTA*1.5 + ISSRE*1.5 + ICSM*1.5 + ' +
+        'Other*0.8 as Score from paper.' + table + ' order by score desc limit 30';
 
     pool.getConnection(function (err, connection) {
         connection.query(sql, function(err, results) {
