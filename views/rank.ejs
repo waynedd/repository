@@ -35,11 +35,31 @@
 
             <!-- data part -->
             <div class="col-md-10 col-sm-9">
-                <h4>Ranking Scheme</h4>
-                <p>This ranking system applies a publication counting based criterion, and assumes that every scholar
-                    or institution contributes equally in each publication. Different publication venues are assigned
-                    to different weights to make the importance of each publication be accounted.
-                    The final weighted score is calculated as follows:</p>
+                <h4><strong>Ranking Scheme</strong></h4>
+                <p>This ranking system applies a publication counting based criterion, and assumes that
+                    every scholar or institution contributes equally in each publication. Different
+                    publication venues are assigned to different weights to make the importance of each
+                    publication be accounted.</p>
+
+                <p>In detail, the selected leading <strong>journals</strong> and <strong>conferences</strong>
+                    and their weights are as follows:</p>
+                <ul>
+                    <li><em>TSE</em>, IEEE Transactions on Software Engineering (3.0)</li>
+                    <li><em>TOSEM</em>, ACM Transactions on Software Engineering and Methodology (3.0)</li>
+                    <li><em>JSS</em>, Journal of Systems and Software (1.8)</li>
+                    <li><em>IST</em>, Information and Software Technology (1.8)</li>
+                    <li><em>ESEM</em>, Empirical Software Engineering (1.8)</li>
+                    <li><em>STVR</em>, Software Testing, Verification and Reliability (1.8)</li>
+                    <br>
+                    <li><em>ICSE</em>, International Conference on Software Engineering (2.5)</li>
+                    <li><em>FSE</em>, International Symposium on the Foundations of Software Engineering,  (2.5)</li>
+                    <li><em>ASE</em>, International Conference on Automated Software Engineering (1.5)</li>
+                    <li><em>ISSTA</em>, International Symposium on Software Testing and Analysis (1.5)</li>
+                    <li><em>ISSRE</em>, International Symposium on Software Reliability Engineering (1.5)</li>
+                    <li><em>ICSM</em>, International Conference on Software Maintenance (1.5)</li>
+                </ul>
+                <p>The final weighted score of each scholar or institution is calculated as follows,
+                    where <code>#A</code> indicates the number of named papers published in the venue A:</p>
                 <p><strong>Score = (<code>#TSE</code> + <code>#TOSEM</code>) * 3.0 +
                         (<code>#JSS</code> + <code>#IST</code> + <code>#ESEM</code> + <code>#STVR</code>) * 1.8 +
                         (<code>#ICSE</code> + <code>#FSE</code>) * 2.5 +
@@ -48,7 +68,7 @@
                     </strong></p>
                 <br>
 
-                <h4>Top 30 Authors</h4>
+                <h4><strong>Top 30 Authors</strong></h4>
                 <table id='atable' class='table listtable table-hover'>
                     <tr>
                         <th>#</th><th>Name</th>
@@ -59,12 +79,12 @@
                         <th>Other</th><th>Score</th>
                     </tr>
                     <%
-                        var i = 0 ;
+                        var ii = 0 ;
                         rankAuthor.forEach( function(each) {
-                            i = i + 1 ;
+                            ii = ii + 1 ;
                     %>
                     <tr>
-                        <td><%=i%></td><td><%=each.name%></td>
+                        <td><%=ii%></td><td><%=each.name%></td>
                         <td><%=each.TSE%></td><td><%=each.TOSEM%></td>
                         <td><%=each.JSS%></td><td><%=each.IST%></td><td><%=each.EMSE%></td><td><%=each.STVR%></td>
                         <td><%=each.ICSE%></td><td><%=each.FSE%></td>
@@ -76,7 +96,7 @@
                     %>
                 </table>
                 <br>
-                <h4>Top 30 Institutions</h4>
+                <h4><strong>Top 30 Institutions</strong></h4>
                 <table id='atable' class='table listtable table-hover'>
                     <tr>
                         <th>#</th><th>Name</th>
@@ -87,12 +107,12 @@
                         <th>Other</th><th>Score</th>
                     </tr>
                     <%
-                    var i = 0 ;
+                    var jj = 0 ;
                         rankAffiliation.forEach( function(each) {
-                        i = i + 1 ;
+                        jj = jj + 1 ;
                     %>
                     <tr>
-                        <td><%=i%></td><td><%=each.name%></td>
+                        <td><%=jj%></td><td><%=each.name%></td>
                         <td><%=each.TSE%></td><td><%=each.TOSEM%></td>
                         <td><%=each.JSS%></td><td><%=each.IST%></td><td><%=each.EMSE%></td><td><%=each.STVR%></td>
                         <td><%=each.ICSE%></td><td><%=each.FSE%></td>
@@ -105,26 +125,7 @@
                 </table>
                 <br>
 
-                <p><strong>The selected leading journals and their weights are as follows:</strong></p>
-                <ul>
-                    <li><em>TSE</em>, IEEE Transactions on Software Engineering (3.0)</li>
-                    <li><em>TOSEM</em>, ACM Transactions on Software Engineering and Methodology (3.0)</li>
-                    <li><em>JSS</em>, Journal of Systems and Software (1.8)</li>
-                    <li><em>IST</em>, Information and Software Technology (1.8)</li>
-                    <li><em>ESEM</em>, Empirical Software Engineering (1.8)</li>
-                    <li><em>STVR</em>, Software Testing, Verification and Reliability (1.8)</li>
-                </ul>
 
-                <p><strong>The selected leading conferences and their weights are as follows:</strong></p>
-                <ul>
-                    <li><em>ICSE</em>, International Conference on Software Engineering (2.5)</li>
-                    <li><em>FSE</em>, International Symposium on the Foundations of Software Engineering,  (2.5)</li>
-                    <li><em>ASE</em>, International Conference on Automated Software Engineering (1.5)</li>
-                    <li><em>ISSTA</em>, International Symposium on Software Testing and Analysis (1.5)</li>
-                    <li><em>ISSRE</em>, International Symposium on Software Reliability Engineering (1.5)</li>
-                    <li><em>ICSM</em>, International Conference on Software Maintenance (1.5)</li>
-                </ul>
-                <br>
             </div>
             <!-- span10 -->
         </div>
