@@ -3,8 +3,7 @@
  */
 
 /*
- *  global parameters that are used in the following pages:
- *  search, all, scholar, field, and venue
+ *  global parameters
  */
 
 // parameters for ajax post
@@ -18,7 +17,7 @@ var pageNum = 0 ;           // the total number of all pages
 var pageCount = 5 ;         // the page interval
 // parameters for display
 var matchNum = 0 ;          // the number of all matches
-var currentJSON ;           // the publication list of current json data
+var currentJSON ;           // the publication list of current page
 var search_type = "" ;      // type = all | index (search button) | author | field | tag | booktitle
 var search_content = "" ;   // content = text to be searched
 
@@ -41,19 +40,19 @@ var search_content = "" ;   // content = text to be searched
 
 $(document).ready(function() {
     // click the bread nav to go back to the main list
-	$("#result_info_type").click(function () {
-        // clear result table for author, field and booktitle
-        $("#result_info").hide();
-        $(".added").empty();
-        $(".page_added").empty();
-        $("#result_paper").hide();
-        $("#result_page").hide();
-        $("#main_list").show();
+	$('#result_info_type').click(function () {
+        // clear result table for scholar, field and venue pages
+        $('#result_info').hide();
+        $('.added').empty();
+        $('.page_added').empty();
+        $('#result_paper').hide();
+        $('#result_page').hide();
+        $('#main_list').show();
     });
 
 	// click previous page
-	$("#result_page_pre").click(function() {
-		if( $(this).hasClass("disabled") )
+	$('#result_page_pre').click(function() {
+		if( $(this).hasClass('disabled') )
 			event.preventDefault();
 		else {
             start = (parseInt(pageCurrent) - 2) * step;
@@ -63,8 +62,8 @@ $(document).ready(function() {
 	});
 
     // click next page
-	$("#result_page_next").click(function() {
-		if( $(this).hasClass("disabled") )
+	$('#result_page_next').click(function() {
+		if( $(this).hasClass('disabled') )
 			event.preventDefault();
 		else {
             start = parseInt(pageCurrent) * step;
@@ -72,13 +71,13 @@ $(document).ready(function() {
             makeRequest();
 		}
 	});
-	
+
 	// click a particular page
-	$(document).on("click", ".page_added", function() {
-		if( parseInt($(this).attr("id")) == pageCurrent )
+	$(document).on('click', '.page_added', function() {
+		if( parseInt($(this).attr('id')) == pageCurrent )
 			event.preventDefault();
 		else {
-            start = ($(this).attr("id") - 1) * step ;
+            start = ($(this).attr('id') - 1) * step ;
             ct_para.start = start;
             makeRequest();
 		}
@@ -86,18 +85,21 @@ $(document).ready(function() {
 });
 
 /*
- *  Make ajax request and then do showResult
+ *  Make request for publication list and then do showResult
  */
 function makeRequest() {
     if( ct_url == '' )
         return ;
-    $.ajax({
-        url: ct_url,
-        type: 'post',
-        data: ct_para,
-        dataType: 'json',
-        success: showResult
-    });
+    else {
+        $(".added").empty();
+        $.ajax({
+            url: ct_url,
+            type: 'post',
+            data: ct_para,
+            dataType: 'json',
+            success: showResult
+        });
+    }
 }
 
 /*
@@ -108,8 +110,8 @@ function showResult(data) {
     matchNum = eval( data.totalNum[0].num );
 
     // if return nothing (only when search_type == index)
-    if ( search_type == "index" && currentJSON == "" ) {
-        $("#search_none").fadeIn("slow");
+    if ( search_type == 'index' && currentJSON == '' ) {
+        $('#search_none').fadeIn('slow');
         return;
     }
 
@@ -117,27 +119,27 @@ function showResult(data) {
     pageCurrent = (start/step) + 1;
     pageNum = parseInt(( matchNum + step - 1 ) / step);
 
-    // show result_info section
-    if( search_type != "all" || search_type != "index") {
+    // show result_info
+    if( search_type != 'all' || search_type != 'index') {
         // search whole paper and index will not run the followings
-        $("#result_info_type").html("<a href='#'>" + search_type + "</a>");
-        $("#result_info_name").html(search_content);
+        $('#result_info_type').html('<a href="#">' + search_type + '</a>');
+        $('#result_info_name').html(search_content);
     }
-    if( search_type == "index" ) {
+    if( search_type == 'index' ) {
         // if searching index, the sta will show the search content
-        $("#result_sta").html("<p>searching <strong class='text-success'>" + search_content +
-        "</strong>, <span class='label label-success'>" + matchNum + "</span> papers found</p>");
+        $('#result_sta').html('<p>searching <strong class="text-success">' + search_content +
+        '</strong>, <span class="label label-success">' + matchNum + '</span> papers found</p>');
     }
     else {
         // for the others, the content has been shown in bread nav
-        $("#result_sta").html("<p><span class='label label-success'>" + matchNum + "</span> papers found</p>");
+        $('#result_sta').html('<p><span class="label label-success">' + matchNum + '</span> papers found</p>');
     }
-    $("#result_info").fadeIn("slow");
+    $('#result_info').fadeIn('slow');
 
-    // show result_paper section
+    // show result_paper
     showPaper(currentJSON);
 
-    // show result_page section
+    // show result_page
     if( pageNum > 1 )
         showPagination(pageCurrent, pageNum, pageCount);
 }
@@ -146,40 +148,39 @@ function showResult(data) {
  *  Show current publication list (i.e. current page)
  */
 function showPaper(data) {
-    $(".added").empty();
-    var doi_text = "" ;
+    var doi_text = '' ;
 
     for(var i = 0 ; i < data.length ; i++ ) {
         // set doi
         if( data[i].doi != null )
-            doi_text = "<a class='red_link' href='http://dx.doi.org/" + data[i].doi + "' target='_blank'>DOI</a>" ;
+            doi_text = '<a class="red_link" href="http://dx.doi.org/' + data[i].doi + '" target="_blank">DOI</a>' ;
         else
-            doi_text = "DOI" ;
+            doi_text = 'DOI' ;
 
         // add a new row in result table
-        $("#rstable").append("<tr class='added'><td>" + (i+start+1) + "</td><td>" +
-            "<div class='row'>" +
-                "<div class='col-md-12'>" +
-                    "<p>" + data[i].author + "</p>" +
-                    "<p><strong>" + data[i].title + "</strong></p>" +
-                    "<p><em>" + getFullPublication( data[i] ) + "</em></p>" +
-                "</div>" +
-            "</div>" +
-            "<div class='row'>" +
-                "<div class='col-md-12'>" +
-                    "<p class='pull-right' id='accordion'>" +
-                    "<a class='red_link' data-toggle='collapse' data-parent='#accordion' href='#b_collapse" +
-                        i + "'>BibTex</a>&nbsp;&nbsp;|&nbsp;&nbsp;" + doi_text + "</p>" +
-                "</div>" +
-            "</div>" +
-            "<div class='row'>" +
-                "<div id='b_collapse" + i + "' class='col-md-12 panel panel-default collapse'>" +
-                "<div class='panel-body'>" + getBibEntry(data[i]) +"</div>" +
-            "</div>" +
-        "</div>" +
-        "</td></tr>") ;
+        $('#rstable').append('<tr class="added"><td>' + (i+start+1) + '</td><td>' +
+            '<div class="row">' +
+                '<div class="col-md-12">' +
+                    '<p>' + data[i].author + '</p>' +
+                    '<p><strong>' + data[i].title + '</strong></p>' +
+                    '<p><em>' + getFullPublication( data[i] ) + '</em></p>' +
+                '</div>' +
+            '</div>' +
+            '<div class="row">' +
+                '<div class="col-md-12">' +
+                    '<p class="pull-right" id="accordion">' +
+                    '<a class="red_link" data-toggle="collapse" data-parent="#accordion" ' +
+                    'href="#b_collapse' + i + '">BibTex</a>&nbsp;&nbsp;|&nbsp;&nbsp;' + doi_text + '</p>' +
+                '</div>' +
+            '</div>' +
+            '<div class="row">' +
+                '<div id="b_collapse' + i + '" class="col-md-12 panel panel-default collapse">' +
+                '<div class="panel-body">' + getBibEntry(data[i]) +'</div>' +
+            '</div>' +
+        '</div>' +
+        '</td></tr>') ;
     }
-    $("#result_paper").fadeIn("slow");
+    $('#result_paper').fadeIn('slow');
 }
 
 /*
@@ -191,59 +192,59 @@ function showPaper(data) {
 function showPagination(current, page, count) {
     // condition 1
     if( parseInt(current) < count-1 || page <= count - 1 ) {
-        $(".page_added").empty();
+        $('.page_added').empty();
         if( parseInt(current) == 1 ) {
-            $("#result_page_pre").after("<li id='1' class='active page_added'><a href='#'>1 <span class='sr-only'>(current)</span></a></li>")
-                .addClass("disabled");
+            $('#result_page_pre').after('<li id="1" class="active page_added"><a href="#">1 <span class="sr-only">(current)</span></a></li>')
+                .addClass('disabled');
         }
         else {
-            $("#result_page_pre").after("<li id='1' class='page_added'><a href='#'>1</a></li>")
-                .removeClass("disabled");
+            $('#result_page_pre').after('<li id="1" class="page_added"><a href="#">1</a></li>')
+                .removeClass('disabled');
         }
         for( var k1=2 ; k1<=page && k1<=count ; k1++ ) {
             if( k1 == parseInt(current) )
-                $("#result_page_next").before("<li id='"+k1+"' class='active page_added'><a href='#'>"+k1+" <span class='sr-only'>(current)</span></a></li>");
+                $('#result_page_next').before('<li id="'+k1+'" class="active page_added"><a href="#">'+k1+' <span class="sr-only">(current)</span></a></li>');
             else
-                $("#result_page_next").before("<li id='"+k1+"' class='page_added'><a href='#'>"+k1+"</a></li>");
+                $('#result_page_next').before('<li id="'+k1+'" class="page_added"><a href="#">'+k1+'</a></li>');
         }
         if( page > count )
-            $("#result_page_next").before("<li id='"+page+"' class='page_added'><a href='#'>Last</a></li>");
+            $('#result_page_next').before('<li id="'+page+'" class="page_added"><a href="#">Last</a></li>');
         if( current == page )
-            $("#result_page_next").addClass("disabled");
+            $('#result_page_next').addClass('disabled');
         else
-            $("#result_page_next").removeClass("disabled");
+            $('#result_page_next').removeClass('disabled');
     }
     // condition 2
     else if( parseInt(current) >= count-1 && parseInt(current) <= page-parseInt(count/2)-1 ) {
-        $(".page_added").empty();
-        $("#result_page_pre").after("<li id='1' class='page_added'><a href='#'>First</a></li>")
-            .removeClass("disabled");
+        $('.page_added').empty();
+        $('#result_page_pre').after('<li id="1" class="page_added"><a href="#">First</a></li>')
+            .removeClass('disabled');
         for( var k2=parseInt(current)-parseInt(count/2) ; k2<=parseInt(current)+parseInt(count/2) ; k2++ ) {
             if( k2 == parseInt(current) )
-                $("#result_page_next").before("<li id='"+k2+"' class='active page_added'><a href='#'>"+k2+" <span class='sr-only'>(current)</span></a></li>");
+                $('#result_page_next').before('<li id="'+k2+'" class="active page_added"><a href="#">'+k2+' <span class="sr-only">(current)</span></a></li>');
             else
-                $("#result_page_next").before("<li id='"+k2+"' class='page_added'><a href='#'>"+k2+"</a></li>");
+                $('#result_page_next').before('<li id="'+k2+'" class="page_added"><a href="#">'+k2+'</a></li>');
         }
-        $("#result_page_next").before("<li id='"+page+"' class='page_added'><a href='#'>Last</a></li>")
-            .removeClass("disabled");
+        $('#result_page_next').before('<li id="'+page+'" class="page_added"><a href="#">Last</a></li>')
+            .removeClass('disabled');
     }
     // condition 3
     else {
-        $(".page_added").empty();
-        $("#result_page_pre").after("<li id='1' class='page_added'><a href='#'>First</a></li>")
-            .removeClass("disabled");
+        $('.page_added').empty();
+        $('#result_page_pre').after('<li id="1" class="page_added"><a href="#">First</a></li>')
+            .removeClass('disabled');
         for( var k3=parseInt(page-count)+1 ; k3<=parseInt(page) ; k3++ ) {
             if( k3 == parseInt(current) )
-                $("#result_page_next").before("<li id='"+k3+"' class='active page_added'><a href='#'>"+k3+" <span class='sr-only'>(current)</span></a></li>");
+                $('#result_page_next').before('<li id="'+k3+'" class="active page_added"><a href="#">'+k3+' <span class="sr-only">(current)</span></a></li>');
             else
-                $("#result_page_next").before("<li id='"+k3+"' class='page_added'><a href='#'>"+k3+"</a></li>");
+                $('#result_page_next').before('<li id="'+k3+'" class="page_added"><a href="#">'+k3+'</a></li>');
         }
         if( current == page )
-            $("#result_page_next").addClass("disabled");
+            $('#result_page_next').addClass('disabled');
         else
-            $("#result_page_next").removeClass("disabled");
+            $('#result_page_next').removeClass('disabled');
     }
-    $("#result_page").show();
+    $('#result_page').show();
 }
 
 /*
@@ -260,40 +261,40 @@ function getFullPublication( jn ) {
     var publisher = jn.publisher ;
 
     // add the abbreviation of journal or conference
-	if (abbr != null && abbr != "Phd" && abbr != "Book" && abbr != "Tech" && abbr != "Computer" && abbr != "Software")
-        booktitle += " (" +  abbr + ")" ;
+	if (abbr != null && abbr != 'Phd' && abbr != 'Book' && abbr != 'Tech' && abbr != 'Computer' && abbr != 'Software')
+        booktitle += ' (' +  abbr + ')' ;
 
     // different cases
-    if (type == "article") {
-        var suffix = ", " ;
+    if (type == 'article') {
+        var suffix = ', ' ;
         if ( vol != null ) {
             if( no != null )
-                suffix += vol + "(" + no + "): " + pages ;
+                suffix += vol + '(' + no + '): ' + pages ;
             else
-                suffix += "vol." + vol + ", " + "pp." + pages ;
+                suffix += 'vol.' + vol + ', ' + 'pp.' + pages ;
         }
-        return booktitle + suffix + ", " + year ;
+        return booktitle + suffix + ', ' + year ;
 	}
-	else if( type == "inproceedings" ) {
-		return booktitle + ", pp." + pages + ", " + year ;
+	else if( type == 'inproceedings' ) {
+		return booktitle + ', pp.' + pages + ', ' + year ;
 	}
-    else if( type == "incollection" ) {
-        return booktitle + ", vol." + vol + ", pp." + pages + ", " + year ;
+    else if( type == 'incollection' ) {
+        return booktitle + ', vol.' + vol + ', pp.' + pages + ', ' + year ;
     }
-	else if( type == "phdthesis" || type == "masterthesis" ) {
-		return booktitle + ", " + year ;
+	else if( type == 'phdthesis' || type == 'masterthesis' ) {
+		return booktitle + ', ' + year ;
 	}
-    else if( type == "book" ) {
-        return publisher + ", " + year ;
+    else if( type == 'book' ) {
+        return publisher + ', ' + year ;
     }
-    else if( type == "inbook" ) {
-        return booktitle + ", " + publisher + ", " + year ;
+    else if( type == 'inbook' ) {
+        return booktitle + ', ' + publisher + ', ' + year ;
     }
-	else if( type == "techreport" ) {
+	else if( type == 'techreport' ) {
         if( no != null )
-		    return booktitle + ", " + no + ", " + year ;
+		    return booktitle + ', ' + no + ', ' + year ;
         else
-            return booktitle + ", " + year ;
+            return booktitle + ', ' + year ;
 	}
 }
 
@@ -301,17 +302,17 @@ function getFullPublication( jn ) {
  *  get bib entry as html code
  */
 function getBibEntry( jn ) {
-	var re = "" ;
+	var re = '' ;
 
-    // author should be joined by "and"
+    // author should be joined by 'and'
     var bibAuthor = jn.author.split(',').join(' and');
-    // the "_" in doi should be replaced by "\_" (jn.doi may be null)
+    // the '_' in doi should be replaced by '\_' (jn.doi may be null)
     var bibDOI = jn.doi ? jn.doi.replace('_', '\\_') : null;
-    // the "--" in page should be replaced by "-" (jn.pages may be null)
+    // the '--' in page should be replaced by '-' (jn.pages may be null)
     var bibPages = jn.pages ? jn.pages.replace('--', '-') : null;
     // create bib
     var tp = (jn.author.split(',')[0]).split(' ');
-    var bib = tp[tp.length-1] + ':' + jn.year + "." + jn.id ;
+    var bib = tp[tp.length-1] + ':' + jn.year + '.' + jn.id ;
 
     /*
 	@article{$bib,
@@ -325,17 +326,17 @@ function getBibEntry( jn ) {
 		doi = {$doi}
 	}
 	*/
-	if( jn.type == "article" ) {
-		re += "@article{" + bib + ",<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;journal = {" + jn.booktitle + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;volume = {" + jn.vol + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
-            "}";
+	if( jn.type == 'article' ) {
+		re += '@article{' + bib + ',<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;author = {' + bibAuthor + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;title = {' + jn.title + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;journal = {' + jn.booktitle + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;volume = {' + jn.vol + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;number = {' + jn.no + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;pages = {' + bibPages + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;year = {' + jn.year + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;doi = {' + bibDOI + '}<br/>' +
+            '}';
 	}
 	/*
 	@inproceedings{$bib,
@@ -347,15 +348,15 @@ function getBibEntry( jn ) {
 		doi = {$doi}
 	}
 	*/
-	else if( jn.type == "inproceedings" ) {
-		re += "@inproceedings{" + bib + ",<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
-            "}";
+	else if( jn.type == 'inproceedings' ) {
+		re += '@inproceedings{' + bib + ',<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;author = {' + bibAuthor + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;title = {' + jn.title + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {' + jn.booktitle + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;pages = {' + bibPages + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;year = {' + jn.year + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;doi = {' + bibDOI + '}<br/>' +
+            '}';
 	}
     /*
      @incollection{$bib,
@@ -368,17 +369,17 @@ function getBibEntry( jn ) {
         doi = {$doi}
      }
      */
-    else if( jn.type == "incollection" ) {
-        re += "@incollection{" + bib + ",<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {" + jn.booktitle + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;volume = {" + jn.vol + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;pages = {" + bibPages + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;doi = {" + bibDOI + "}<br/>" +
-            "}";
+    else if( jn.type == 'incollection' ) {
+        re += '@incollection{' + bib + ',<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;author = {' + bibAuthor + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;title = {' + jn.title + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;booktitle = {' + jn.booktitle + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;publisher = {' + jn.publisher + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;volume = {' + jn.vol + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;pages = {' + bibPages + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;year = {' + jn.year + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;doi = {' + bibDOI + '}<br/>' +
+            '}';
     }
 	/*
 	@phdthesis{$bib,
@@ -388,13 +389,13 @@ function getBibEntry( jn ) {
 		year = {$year}
 	}
 	*/
-	else if( jn.type == "phdthesis" || jn.type == "masterthesis" ) {
-		re += "@" + jn.type + "{" + bib + ",<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;school = {" + jn.booktitle + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-            "}";
+	else if( jn.type == 'phdthesis' || jn.type == 'masterthesis' ) {
+		re += '@' + jn.type + '{' + bib + ',<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;author = {' + bibAuthor + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;title = {' + jn.title + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;school = {' + jn.booktitle + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;year = {' + jn.year + '}<br/>' +
+            '}';
 	}
 	/*
 	@techreport{$bib,
@@ -405,14 +406,14 @@ function getBibEntry( jn ) {
 		year = {$year}
 	}
 	*/
-	else if( jn.type == "techreport" ) {
-		re += "@techreport{" + bib + ",<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;institution = {" + jn.booktitle + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;number = {" + jn.no + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-            "}";
+	else if( jn.type == 'techreport' ) {
+		re += '@techreport{' + bib + ',<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;author = {' + bibAuthor + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;title = {' + jn.title + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;institution = {' + jn.booktitle + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;number = {' + jn.no + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;year = {' + jn.year + '}<br/>' +
+            '}';
 	}
     /*
      @book{$bib,
@@ -422,13 +423,13 @@ function getBibEntry( jn ) {
         year = {$year}
      }
      */
-    else if( jn.type == "book" ) {
-        re += "@book{" + bib + ",<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-            "}";
+    else if( jn.type == 'book' ) {
+        re += '@book{' + bib + ',<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;author = {' + bibAuthor + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;title = {' + jn.title + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;publisher = {' + jn.publisher + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;year = {' + jn.year + '}<br/>' +
+            '}';
     }
     /*
      @inbook{$bib,
@@ -439,17 +440,17 @@ function getBibEntry( jn ) {
         year = {$year}
      }
      */
-    else if( jn.type == "inbook" ) {
-        re += "@inbook{" + bib + ",<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;author = {" + bibAuthor + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;title = {" + jn.title + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;chapter = {" + jn.booktitle + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;publisher = {" + jn.publisher + "},<br/>" +
-            "&nbsp;&nbsp;&nbsp;&nbsp;year = {" + jn.year + "}<br/>" +
-            "}";
+    else if( jn.type == 'inbook' ) {
+        re += '@inbook{' + bib + ',<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;author = {' + bibAuthor + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;title = {' + jn.title + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;chapter = {' + jn.booktitle + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;publisher = {' + jn.publisher + '},<br/>' +
+            '&nbsp;&nbsp;&nbsp;&nbsp;year = {' + jn.year + '}<br/>' +
+            '}';
     }
 	else {
-        re = "not available";
+        re = 'not available';
     }
 	return re ;
 }

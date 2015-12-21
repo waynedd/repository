@@ -2,48 +2,55 @@
  *  control the display of statistic charts
  */
 $(document).ready(function () {
-    $("#show_c1").click(function () {
+    // return to main list
+    $('#chart_info_type').click(function () {
+        $('#chart_info').hide();
+        $('#container_chart').hide();
+        $('#btn_group').fadeIn('slow');
+    });
+    // show charts
+    $('#show_c1').click(function () {
         $.ajax({
-            url: "action/chart",
-            type: "post",
-            dataType: "json",
-            data: "no=1",
+            url: 'action/chart',
+            type: 'post',
+            dataType: 'json',
+            data: 'no=1',
             success: showChart1
         });
     });
-    $("#show_c2").click(function () {
+    $('#show_c2').click(function () {
         $.ajax({
-            url: "action/chart",
-            type: "post",
-            dataType: "json",
-            data: "no=2",
+            url: 'action/chart',
+            type: 'post',
+            dataType: 'json',
+            data: 'no=2',
             success: showChart2
         });
     });
-    $("#show_c3").click(function () {
+    $('#show_c3').click(function () {
         $.ajax({
-            url: "action/chart",
-            type: "post",
-            dataType: "json",
-            data: "no=3",
+            url: 'action/chart',
+            type: 'post',
+            dataType: 'json',
+            data: 'no=3',
             success: showChart3
         });
     });
-    $("#show_c4").click(function () {
+    $('#show_c4').click(function () {
         $.ajax({
-            url: "action/chart",
-            type: "post",
-            dataType: "json",
-            data: "no=4",
+            url: 'action/chart',
+            type: 'post',
+            dataType: 'json',
+            data: 'no=4',
             success: showChart4
         });
     });
-    $("#show_c5").click(function () {
+    $('#show_c5').click(function () {
         $.ajax({
-            url: "action/chart",
-            type: "post",
-            dataType: "json",
-            data: "no=5",
+            url: 'action/chart',
+            type: 'post',
+            dataType: 'json',
+            data: 'no=5',
             success: showChart5
         });
     });
@@ -51,17 +58,17 @@ $(document).ready(function () {
 
 // make the chart dom display
 function chartToggle( text ) {
-    $("#btn_group").hide();
-    $("#back_home").html("<a href='statistic'>statistic</a>");
-    $("#current").html("<span class='divider'></span>" + text );
-    $("#chart_info").fadeIn("slow");
-    $("#container_chart").fadeIn("slow");
+    $('#btn_group').hide();
+    $('#chart_info_type').html('<a href="#">statistic</a>');
+    $('#chart_info_name').html('<span class="divider"></span>' + text );
+    $('#chart_info').fadeIn('slow');
+    $('#container_chart').fadeIn('slow');
 }
 
 // check whether there exits an error message
 function validateData( data ) {
     if( data.error != null ) {
-        alert("The service is temporarily unavailable: " + data.error);
+        alert('The service is temporarily unavailable: ' + data.error);
         return false;
     }
     return true;
@@ -73,7 +80,7 @@ function showChart1( results ) {
     if( !validateData(data) )
         return;
 
-    chartToggle("number of publication");
+    chartToggle('number of publication');
     $('#container_chart').highcharts({
         title: {
             text: 'The Number of Combinatorial Testing Publications from '
@@ -127,7 +134,7 @@ function showChart2( results ) {
     if( !validateData(data) )
         return;
 
-    chartToggle("distribution of field");
+    chartToggle('distribution of field');
     // Make monochrome colors and set them as default for all pies
     Highcharts.getOptions().plotOptions.pie.colors = (function () {
         var colors = [],
@@ -185,7 +192,7 @@ function showChart3( results ) {
     if( !validateData(data) )
         return;
 
-    chartToggle("relative proportion of field");
+    chartToggle('relative proportion of field');
     $('#container_chart').highcharts({
         chart: {
             type: 'column'
@@ -206,7 +213,8 @@ function showChart3( results ) {
             }
         },
         tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ' +
+            '({point.percentage:.0f}%)<br/>',
             shared: true
         },
         plotOptions: {
@@ -257,7 +265,7 @@ function showChart4( results ) {
     if( !validateData(data) )
         return;
 
-    chartToggle("scholar in the world");
+    chartToggle('scholar in the world');
     $('#container_chart').highcharts('Map', {
         title : {
             text : 'The Distribution of Scholars in the World'
@@ -297,7 +305,7 @@ function showChart5( results ) {
     if( !validateData(data) )
         return;
 
-    chartToggle("number of new institutions");
+    chartToggle('number of new institutions');
     $('#container_chart').highcharts({
         chart: {
             type: 'column'
