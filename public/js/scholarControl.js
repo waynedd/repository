@@ -4,60 +4,47 @@
 $(document).ready(function () {
     // search paper by author
     $(".auTD a[id]").click(function () {
-        var para = "content=" + $(this).attr("id") + "&group=scholar";
+        start = 0;
+        ct_url = 'action/query';
+        ct_para = {start: start, step: step, content: $(this).attr("id"), group: 'scholar'};
         search_content = $(this).attr("id");
         search_type = "scholar";
-        $("#wait").show();
         $("#main_list").hide();
         $.ajax({
             url: "action/scholar_info",
             type: "post",
             dataType: "json",
-            data: para,
+            data: {start: start, step: step, content: $(this).attr("id"), group: 'scholar'},
             success: prepareAuthor
         });
-        $.ajax({
-            url: "action/query",
-            type: "post",
-            dataType: "json",
-            data: para,
-            success: showSearchResult
-        });
+        makeRequest();
     });
+
     // search paper by affiliation
     $(".afTD a[id]").click(function () {
-        var para = "content=" + escape($(this).attr("id")) + "&group=institution";
+        start = 0;
+        ct_url = 'action/query';
+        ct_para = {start: start, step: step, content: $(this).attr("id"), group: 'institution'};
         search_content = $(this).attr("id");
         search_type = "institution";
-        $("#wait").show();
         $("#main_list").hide();
-        $.ajax({
-            url: "action/query",
-            type: "post",
-            dataType: "json",
-            data: para,
-            success: showSearchResult
-        });
+        makeRequest();
     });
+
     // search paper by country
     $(".coTD a[id]").click(function () {
-        var para = "content=" + $(this).attr("id") + "&group=country";
+        start = 0;
+        ct_url = 'action/query';
+        ct_para = {start: start, step: step, content: $(this).attr("id"), group: 'country'};
         search_content = $(this).attr("id");
         search_type = "country";
-        $("#wait").show();
         $("#main_list").hide();
-        $.ajax({
-            url: "action/query",
-            type: "post",
-            dataType: "json",
-            data: para,
-            success: showSearchResult
-        });
+        makeRequest();
     });
 });
 
 /*
- *	dealing with author's affiliation and country
+ *	deal with author's institution and country
  */
 function prepareAuthor(data) {
     var ja = eval( data.basicInfo );

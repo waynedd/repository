@@ -7,42 +7,75 @@ var Info = require('../model/Info');
 var router = express.Router();
 
 /*
- *  return search list
+ *  Parameter Required:
+ *  start     - the start position
+ *  step      - the number of items in each page, default = 25
+ *  group     - all | search | scholar | institution | country | field | tag | booktitle
+ *  content   - particular name or text
+ *
+ *  Return:
+ *  totalNum - the number of all matches
+ *  result   - the publication list of all matches
  */
-router.post('/search', function(req, res) {
+
+function verifyParameter(req, res, next) {
+    var valid = ['all', 'search', 'scholar', 'institution', 'country', 'field', 'tag', 'booktitle'];
+    if( valid.indexOf(req.body.group) < 0 )
+        res.send("invalid request");
+    else if( req.body.start < 0 || req.body.step < 0 )
+        res.send("invalid request");
+    else
+        next();
+}
+
+/*  search list  */
+router.post('/search', verifyParameter, function(req, res) {
     var content = req.body.content;
-    Paper.searchByInput(content, function (err, results) {
-        res.send(JSON.stringify(results));
+    var start = req.body.start ;
+    var step = req.body.step ;
+
+    Paper.searchByInput(content, start, step, function (err, totalNum, result) {
+        res.send({
+            totalNum: totalNum,
+            result: JSON.stringify(result)
+        });
+    });
+});
+
+/*  all list  */
+router.post('/all', verifyParameter, function(req, res) {
+    var start = req.body.start ;
+    var step = req.body.step ;
+
+    Paper.getPaperAll(start, step, function (err, totalNum, result) {
+        res.send({
+            totalNum: totalNum,
+            result: JSON.stringify(result)
+        });
     });
 });
 
 /*
- *  return all list
- */
-router.post('/all', function(req, res) {
-    Paper.getPaperAll(function (err, results) {
-        res.send(JSON.stringify(results));
-    });
-});
-
-/*
- *  return query list
+ *  query list
  *  group = scholar | institution | country | field | subfield | booktitle
  *  content = the name to be searched
  */
-router.post('/query', function(req, res) {
+router.post('/query', verifyParameter, function(req, res) {
     var group = req.body.group ;
     var content = req.body.content ;
+    var start = req.body.start ;
+    var step = req.body.step ;
 
-    Paper.searchByContent(group, content, function (err, results) {
-        res.send(JSON.stringify(results));
+    Paper.searchByContent(group, content, start, step, function (err, totalNum, result) {
+        res.send({
+            totalNum: totalNum,
+            result: JSON.stringify(result)
+        });
     });
 });
 
-/*
- *  return information for a particular author
- */
-router.post('/scholar_info', function(req, res) {
+/*  scholar information  */
+router.post('/scholar_info', verifyParameter, function(req, res) {
     var content = req.body.content ;
     Info.getScholarInfo(content, function (err, result1, result2) {
         res.send({
@@ -52,9 +85,7 @@ router.post('/scholar_info', function(req, res) {
     });
 });
 
-/*
- *  return statistic data for plotting charts
- */
+/*  statistic data for plotting charts  */
 router.post('/chart', function (req, res) {
     var no = req.body.no ;
 

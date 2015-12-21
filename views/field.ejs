@@ -17,34 +17,25 @@
     <script src="js/repository.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            // search field or sub field by id
+            // search field
             $("h3 a[id]").click(function () {
-                var para = "content=" + $(this).attr("id") + "&group=field";
+                start = 0;
+                ct_url = 'action/query';
+                ct_para = {start: start, step: step, group: 'field', content: $(this).attr("id")};
                 search_content = $(this).attr("id");
                 search_type = "field";
-                $("#wait").show();
                 $("#main_list").hide();
-                $.ajax({
-                    url: "action/query",
-                    type: "post",
-                    dataType: "json",
-                    data: para,
-                    success: showSearchResult
-                });
+                makeRequest();
             });
+            // search tag
             $("#tags a[id]").click(function () {
-                var para = "content=" + $(this).attr("id") + "&group=tag";
+                start = 0;
+                ct_url = 'action/query';
+                ct_para = {start: start, step: step, group: 'tag', content: $(this).attr("id")};
                 search_content = $(this).attr("id");
                 search_type = "tag";
-                $("#wait").show();
                 $("#main_list").hide();
-                $.ajax({
-                    url: "action/query",
-                    type: "post",
-                    dataType: "json",
-                    data: para,
-                    success: showSearchResult
-                });
+                makeRequest();
             });
         });
     </script>

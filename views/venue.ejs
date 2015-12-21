@@ -19,18 +19,13 @@
         $(document).ready(function () {
             // search field id
             $("p.vp a[id]").click(function () {
-                var para = "content=" + $(this).attr("id") + "&group=booktitle";
+                start = 0;
+                ct_url = 'action/query';
+                ct_para = {start: start, step: step, group: 'booktitle', content: $(this).attr("id")};
                 search_content = $(this).text();
                 search_type = "venue";
-                $("#wait").show();
                 $("#main_list").hide();
-                $.ajax({
-                    url: "action/query",
-                    type: "post",
-                    dataType: "json",
-                    data: para,
-                    success: showSearchResult
-                });
+                makeRequest();
             });
         });
     </script>

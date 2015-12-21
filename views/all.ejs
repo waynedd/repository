@@ -17,13 +17,10 @@
     <script src="js/repository.js"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#wait").show();
-            $.ajax({
-                url: "action/all",
-                type: "post",
-                dataType: "json",
-                success: showSearchResult
-            });
+            start = 0;
+            ct_url = 'action/all';
+            ct_para = {start: start, step: step, group: 'all', content: ''};
+            makeRequest();
         });
     </script>
 </head>

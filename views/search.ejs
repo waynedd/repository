@@ -16,18 +16,13 @@
     <script src="http://gist.nju.edu.cn/js/jquery.min.js"></script>
     <script src="js/repository.js"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
-            var para = "content=<%=content%>";
+        $(document).ready(function() {
+            start = 0;
+            ct_url = 'action/search';
+            ct_para = {start: start, step: step, group: 'search', content: '<%=content%>'};
             search_content = "<%=content%>";
             search_type = "index";
-            $("#wait").show();
-            $.ajax({
-                url: "action/search",
-                type: "post",
-                dataType: "json",
-                data: para,
-                success: showSearchResult
-            });
+            makeRequest();
         });
     </script>
 </head>

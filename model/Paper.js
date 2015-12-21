@@ -22,9 +22,10 @@ function Paper(paper) {
 module.exports = Paper;
 
 var pool  = mysql.createPool ({
-    host     : 'localhost',
-    user     : 'wayne',
-    password : '123456'
+    multipleStatements : true,
+    host            : 'localhost',
+    user            : 'wayne',
+    password        : '123456'
 });
 
 pool.on('connection', function(connection) {
@@ -46,91 +47,104 @@ Paper.getWholeNum = function getWholeNum(callback) {
     });
 };
 
-/* get all paper list as results */
-Paper.getPaperAll = function getPaperAll(callback) {
+/*
+ *  callback(err, totalNum, result)
+ */
+
+/*
+ *  Get all paper list from $(start) to $(start) + $(step)
+ */
+Paper.getPaperAll = function getPaperAll(start, step, callback) {
     pool.getConnection(function (err, connection) {
-        var sql = 'SELECT id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                  'FROM paper.list order by year DESC, booktitle, title';
+        var sql = 'SELECT SQL_CALC_FOUND_ROWS ' +
+                  'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                  'FROM paper.list order by year DESC, booktitle, title limit ' + start + ', ' + step +
+                  '; select FOUND_ROWS() as num';
         connection.query(sql, function(err, results) {
             if (err) {
                 logger.log('error', 'PAPER [Get PaperAll] Error: ' + err.message);
                 console.error('PAPER [Get PaperAll] Error: ' + err.message);
             }
             connection.release();
-            callback(err, results);
-        });
-    });
-};
-
-/* search by input */
-Paper.searchByInput = function searchByInput(input, callback) {
-    pool.getConnection(function (err, connection) {
-        var sql = 'select id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                  'from paper.list WHERE (author like CONCAT("%", ?, "%") OR ' +
-                  'title like CONCAT("%", ?, "%") OR ' +
-                  'booktitle like CONCAT("%", ?, "%") OR ' +
-                  'tag like CONCAT("%", ?, "%") OR '+
-                  'year like CONCAT("%", ?, "%")) ' +
-                  'order by year DESC, author ASC';
-
-        connection.query(sql, [input, input, input, input, input], function(err, results) {
-            if (err) {
-                logger.log('error', 'PAPER [Search Input] Error: ' + err.message);
-                console.error('PAPER [Search Input] Error: ' + err.message);
-            }
-            connection.release();
-            callback(err, results);
+            callback(err, results[1], results[0]);
         });
     });
 };
 
 /*
- *  get paper list according to
- *  group = author | institution | country | field | subfield | booktitle
- *  content
+ *  Search by input
  */
-Paper.searchByContent = function searchByContent(group, content, callback) {
+Paper.searchByInput = function searchByInput(content, start, step, callback) {
     pool.getConnection(function (err, connection) {
-        var sql = '' ;
+        var sql = 'select SQL_CALC_FOUND_ROWS ' +
+                  'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                  'from paper.list where (author like CONCAT("%", ?, "%") OR ' +
+                  'title like CONCAT("%", ?, "%") OR ' +
+                  'booktitle like CONCAT("%", ?, "%") OR ' +
+                  'tag like CONCAT("%", ?, "%") OR '+
+                  'abbr like CONCAT("%" ?, "%") OR ' +
+                  'year like CONCAT("%", ?, "%")' +
+                  ') order by year DESC, author ASC limit ' + start + ', ' + step +
+                  '; select FOUND_ROWS() as num';
+
+        connection.query(sql, [content, content, content, content, content, content], function(err, results) {
+            if (err) {
+                logger.log('error', 'PAPER [Search Input] Error: ' + err.message);
+                console.error('PAPER [Search Input] Error: ' + err.message);
+            }
+            connection.release();
+            callback(err, results[1], results[0]);
+        });
+    });
+};
+
+/*
+ *  Get publication list according to group and content
+ *      group = scholar | institution | country | field | tag | booktitle
+ *      content = particular name
+ */
+Paper.searchByContent = function searchByContent(group, content, start, step, callback) {
+    pool.getConnection(function (err, connection) {
+        var sql = 'select SQL_CALC_FOUND_ROWS ' ;
         if( group == 'scholar' ) {
-            sql = 'select id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                  'from paper.list where author like CONCAT("%", ?, "%")';
+            sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                    'from paper.list where author like CONCAT("%", ?, "%")';
         }
         else if( group == 'institution' ) {
-            sql = 'select distinct id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                  'from (select name, institution from paper.scholar where institution = ?) p ' +
-                  'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
+            sql += 'distinct id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                    'from (select name, institution from paper.scholar where institution = ?) p ' +
+                    'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
         }
         else if( group == 'country' ) {
-            sql = 'select distinct id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                  'from (select name, country from paper.scholar where country = ?) p ' +
-                  'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
+            sql += 'distinct id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                    'from (select name, country from paper.scholar where country = ?) p ' +
+                    'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
         }
         else if( group == 'field' ) {
-            sql = 'select id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                  'from paper.list where field = ?';
+            sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                    'from paper.list where field = ?';
         }
         else if( group == 'tag' ) {
-            sql = 'select id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                  'from paper.list where tag like CONCAT("%", ?, "%")';
+            sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                    'from paper.list where tag like CONCAT("%", ?, "%")';
         }
         else if( group == 'booktitle' ) {
             // phd thesis and technical reports
             if( content == 'phdthesis' || content == 'techreport' ) {
-                sql = 'select id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                      'from paper.list where type = "' + content + '"' ;
+                sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                        'from paper.list where type = "' + content + '"' ;
             }
             // abbr
             else {
-                sql = 'select id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
-                      'from paper.list where abbr = ?' ;
+                sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                        'from paper.list where abbr = ?' ;
             }
         }
         else {
             logger.log('error', 'PAPER - Invalid search parameter: ' + group + ', ' + content);
             return;
         }
-        sql += ' order by year DESC' ;
+        sql += ' order by year DESC limit ' + start + ', ' + step + '; select FOUND_ROWS() as num';
 
         // if there is a ? in sql
         if( sql.indexOf('?') != -1 ) {
@@ -140,7 +154,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
                     console.error('PAPER [Search C-1] Error: ' + err.message);
                 }
                 connection.release();
-                callback(err, results);
+                callback(err, results[1], results[0]);
             });
         }
         // else
@@ -151,7 +165,7 @@ Paper.searchByContent = function searchByContent(group, content, callback) {
                     console.error('PAPER [Search C-2] Error: ' + err.message);
                 }
                 connection.release();
-                callback(err, results);
+                callback(err, results[1], results[0]);
             });
         }
     });
