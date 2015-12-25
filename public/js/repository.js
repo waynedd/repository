@@ -20,6 +20,8 @@ var matchNum = 0 ;          // the number of all matches
 var currentJSON ;           // the publication list of current page
 var search_type = "" ;      // type = all | index (search button) | author | field | tag | booktitle
 var search_content = "" ;   // content = text to be searched
+// wait state
+var should_wait = true ;
 
 /*
  * basic layout of content part:
@@ -42,11 +44,13 @@ $(document).ready(function() {
     // click the bread nav to go back to the main list
 	$('#result_info_type').click(function () {
         // clear result table for scholar, field and venue pages
-        $('#result_info').hide();
         $('.added').empty();
         $('.page_added').empty();
+        // result_list
+        $('#result_info').hide();
         $('#result_paper').hide();
         $('#result_page').hide();
+        // main_list
         $('#main_list').show();
     });
 
@@ -91,7 +95,9 @@ function makeRequest() {
     if( ct_url == '' )
         return ;
     else {
-        $(".added").empty();
+        $('.added').empty();
+        $('#result_page').hide();
+        should_wait = true;
         $.ajax({
             url: ct_url,
             type: 'post',
@@ -99,6 +105,11 @@ function makeRequest() {
             dataType: 'json',
             success: showResult
         });
+        // if it costs too much time to response
+        setTimeout(function(){
+            if( should_wait )
+                $('#wait').show();
+        }, 200);
     }
 }
 
@@ -108,6 +119,9 @@ function makeRequest() {
 function showResult(data) {
     currentJSON = eval( data.result );
     matchNum = eval( data.totalNum[0].num );
+
+    should_wait = false;
+    $('#wait').hide();
 
     // if return nothing (only when search_type == index)
     if ( search_type == 'index' && currentJSON == '' ) {

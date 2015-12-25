@@ -5,12 +5,14 @@
 
     <!-- result info -->
     <div id="result_info" style="display:none" class="row">
+        <% if( page != "all" && page != "search" ) { %>
         <div class="col-md-12">
             <ul class="breadcrumb">
                 <li id="result_info_type"></li>
                 <li id="result_info_name"></li>
             </ul>
         </div>
+        <% } %>
 
         <% if( page == "scholar") { %>
         <div id="author_info" class="col-md-12">
@@ -32,6 +34,14 @@
 
         <div>
             <div id="result_sta" class="col-md-6"></div>
+        </div>
+    </div>
+
+    <!-- waiting -->
+    <div id="wait" style="display:none" class="row">
+        <div class="col-md-12 text-center">
+            <h1><i class="fa fa-spinner fa-pulse fa-lg"></i></h1><br>
+            <h4>loading ...</h4>
         </div>
     </div>
 
