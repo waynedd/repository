@@ -32,17 +32,23 @@ pool.on('connection', function(connection) {
     connection.query('SET SESSION auto_increment_increment=1');
 });
 
-/* get the whole number as result[0].num */
-Paper.getWholeNum = function getWholeNum(callback) {
+/*
+ *  get the total number
+ */
+Paper.getIndexInfo = function getIndexInfo(callback) {
     pool.getConnection(function (err, connection) {
-        var sql = 'select count(*) as num from paper.list';
-        connection.query(sql, function(err, result) {
-            if (err) {
-                logger.log('error', 'PAPER [Get WholeNum] Error: ' + err.message);
-                console.error('PAPER [Get WholeNum] Error: ' + err.message);
-            }
-            connection.release();
-            callback(err, result[0].num);
+        var sql1 = 'select count(*) as num from paper.list';
+        var sql2 = 'select value from paper.configuration where name = "lastUpdateDate"';
+
+        connection.query(sql1, function(err1, result1) {
+            connection.query(sql2, function (err2, result2) {
+                if (err1 || err2) {
+                    logger.log('error', 'PAPER [Get IndexInfo] Error: ' + err.message);
+                    console.error('PAPER [Get IndexInfo] Error: ' + err.message);
+                }
+                connection.release();
+                callback(err, result1[0].num, result2[0].value);
+            });
         });
     });
 };

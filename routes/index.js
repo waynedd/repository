@@ -6,13 +6,11 @@ var router = express.Router();
 
 /* GET home page */
 router.get('/', Hooks.miniHTML, function(req, res) {
-    Paper.getWholeNum(function (err, result) {
-        if( err ) {
+    Paper.getIndexInfo(function (err, num, date) {
+        if( err )
             res.render('error', {message: 'System error at start.'});
-        }
-        else {
-            res.render('index', {num: result});
-        }
+        else
+            res.render('index', {num: num, date: date});
     });
 });
 
