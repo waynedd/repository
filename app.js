@@ -8,6 +8,7 @@ var minify = require('express-minify');
 
 var index = require('./routes/index');
 var action = require('./routes/action');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -35,6 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/action', action);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

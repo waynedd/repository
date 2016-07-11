@@ -54,10 +54,6 @@ Paper.getIndexInfo = function getIndexInfo(callback) {
 };
 
 /*
- *  callback(err, totalNum, result)
- */
-
-/*
  *  Get all paper list from $(start) to $(start) + $(step)
  */
 Paper.getPaperAll = function getPaperAll(start, step, callback) {
@@ -174,5 +170,22 @@ Paper.searchByContent = function searchByContent(group, content, start, step, ca
                 callback(err, results[1], results[0]);
             });
         }
+    });
+};
+
+/*
+ *  Get all data
+ */
+Paper.getDataAll = function getDataAll(callback) {
+    pool.getConnection(function (err, connection) {
+        var sql = 'SELECT * FROM paper.list';
+        connection.query(sql, function(err, result) {
+            if (err) {
+                logger.log('error', 'PAPER [Get getDataAll] Error: ' + err.message);
+                console.error('PAPER [Get getDataAll] Error: ' + err.message);
+            }
+            connection.release();
+            callback(err, result);
+        });
     });
 };

@@ -1,5 +1,5 @@
 /**
- *  the APIs to respond query request
+ *  the methods to respond query request
  */
 var express = require('express');
 var Paper = require('../model/Paper');
