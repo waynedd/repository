@@ -37,7 +37,8 @@ router.post('/search', verifyParameter, function(req, res) {
     Paper.searchByInput(content, start, step, function (err, totalNum, result) {
         res.send({
             totalNum: totalNum,
-            result: JSON.stringify(result)
+            result: JSON.stringify(result),
+            timeStamp: Paper.thisStamp
         });
     });
 });
@@ -50,7 +51,8 @@ router.post('/all', verifyParameter, function(req, res) {
     Paper.getPaperAll(start, step, function (err, totalNum, result) {
         res.send({
             totalNum: totalNum,
-            result: JSON.stringify(result)
+            result: JSON.stringify(result),
+            timeStamp: Paper.thisStamp
         });
     });
 });
@@ -69,7 +71,8 @@ router.post('/query', verifyParameter, function(req, res) {
     Paper.searchByContent(group, content, start, step, function (err, totalNum, result) {
         res.send({
             totalNum: totalNum,
-            result: JSON.stringify(result)
+            result: JSON.stringify(result),
+            timeStamp: Paper.thisStamp
         });
     });
 });

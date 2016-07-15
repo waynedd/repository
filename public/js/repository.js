@@ -151,7 +151,7 @@ function showResult(data) {
     $('#result_info').fadeIn('slow');
 
     // show result_paper
-    showPaper(currentJSON);
+    showPaper(currentJSON, data.timeStamp);
 
     // show result_page
     if( pageNum > 1 )
@@ -161,21 +161,28 @@ function showResult(data) {
 /*
  *  Show current publication list (i.e. current page)
  */
-function showPaper(data) {
+function showPaper(data, timeStamp) {
     var doi_text = '' ;
+    var new_label = '' ;
 
     for(var i = 0 ; i < data.length ; i++ ) {
         // set doi
-        if( data[i].doi != null )
+        if( data[i].doi != null && data[i].doi.length != 0 )
             doi_text = '<a class="red_link" href="http://dx.doi.org/' + data[i].doi + '" target="_blank">DOI</a>' ;
         else
             doi_text = 'DOI' ;
+
+        // set new label
+        if( data[i].time_stamp == timeStamp )
+            new_label = '<span class="label label-info pull-right">new</span>' ;
+        else
+            new_label = '' ;
 
         // add a new row in result table
         $('#rstable').append('<tr class="added"><td>' + (i+start+1) + '</td><td>' +
             '<div class="row">' +
                 '<div class="col-md-12">' +
-                    '<p>' + data[i].author + '</p>' +
+                    '<p>' + data[i].author + new_label + '</p>' +
                     '<p><strong>' + data[i].title + '</strong></p>' +
                     '<p><em>' + getFullPublication( data[i] ) + '</em></p>' +
                 '</div>' +

@@ -6,7 +6,7 @@ var router = express.Router();
 
 /* GET home page */
 router.get('/', Hooks.miniHTML, function(req, res) {
-    Paper.getIndexInfo(function (err, num, date) {
+    Info.getIndexInfo(function (err, num, date) {
         if( err )
             res.render('error', {message: 'System error at start.'});
         else
@@ -57,7 +57,7 @@ router.get('/rank', Hooks.miniHTML, function(req, res) {
 
 /* GET all list (all button) */
 router.get('/all', Hooks.miniHTML, function(req, res) {
-    res.render('all', { page: 'all' });
+    res.render('all', { page: 'all'});
 });
 
 /* GET scholar page with url request parameters (scholar button) */

@@ -21,6 +21,27 @@ pool.on('connection', function(connection) {
 });
 
 /*
+ *  get the total number
+ */
+Info.getIndexInfo = function getIndexInfo(callback) {
+    pool.getConnection(function (err, connection) {
+        var sql1 = 'select count(*) as num from paper.list';
+        var sql2 = 'select value from paper.configuration where name = "lastUpdateDate"';
+
+        connection.query(sql1, function(err1, result1) {
+            connection.query(sql2, function (err2, result2) {
+                if (err1 || err2) {
+                    logger.log('error', 'Info [Get IndexInfo] Error: ' + err.message);
+                    console.error('Info [Get IndexInfo] Error: ' + err.message);
+                }
+                connection.release();
+                callback(err, result1[0].num, result2[0].value);
+            });
+        });
+    });
+};
+
+/*
  *  get the statistic data
  *  no = 1 : annual & cumulative number of publications
  *  no = 2 : total number of each field

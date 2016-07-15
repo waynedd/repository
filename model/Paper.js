@@ -6,6 +6,7 @@ var logger = require('../model/Logger');
 
 function Paper(paper) {
     this.id = paper.id;
+    this.time_stamp = paper.time_stamp;
     this.year = paper.year;
     this.type = paper.type;
     this.author = paper.author;
@@ -19,6 +20,19 @@ function Paper(paper) {
     this.doi = paper.doi;
 }
 
+function setTimeStamp() {
+    var connection = mysql.createConnection({
+        host            : 'localhost',
+        user            : 'wayne',
+        password        : '123456'
+    });
+    connection.connect();
+    connection.query('select value from paper.configuration where name = "lastTimeStamp"', function(err, result) {
+        Paper.thisStamp = result[0].value;
+    });
+    connection.end();
+}
+
 module.exports = Paper;
 
 var pool  = mysql.createPool ({
@@ -28,30 +42,12 @@ var pool  = mysql.createPool ({
     password        : '123456'
 });
 
+Paper.thisStamp = "0000-00-00" ;
+setTimeStamp();
+
 pool.on('connection', function(connection) {
     connection.query('SET SESSION auto_increment_increment=1');
 });
-
-/*
- *  get the total number
- */
-Paper.getIndexInfo = function getIndexInfo(callback) {
-    pool.getConnection(function (err, connection) {
-        var sql1 = 'select count(*) as num from paper.list';
-        var sql2 = 'select value from paper.configuration where name = "lastUpdateDate"';
-
-        connection.query(sql1, function(err1, result1) {
-            connection.query(sql2, function (err2, result2) {
-                if (err1 || err2) {
-                    logger.log('error', 'PAPER [Get IndexInfo] Error: ' + err.message);
-                    console.error('PAPER [Get IndexInfo] Error: ' + err.message);
-                }
-                connection.release();
-                callback(err, result1[0].num, result2[0].value);
-            });
-        });
-    });
-};
 
 /*
  *  Get all paper list from $(start) to $(start) + $(step)
@@ -59,7 +55,7 @@ Paper.getIndexInfo = function getIndexInfo(callback) {
 Paper.getPaperAll = function getPaperAll(start, step, callback) {
     pool.getConnection(function (err, connection) {
         var sql = 'SELECT SQL_CALC_FOUND_ROWS ' +
-                  'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                  'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                   'FROM paper.list order by year DESC, booktitle, title limit ' + start + ', ' + step +
                   '; select FOUND_ROWS() as num';
         connection.query(sql, function(err, results) {
@@ -79,7 +75,7 @@ Paper.getPaperAll = function getPaperAll(start, step, callback) {
 Paper.searchByInput = function searchByInput(content, start, step, callback) {
     pool.getConnection(function (err, connection) {
         var sql = 'select SQL_CALC_FOUND_ROWS ' +
-                  'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                  'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                   'from paper.list where (author like CONCAT("%", ?, "%") OR ' +
                   'title like CONCAT("%", ?, "%") OR ' +
                   'booktitle like CONCAT("%", ?, "%") OR ' +
@@ -109,36 +105,36 @@ Paper.searchByContent = function searchByContent(group, content, start, step, ca
     pool.getConnection(function (err, connection) {
         var sql = 'select SQL_CALC_FOUND_ROWS ' ;
         if( group == 'scholar' ) {
-            sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+            sql += 'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                     'from paper.list where author like CONCAT("%", ?, "%")';
         }
         else if( group == 'institution' ) {
-            sql += 'distinct id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+            sql += 'distinct id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                     'from (select name, institution from paper.scholar where institution = ?) p ' +
                     'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
         }
         else if( group == 'country' ) {
-            sql += 'distinct id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+            sql += 'distinct id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                     'from (select name, country from paper.scholar where country = ?) p ' +
                     'left join paper.list q on q.author like CONCAT("%", p.name, "%")';
         }
         else if( group == 'field' ) {
-            sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+            sql += 'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                     'from paper.list where field = ?';
         }
         else if( group == 'tag' ) {
-            sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+            sql += 'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                     'from paper.list where tag like CONCAT("%", ?, "%")';
         }
         else if( group == 'booktitle' ) {
             // phd thesis and technical reports
             if( content == 'phdthesis' || content == 'techreport' ) {
-                sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                sql += 'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                         'from paper.list where type = "' + content + '"' ;
             }
             // abbr
             else {
-                sql += 'id, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
+                sql += 'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi ' +
                         'from paper.list where abbr = ?' ;
             }
         }
