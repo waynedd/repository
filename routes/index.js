@@ -1,5 +1,4 @@
 var express = require('express');
-var Paper = require('../model/Paper');
 var Info = require('../model/Info');
 var Hooks = require('../model/Hooks');  // hook to minimize html page
 var router = express.Router();

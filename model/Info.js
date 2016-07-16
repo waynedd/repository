@@ -1,5 +1,5 @@
 /**
- *  Get Info List
+ *  The methods used to get additional information
  */
 var mysql = require('mysql');
 var logger = require('../model/Logger');
@@ -21,7 +21,8 @@ pool.on('connection', function(connection) {
 });
 
 /*
- *  get the total number
+ *  Get the total number and the last updated date,
+ *  which are used in the index page.
  */
 Info.getIndexInfo = function getIndexInfo(callback) {
     pool.getConnection(function (err, connection) {
@@ -31,8 +32,7 @@ Info.getIndexInfo = function getIndexInfo(callback) {
         connection.query(sql1, function(err1, result1) {
             connection.query(sql2, function (err2, result2) {
                 if (err1 || err2) {
-                    logger.log('error', 'Info [Get IndexInfo] Error: ' + err.message);
-                    console.error('Info [Get IndexInfo] Error: ' + err.message);
+                    logger.log('error', 'Info (Get Index) Error: ' + err.message);
                 }
                 connection.release();
                 callback(err, result1[0].num, result2[0].value);
@@ -42,12 +42,12 @@ Info.getIndexInfo = function getIndexInfo(callback) {
 };
 
 /*
- *  get the statistic data
- *  no = 1 : annual & cumulative number of publications
- *  no = 2 : total number of each field
- *  no = 3 : annual number of each filed
- *  no = 4 : number of scholars of each country
- *  no = 5 : the number of new institutions that join the CT community
+ *  Get the statistic data, which is used to draw figures.
+ *      no = 1 : annual & cumulative number of publications
+ *      no = 2 : total number of each field
+ *      no = 3 : annual number of each filed
+ *      no = 4 : number of scholars of each country
+ *      no = 5 : the number of new institutions that join the CT community
  */
 Info.getStatistics = function getStatistics(no, callback) {
     pool.getConnection(function (err, connection) {
@@ -72,14 +72,13 @@ Info.getStatistics = function getStatistics(no, callback) {
                 sql = 'select year, num from paper.count_new_institution';
                 break ;
             default :
-                logger.log('error', 'INFO - Invalid statistic parameter: ' + no);
+                logger.log('error', 'INFO - Invalid Statistic Parameter: ' + no);
                 break ;
-        } // end switch
+        }
 
         connection.query(sql, function (err, results) {
             if (err) {
-                logger.log('error', 'INFO [Get Statistic] Error: ' + err.message);
-                console.error('INFO [Get Statistic] Error: ' + err.message);
+                logger.log('error', 'INFO (Get Statistic) Error: ' + err.message);
             }
             connection.release();
             callback(err, results);
@@ -88,27 +87,29 @@ Info.getStatistics = function getStatistics(no, callback) {
 };
 
 /*
- *  get the required list from scholar table
- *  para = scholar | institution | country
+ *  Get the required data from the scholar table
+ *      para = scholar | institution | country
  */
 Info.getScholar = function getScholar(para, callback) {
     pool.getConnection(function (err, connection) {
         var sql = '' ;
+        // all scholars
         if( para == 'scholar' )
             sql = 'select name from paper.scholar order by name';
+        // all institutions
         else if( para == 'institution' )
             sql = 'select distinct institution, category from paper.scholar order by institution';
+        // all countries
         else if( para == 'country' )
             sql = 'select distinct country from paper.scholar order by country';
         else {
-            logger.log('error', 'INFO - Invalid scholar parameter: ' + para);
+            logger.log('error', 'INFO - Invalid Scholar Parameter: ' + para);
             return;
         }
 
         connection.query(sql, function(err, results) {
             if (err) {
-                logger.log('error', 'INFO [Get ScholarList] Error: ' + err.message);
-                console.error('[Get ScholarList] Error: ' + err.message);
+                logger.log('error', 'INFO (Get Scholar List) Error: ' + err.message);
             }
             connection.release();
             callback(err, results);
@@ -117,9 +118,9 @@ Info.getScholar = function getScholar(para, callback) {
 };
 
 /*
- *  get the information of particular scholar
- *  result1: name, institution, country, email, homepage
- *  result2: the research fields that have been focused
+ *  Get the information of particular scholar
+ *      result1: name, institution, country, email, homepage
+ *      result2: the research fields that have been focused
  */
 Info.getScholarInfo = function getScholarInfo(input, callback) {
     pool.getConnection(function (err, connection) {
@@ -129,8 +130,7 @@ Info.getScholarInfo = function getScholarInfo(input, callback) {
         connection.query(sql1, [input], function(err, result1) {
             connection.query(sql2, [input], function(err, result2) {
                 if (err) {
-                    logger.log('error', 'INFO [Get ScholarInfo] Error: ' + err.message);
-                    console.error('INFO [Get ScholarInfo] Error: ' + err.message);
+                    logger.log('error', 'INFO (Get Scholar Info) Error: ' + err.message);
                 }
                 connection.release();
                 callback(err, result1, result2);
@@ -140,9 +140,9 @@ Info.getScholarInfo = function getScholarInfo(input, callback) {
 };
 
 /*
- *  get the list of all booktitle venues
- *  results1 = article list
- *  results2 = inproceeding list
+ *  Get the list of all booktitle venues
+ *      results1 = article list
+ *      results2 = inproceedings list
  */
 Info.getVenue = function getVenue(callback) {
     pool.getConnection(function (err, connection) {
@@ -150,13 +150,11 @@ Info.getVenue = function getVenue(callback) {
         var sql2 = 'select booktitle, abbr from paper.venue where type = "inproceedings"';
         connection.query(sql1, function(err, results1) {
             if (err) {
-                logger.log('error', 'INFO [Get Article] Error: ' + err.message);
-                console.error('INFO [Get Article] Error: ' + err.message);
+                logger.log('error', 'INFO (Get Article) Error: ' + err.message);
             }
             connection.query(sql2, function(err, results2) {
                 if (err) {
-                    logger.log('error', 'INFO [Get Inproceeding] Error: ' + err.message);
-                    console.error('INFO [Get Inproceeding] Error: ' + err.message);
+                    logger.log('error', 'INFO (Get Inproceedings) Error: ' + err.message);
                 }
                 connection.release();
                 callback(err, results1, results2);
@@ -166,15 +164,15 @@ Info.getVenue = function getVenue(callback) {
 };
 
 /*
- *  get the list of rank
- *  para = author | affiliation
+ *  Get the list of rank
+ *      para = author | affiliation
  */
 Info.getRank = function getRank(para, callback) {
     var table = '' ;
     if( para == 'author' || para == 'institution' )
         table = 'rank_' + para + '_archive' ;
     else {
-        logger.log('error', 'INFO - Invalid rank parameter: ' + para);
+        logger.log('error', 'INFO - Invalid Rank Parameter: ' + para);
         return;
     }
 
@@ -186,8 +184,7 @@ Info.getRank = function getRank(para, callback) {
     pool.getConnection(function (err, connection) {
         connection.query(sql, function(err, results) {
             if (err) {
-                logger.log('error', 'INFO [Get Rank] Error: ' + err.message);
-                console.error('INFO [Get Rank] Error: ' + err.message);
+                logger.log('error', 'INFO (Get Rank) Error: ' + err.message);
             }
             connection.release();
             callback(err, results);

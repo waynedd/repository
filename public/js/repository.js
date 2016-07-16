@@ -1,30 +1,26 @@
 /**
- *  main script for combinatorial testing repository
+ *  the main javascript file of combinatorial testing repository
  */
 
-/*
- *  global parameters
- */
-
-// parameters for ajax post
-var start = 0 ;             // the start position of each page
-var step = 25 ;             // the maximum items of each page
-var ct_url = '' ;           // the action url
-var ct_para ;               // the parameters to be posted
-// parameters for pagination control
-var pageCurrent = 0 ;       // the current page number
-var pageNum = 0 ;           // the total number of all pages
-var pageCount = 5 ;         // the page interval
-// parameters for display
-var matchNum = 0 ;          // the number of all matches
-var currentJSON ;           // the publication list of current page
-var search_type = "" ;      // type = all | index (search button) | author | field | tag | booktitle
-var search_content = "" ;   // content = text to be searched
-// wait state
+/* parameters for ajax post */
+var start           = 0  ;      // the start position of each page
+var step            = 25 ;      // the maximum items of each page
+var ct_url          = '' ;      // the action url
+var ct_para  ;                  // the parameters to be posted
+/* parameters for pagination control */
+var pageCurrent     = 0 ;       // the current page number
+var pageNum         = 0 ;       // the total number of pages
+var pageCount       = 5 ;       // the page interval
+/* parameters for information display */
+var matchNum        = 0 ;       // the number of all matches
+var currentJSON ;               // the publication list of current page
+var search_type     = '' ;      // all | index (search button) | author | field | tag | booktitle
+var search_content  = '' ;      // the text to be searched
+/* wait state */
 var should_wait = true ;
 
-/*
- * basic layout of content part:
+/**
+ * Basic layout of content in each web page:
  * | main list
  * | wait
  * | result_list
@@ -33,15 +29,15 @@ var should_wait = true ;
  *          | author_info (only in author page)
  *          | result_sta
  *      | result_paper: paper list is shown in #rstable
- *      | result_page: previous and next button #result_page_pre and #search_page_net
+ *      | result_page: previous (#result_page_pre) and next (#search_page_net) button
  *
- * basic css classes:
- * .added : the new added elements of table
- * .page_added : the new added elements of pagination
+ * Basic CSS classes:
+ *  .added      : the new added elements of table
+ *  .page_added : the new added elements of pagination
  */
 
 $(document).ready(function() {
-    // click the bread nav to go back to the main list
+    // when clicking the bread nav to go back to the main list
 	$('#result_info_type').click(function () {
         // clear result table for scholar, field and venue pages
         $('.added').empty();
@@ -54,7 +50,7 @@ $(document).ready(function() {
         $('#main_list').show();
     });
 
-	// click previous page
+	// when clicking the previous page
 	$('#result_page_pre').click(function() {
 		if( $(this).hasClass('disabled') )
 			event.preventDefault();
@@ -65,7 +61,7 @@ $(document).ready(function() {
 		}
 	});
 
-    // click next page
+    // when clicking the next page
 	$('#result_page_next').click(function() {
 		if( $(this).hasClass('disabled') )
 			event.preventDefault();
@@ -76,7 +72,7 @@ $(document).ready(function() {
 		}
 	});
 
-	// click a particular page
+	// when clicking a particular page
 	$(document).on('click', '.page_added', function() {
 		if( parseInt($(this).attr('id')) == pageCurrent )
 			event.preventDefault();
@@ -89,21 +85,20 @@ $(document).ready(function() {
 });
 
 /*
- *  Make request for publication list and then do showResult
+ *  This method is used to invoke request to get paper list
+ *  and then show corresponding results.
  */
 function makeRequest() {
-    if( ct_url == '' )
-        return ;
-    else {
+    if( ct_url != '' ) {
         $('.added').empty();
         $('#result_page').hide();
         should_wait = true;
         $.ajax({
-            url: ct_url,
-            type: 'post',
-            data: ct_para,
-            dataType: 'json',
-            success: showResult
+            url       : ct_url,
+            type      : 'post',
+            data      : ct_para,
+            dataType  : 'json',
+            success   : showResult
         });
         // if it costs too much time to response
         setTimeout(function(){
@@ -114,44 +109,45 @@ function makeRequest() {
 }
 
 /*
- *  Show result
+ *  Show the paper list.
  */
 function showResult(data) {
     currentJSON = eval( data.result );
     matchNum = eval( data.totalNum[0].num );
 
+    // disable the waiting icon
     should_wait = false;
     $('#wait').hide();
 
-    // if return nothing (only when search_type == index)
+    // if nothing is returned (only when search_type == index)
     if ( search_type == 'index' && currentJSON == '' ) {
         $('#search_none').fadeIn('slow');
         return;
     }
 
-    // compute total page and current page
+    // compute the total number of pages and the current page number
     pageCurrent = (start/step) + 1;
     pageNum = parseInt(( matchNum + step - 1 ) / step);
 
     // show result_info
     if( search_type != 'all' || search_type != 'index') {
-        // search whole paper and index will not run the followings
+        // if WEB_PAGE = all | index, the followings will not be shown
         $('#result_info_type').html('<a href="#">' + search_type + '</a>');
         $('#result_info_name').html(search_content);
     }
     if( search_type == 'index' ) {
-        // if searching index, the sta will show the search content
+        // if WEB_PAGE = index, the sta will be the search content
         $('#result_sta').html('<p>searching <strong class="text-success">' + search_content +
         '</strong>, <span class="label label-success">' + matchNum + '</span> papers found</p>');
     }
     else {
-        // for the others, the content has been shown in bread nav
+        // for other WEB_PAGE, the information has been shown in bread nav
         $('#result_sta').html('<p><span class="label label-success">' + matchNum + '</span> papers found</p>');
     }
     $('#result_info').fadeIn('slow');
 
     // show result_paper
-    showPaper(currentJSON, data.timeStamp);
+    showCurrentPage(currentJSON, data.timeStamp);
 
     // show result_page
     if( pageNum > 1 )
@@ -159,9 +155,10 @@ function showResult(data) {
 }
 
 /*
- *  Show current publication list (i.e. current page)
+ *  Show current paper list (i.e. current page).
+ *  Here the timeStamp is used to determine whether the "new" label is displayed.
  */
-function showPaper(data, timeStamp) {
+function showCurrentPage(data, timeStamp) {
     var doi_text = '' ;
     var new_label = '' ;
 
@@ -178,7 +175,7 @@ function showPaper(data, timeStamp) {
         else
             new_label = '' ;
 
-        // add a new row in result table
+        // insert a new row in result table
         $('#rstable').append('<tr class="added"><td>' + (i+start+1) + '</td><td>' +
             '<div class="row">' +
                 '<div class="col-md-12">' +
@@ -205,9 +202,9 @@ function showPaper(data, timeStamp) {
 }
 
 /*
- *  Show pagination
+ *  Show pagination.
  *      current - current page number
- *      page    - the number of all pages
+ *      page    - the total number of pages
  *      count   - the maximum page number to show
  */
 function showPagination(current, page, count) {
@@ -269,7 +266,7 @@ function showPagination(current, page, count) {
 }
 
 /*
- *  get the complete booktitle as a string
+ *  Get the complete booktitle as a string.
  */
 function getFullPublication( jn ) {
 	var type = jn.type ;
@@ -285,7 +282,7 @@ function getFullPublication( jn ) {
 	if (abbr != null && abbr != 'Phd' && abbr != 'Book' && abbr != 'Tech' && abbr != 'Computer' && abbr != 'Software')
         booktitle += ' (' +  abbr + ')' ;
 
-    // different cases
+    // deal with different cases
     if (type == 'article') {
         var suffix = ', ' ;
         if ( vol != null ) {
@@ -320,7 +317,7 @@ function getFullPublication( jn ) {
 }
 
 /*
- *  get bib entry as html code
+ *  Get the bib entry as a segment of html code
  */
 function getBibEntry( jn ) {
 	var re = '' ;

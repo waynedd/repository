@@ -1,5 +1,5 @@
 /**
- *  the methods to respond query request
+ *  the methods used to deal with query request
  */
 var express = require('express');
 var Paper = require('../model/Paper');
@@ -8,21 +8,19 @@ var router = express.Router();
 
 /*
  *  Parameter Required:
- *  start     - the start position
- *  step      - the number of items in each page, default = 25
- *  group     - all | search | scholar | institution | country | field | tag | booktitle
- *  content   - particular name or text
+ *      start    - the start position
+ *      step     - the number of items in each page, default = 25
+ *      group    - all | search | scholar | institution | country | field | tag | booktitle
+ *      content  - particular name or text
  *
  *  Return:
- *  totalNum - the number of all matches
- *  result   - the publication list of all matches
+ *      totalNum - the number of all matches
+ *      result   - the publication list of all matches
  */
 
 function verifyParameter(req, res, next) {
     var valid = ['all', 'search', 'scholar', 'institution', 'country', 'field', 'tag', 'booktitle'];
-    if( valid.indexOf(req.body.group) < 0 )
-        res.send("invalid request");
-    else if( req.body.start < 0 || req.body.step < 0 )
+    if( valid.indexOf(req.body.group) < 0 || req.body.start < 0 || req.body.step < 0 )
         res.send("invalid request");
     else
         next();
@@ -59,8 +57,8 @@ router.post('/all', verifyParameter, function(req, res) {
 
 /*
  *  query list
- *  group = scholar | institution | country | field | subfield | booktitle
- *  content = the name to be searched
+ *      group = scholar | institution | country | field | tag | booktitle
+ *      content = the name to be searched
  */
 router.post('/query', verifyParameter, function(req, res) {
     var group = req.body.group ;

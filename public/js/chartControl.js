@@ -1,5 +1,5 @@
 /**
- *  control the display of statistic charts
+ *  Control the display of statistic charts
  */
 $(document).ready(function () {
     // return to main list
@@ -56,7 +56,7 @@ $(document).ready(function () {
     });
 });
 
-// make the chart dom display
+// make the chart DOM display
 function chartToggle( text ) {
     $('#btn_group').hide();
     $('#chart_info_type').html('<a href="#">statistic</a>');
@@ -254,12 +254,13 @@ function showChart3( results ) {
 // show chart 4
 function showChart4( results ) {
     /*
-    var data = [
-        {"code": "AU", "value": 2, "name": "Australia"},
-        {"code": "AT", "value": 1, "name": "Austria"},
-        {"code": "BR", "value": 1, "name": "Brazil"},
-       ...
-    ];
+    DATA EXAMPLE:
+        data = [
+            {"code": "AU", "value": 2, "name": "Australia"},
+            {"code": "AT", "value": 1, "name": "Austria"},
+            {"code": "BR", "value": 1, "name": "Brazil"},
+            ...
+        ];
     */
     var data = eval( results );
     if( !validateData(data) )
