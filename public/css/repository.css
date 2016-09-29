@@ -231,8 +231,8 @@ pre {
 /* middle view */
 @media(min-width: 992px) {
     header .intro-text .intro-heading {
-        margin-top: 0;
-        font-size: 40pt;
+        margin-top: -10pt;
+        font-size: 34pt;
         line-height: 1.4;
     }
     header .intro-text .intro-lead-in {
@@ -258,12 +258,12 @@ pre {
 /* large view */
 @media(min-width: 1200px) {
     header .intro-text .intro-heading {
-        margin-top: 0;
-        font-size: 50pt;
-        line-height: 1.4;
+        margin-top: -10pt;
+        font-size: 42pt;
+        line-height: 1.5;
     }
     header .intro-text .intro-lead-in {
-        font-size: 23pt;
+        font-size: 24pt;
         line-height: 1.4;
     }
     header .main-label {
