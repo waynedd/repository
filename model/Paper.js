@@ -14,14 +14,14 @@ var pool  = mysql.createPool ({
     multipleStatements : true,
     host            : 'localhost',
     user            : 'wayne',
-    password        : '123456'
+    password        : '123456a'
 });
 
 function setTimeStamp() {
     var connection = mysql.createConnection({
         host            : 'localhost',
         user            : 'wayne',
-        password        : '123456'
+        password        : '123456a'
     });
     connection.connect();
     connection.query('select value from paper.configuration where name = "lastTimeStamp"', function(err, result) {

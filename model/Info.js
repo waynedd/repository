@@ -13,7 +13,7 @@ module.exports = Info;
 var pool  = mysql.createPool ({
     host     : 'localhost',
     user     : 'wayne',
-    password : '123456'
+    password : '123456a'
 });
 
 pool.on('connection', function(connection) {
