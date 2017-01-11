@@ -102,4 +102,9 @@ router.get('/venue', Hooks.miniHTML, function(req, res) {
     });
 });
 
+/* Manager Page */
+router.get('/manager', function(req, res) {
+    res.render('manager/index');
+});
+
 module.exports = router;
