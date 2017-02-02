@@ -1,193 +1,340 @@
 /**
- *  The methods used to get additional information
+ * The methods used to get data from database.
  */
 var mysql = require('mysql');
 var logger = require('../model/Logger');
+var config = require('../configuration');
 
-function Info() {
-    this.name = 'info';
+function Info() {}
+Info.timeStamp = "0000-00-00" ;
+setTimeStamp();
+
+function setTimeStamp() {
+  var connection = mysql.createConnection({
+    host      : 'localhost',
+    user      : config.user,
+    password  : config.password,
+    database  : config.database
+  });
+  connection.connect();
+  connection.query('select value from configuration where name = "lastTimeStamp"', function(err, result) {
+    Info.timeStamp = result[0].value;
+  });
+  connection.end();
 }
 
-module.exports = Info;
-
 var pool  = mysql.createPool ({
-    host     : 'localhost',
-    user     : 'wayne',
-    password : '123456a'
+  multipleStatements : true,
+  host      : 'localhost',
+  user      : config.user,
+  password  : config.password,
+  database  : config.database
 });
 
 pool.on('connection', function(connection) {
-    connection.query('SET SESSION auto_increment_increment=1');
+  connection.query('SET SESSION auto_increment_increment=1');
 });
 
-/*
- *  Get the total number and the last updated date,
- *  which are used in the index page.
- */
-Info.getIndexInfo = function getIndexInfo(callback) {
-    pool.getConnection(function (err, connection) {
-        var sql1 = 'select count(*) as num from paper.list';
-        var sql2 = 'select value from paper.configuration where name = "lastUpdateDate"';
+/* common prefix */
+let sql_prefix = 'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi' ;
 
-        connection.query(sql1, function(err1, result1) {
-            connection.query(sql2, function (err2, result2) {
-                if (err1 || err2) {
-                    logger.log('error', 'Info (Get Index) Error: ' + err.message);
-                }
-                connection.release();
-                callback(err, result1[0].num, result2[0].value);
-            });
-        });
+/**
+ * Get papers from $(start) to $(start) + $(step)
+ * @param {number} start: start index
+ * @param {number} step: length
+ * @param callback
+ */
+Info.paperList = function (start, step, callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = 'SELECT SQL_CALC_FOUND_ROWS ' + sql_prefix + ' ' +
+      'FROM list order by year DESC, booktitle, title limit ' + start + ', ' + step +
+      '; select FOUND_ROWS() as num';
+    connection.query(sql, function(err, result) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (paperList) Error: ' + err.message);
+
+      callback(err, result[1], result[0]);
     });
+  });
 };
 
-/*
- *  Get the statistic data, which is used to draw figures.
+/**
+ * Get papers that are relevant to input.
+ * @param {string} input
+ * @param {number} start
+ * @param {number} step
+ * @param callback
+ */
+Info.searchInput = function (input, start, step, callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = 'select SQL_CALC_FOUND_ROWS ' + sql_prefix + ' ' +
+      'from list where (author like CONCAT("%", ?, "%") OR ' +
+      'title like CONCAT("%", ?, "%") OR ' +
+      'booktitle like CONCAT("%", ?, "%") OR ' +
+      'tag like CONCAT("%", ?, "%") OR '+
+      'abbr like CONCAT("%" ?, "%") OR ' +
+      'year like CONCAT("%", ?, "%")' +
+      ') order by year DESC, author ASC limit ' + start + ', ' + step +
+      '; select FOUND_ROWS() as num';
+
+    connection.query(sql, [input, input, input, input, input, input], function(err, result) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (searchInput) Error: ' + err.message);
+
+      callback(err, result[1], result[0]);
+    });
+  });
+};
+
+/**
+ * Get papers that are relevant to a particular group.
+ * @param {string} group: [scholar | institution | country | field | tag | booktitle]
+ * @param {string} content: particular name
+ * @param {number} start
+ * @param {number} step
+ * @param {function} callback
+ */
+Info.searchContent = function (group, content, start, step, callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = 'select SQL_CALC_FOUND_ROWS ' ;
+    switch (group) {
+      case 'scholar':
+        sql += sql_prefix + ' from list where author like CONCAT("%", ?, "%")';
+        break;
+      case 'institution':
+        sql += 'distinct ' + sql_prefix + ' ' + 'from (select name, institution from scholar ' +
+          'where institution = ?) p left join list q on q.author like CONCAT("%", p.name, "%")';
+        break;
+      case 'country':
+        sql += 'distinct ' + sql_prefix + ' ' + 'from (select name, country from scholar ' +
+          'where country = ?) p left join list q on q.author like CONCAT("%", p.name, "%")';
+        break;
+      case 'field':
+        sql += sql_prefix + ' from list where field = ?';
+        break;
+      case 'tag':
+        sql += sql_prefix + ' from list where tag like CONCAT("%", ?, "%")';
+        break;
+      case 'booktitle':
+        if( content == 'phdthesis' || content == 'techreport' )
+          sql += sql_prefix + ' from list where type = "' + content + '"' ;
+        else
+          sql += sql_prefix + ' from list where abbr = ?' ;
+        break;
+      default:
+        logger.log('error', 'PAPER - Invalid Search Parameter: ' + group + ', ' + content);
+        return;
+    }
+    sql += ' order by year DESC limit ' + start + ', ' + step + '; select FOUND_ROWS() as num';
+
+    // if there is an input parameters
+    if( sql.indexOf('?') != -1 ) {
+      connection.query(sql, [content], function(err, result) {
+        connection.release();
+        if (err)
+          logger.log('error', 'INFO (searchContent with input) Error: ' + err.message);
+
+        callback(err, result[1], result[0]);
+      });
+    }
+    else {
+      connection.query(sql, function(err, result) {
+        connection.release();
+        if (err)
+          logger.log('error', 'INFO (searchContent) Error: ' + err.message);
+
+        callback(err, result[1], result[0]);
+      });
+    }
+  });
+};
+
+/**
+ * Get the whole paper.list table.
+ * @param  callback:
+ */
+Info.paperAll = function (callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = 'SELECT * FROM list';
+    connection.query(sql, function(err, result) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (paperAll) Error: ' + err.message);
+
+      callback(err, result);
+    });
+  });
+};
+
+/**
+ * Get the total number of papers and the last updating date,
+ * which are used in the homepage.
+ * @param callback
+ */
+Info.indexInfo = function (callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = 'select count(*) as num from list;' +
+              'select value from configuration where name = "lastUpdateDate"';
+
+    connection.query(sql, function(err, results) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (Get Index) Error: ' + err.message);
+
+      callback(err, results[0][0].num, results[1][0].value);
+    });
+  });
+};
+
+/**
+ * Get the statistic data, which is used to draw figures.
+ * @param {number} no: indicates the targeted figure
  *      no = 1 : annual & cumulative number of publications
  *      no = 2 : total number of each field
  *      no = 3 : annual number of each filed
  *      no = 4 : number of scholars of each country
  *      no = 5 : the number of new institutions that join the CT community
+ * @param callback
  */
-Info.getStatistics = function getStatistics(no, callback) {
-    pool.getConnection(function (err, connection) {
-        var sql = '' ;
-        switch ( no ) {
-            case 1 :
-                sql = 'select year, num, count from paper.count_cumulative';
-                break ;
-            case 2 :
-                sql = 'select field, count from paper.count_field order by count DESC';
-                break ;
-            case 3 :
-                sql = 'select year, num, generation, application, model, evaluation, optimization, ' +
-                      'diagnosis, other from paper.count_field_annual';
-                break ;
-            case 4 :
-                sql = 'select code, count from paper.count_country';
-                break ;
-            case 5 :
-                //sql = 'select a.year, a.num, sum(b.num) as count from paper.first_annual a ' +
-                //      'join paper.first_annual b where b.year <= a.year group by a.year';
-                sql = 'select year, num from paper.count_new_institution';
-                break ;
-            default :
-                logger.log('error', 'INFO - Invalid Statistic Parameter: ' + no);
-                break ;
-        }
+Info.statistics = function (no, callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = '' ;
+    switch ( no ) {
+      case 1 :
+        sql = 'select year, num, count from count_cumulative';
+        break ;
+      case 2 :
+        sql = 'select field, count from count_field order by count DESC';
+        break ;
+      case 3 :
+        sql = 'select year, num, generation, application, model, evaluation, optimization, ' +
+          'diagnosis, other from count_field_annual';
+        break ;
+      case 4 :
+        sql = 'select code, count from count_country';
+        break ;
+      case 5 :
+        sql = 'select year, num from count_new_institution';
+        break ;
+      default :
+        logger.log('error', 'INFO - Invalid Statistic Parameter: ' + no);
+        break ;
+    }
 
-        connection.query(sql, function (err, results) {
-            if (err) {
-                logger.log('error', 'INFO (Get Statistic) Error: ' + err.message);
-            }
-            connection.release();
-            callback(err, results);
-        });
+    connection.query(sql, function (err, result) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (Get Statistic) Error: ' + err.message);
+
+      callback(err, result);
     });
+  });
 };
 
-/*
- *  Get the required data from the scholar table
- *      para = scholar | institution | country
+/**
+ * Get the list of scholars, institutions and countries.
+ * @param {string} group: [scholar | institution | country]
+ * @param callback
  */
-Info.getScholar = function getScholar(para, callback) {
-    pool.getConnection(function (err, connection) {
-        var sql = '' ;
-        // all scholars
-        if( para == 'scholar' )
-            sql = 'select name from paper.scholar order by name';
-        // all institutions
-        else if( para == 'institution' )
-            sql = 'select distinct institution, category from paper.scholar order by institution';
-        // all countries
-        else if( para == 'country' )
-            sql = 'select distinct country from paper.scholar order by country';
-        else {
-            logger.log('error', 'INFO - Invalid Scholar Parameter: ' + para);
-            return;
-        }
-
-        connection.query(sql, function(err, results) {
-            if (err) {
-                logger.log('error', 'INFO (Get Scholar List) Error: ' + err.message);
-            }
-            connection.release();
-            callback(err, results);
-        });
-    });
-};
-
-/*
- *  Get the information of particular scholar
- *      result1: name, institution, country, email, homepage
- *      result2: the research fields that have been focused
- */
-Info.getScholarInfo = function getScholarInfo(input, callback) {
-    pool.getConnection(function (err, connection) {
-        var sql1 = 'select name, institution, country, email, homepage from paper.scholar where name = ?';
-        var sql2 = 'select distinct field from paper.list where author like concat("%", ?, "%")';
-
-        connection.query(sql1, [input], function(err, result1) {
-            connection.query(sql2, [input], function(err, result2) {
-                if (err) {
-                    logger.log('error', 'INFO (Get Scholar Info) Error: ' + err.message);
-                }
-                connection.release();
-                callback(err, result1, result2);
-            });
-        });
-    });
-};
-
-/*
- *  Get the list of all booktitle venues
- *      results1 = article list
- *      results2 = inproceedings list
- */
-Info.getVenue = function getVenue(callback) {
-    pool.getConnection(function (err, connection) {
-        var sql1 = 'select booktitle, abbr from paper.venue where type = "article"';
-        var sql2 = 'select booktitle, abbr from paper.venue where type = "inproceedings"';
-        connection.query(sql1, function(err, results1) {
-            if (err) {
-                logger.log('error', 'INFO (Get Article) Error: ' + err.message);
-            }
-            connection.query(sql2, function(err, results2) {
-                if (err) {
-                    logger.log('error', 'INFO (Get Inproceedings) Error: ' + err.message);
-                }
-                connection.release();
-                callback(err, results1, results2);
-            });
-        });
-    });
-};
-
-/*
- *  Get the list of rank
- *      para = author | affiliation
- */
-Info.getRank = function getRank(para, callback) {
-    var table = '' ;
-    if( para == 'author' || para == 'institution' )
-        table = 'rank_' + para + '_archive' ;
-    else {
-        logger.log('error', 'INFO - Invalid Rank Parameter: ' + para);
+Info.scholarList = function (group, callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = '' ;
+    switch ( group ) {
+      case 'scholar':
+        sql = 'select name from scholar order by name';
+        break;
+      case 'institution':
+        sql = 'select distinct institution, category from scholar order by institution';
+        break;
+      case 'country':
+        sql = 'select distinct country from scholar order by country';
+        break;
+      default:
+        logger.log('error', 'INFO - Invalid Scholar Parameter: ' + group);
         return;
     }
 
-    var sql = 'select name, TSE, TOSEM, JSS, IST, EMSE, STVR, ICSE, FSE, ASE, ISSTA, ISSRE, ICSM, Other,' +
-        ' TSE*3.0 + TOSEM*3.0 + JSS*1.8 + IST*1.8 + EMSE*1.8 + STVR*1.8 + ICSE*2.5 + ' +
-        'FSE*2.5 + ASE*1.5 + ISSTA*1.5 + ISSRE*1.5 + ICSM*1.5 + Other*0.8 as Score ' +
-        'from paper.' + table + ' order by score desc limit 30';
+    connection.query(sql, function(err, result) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (Get Scholar List) Error: ' + err.message);
 
-    pool.getConnection(function (err, connection) {
-        connection.query(sql, function(err, results) {
-            if (err) {
-                logger.log('error', 'INFO (Get Rank) Error: ' + err.message);
-            }
-            connection.release();
-            callback(err, results);
-        });
+      callback(err, result);
     });
+  });
 };
+
+/**
+ * Get the information of a particular scholar.
+ * @param {string} name
+ * @param callback(err, info, field)
+ *        info  = name, institution, country, email, homepage
+ *        field = the research fields that are involved
+ */
+Info.scholarInfo = function (name, callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = 'select name, institution, country, email, homepage from scholar where name = ?;' +
+              'select distinct field from list where author like concat("%", ?, "%")';
+
+    connection.query(sql, [name, name], function(err, results) {
+      connection.release();
+      if ( err )
+        logger.log('error', 'INFO (Get Scholar Info) Error: ' + err.message);
+
+      callback(err, results[0], results[1]);
+    });
+  });
+};
+
+/**
+ * Get the list of all selected venues.
+ * @param callback(err, articles, inproceedings)
+ */
+Info.venue = function getVenue(callback) {
+  pool.getConnection(function (err, connection) {
+    var sql = 'select booktitle, abbr from venue where type = "article";' +
+              'select booktitle, abbr from venue where type = "inproceedings"';
+
+    connection.query(sql, function(err, results) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (Get Inproceedings) Error: ' + err.message);
+
+      callback(err, results[0], results[1]);
+    });
+  });
+};
+
+/**
+ * Get the list of rank table.
+ * @param {string} para: [author | institution]
+ * @param callback
+ */
+Info.ranking = function getRank(para, callback) {
+  var table = '' ;
+  if( para == 'author' || para == 'institution' )
+    table = 'rank_' + para + '_archive' ;
+  else {
+    logger.log('error', 'INFO - Invalid Rank Parameter: ' + para);
+    return;
+  }
+
+  var sql = 'select name, TSE, TOSEM, JSS, IST, EMSE, STVR, ICSE, FSE, ASE, ISSTA, ISSRE, ICSM, Other,' +
+    ' TSE*3.0 + TOSEM*3.0 + JSS*1.8 + IST*1.8 + EMSE*1.8 + STVR*1.8 + ICSE*2.5 + ' +
+    'FSE*2.5 + ASE*1.5 + ISSTA*1.5 + ISSRE*1.5 + ICSM*1.5 + Other*0.8 as Score ' +
+    'from ' + table + ' order by score desc limit 30';
+
+  pool.getConnection(function (err, connection) {
+    connection.query(sql, function(err, results) {
+      connection.release();
+      if (err)
+        logger.log('error', 'INFO (Get Rank) Error: ' + err.message);
+
+      callback(err, results);
+    });
+  });
+};
+
+module.exports = Info;

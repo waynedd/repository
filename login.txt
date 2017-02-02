@@ -1,0 +1,20 @@
+router.post('/login', function(req, res) {
+  var userName = req.body.username.trim(),
+      userPwd = req.body.password.trim();
+
+  Corner.login(userName, userPwd, function (state, info) {
+    if( state == 'success' ) {
+      req.session.token = Math.random().toString(36);
+      req.session.user = userName;
+      res.json({'version': VERSION, 'state': 'accept'});
+    }
+    else {
+      res.json({'version': VERSION, 'state': 'reject: ' + info});
+    }
+  });
+});
+
+router.post('/logout', function(req, res) {
+  req.session.destroy();
+  res.send('logout done');
+});

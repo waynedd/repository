@@ -50,13 +50,9 @@ function prepareAuthor(data) {
     var ja = eval( data.basicInfo );
     var jb = eval( data.focusField );
 
-    // basic information
-    var s1 = ja[0].institution == null ? '' : ja[0].institution ;
-    var s2 = ja[0].country == null ? '' : ', ' + ja[0].country ;
-    var full = s1 + s2 ;
-
-    var email = ja[0].email == null ? '' : ja[0].email ;
-    var homepage = ja[0].homepage == null ? '' : ja[0].homepage ;
+    var basic = ja[0].institution + ', ' + ja[0].country;
+    var email = ja[0].email ;
+    var homepage = ja[0].homepage ;
 
     var jaStr = '';
     if( email != '' )
@@ -70,7 +66,7 @@ function prepareAuthor(data) {
         $('#af_'+each.field).attr('class', 'label label-warning');
     });
 
-    $('#author_aff').html('<p>' + full + '</p>');
+    $('#author_aff').html('<p>' + basic + '</p>');
     $('#author_contact').html('<p class="pull-right">' + jaStr + '</p>');
     $('#author_info').show();
 }
