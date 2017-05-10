@@ -5,23 +5,19 @@ var mysql = require('mysql');
 var logger = require('../model/Logger');
 var config = require('../configuration');
 
-function Info() {}
-Info.timeStamp = "0000-00-00" ;
-setTimeStamp();
+var DataQuery = function () {};
 
-function setTimeStamp() {
-  var connection = mysql.createConnection({
-    host      : 'localhost',
-    user      : config.user,
-    password  : config.password,
-    database  : config.database
-  });
-  connection.connect();
-  connection.query('select value from configuration where name = "lastTimeStamp"', function(err, result) {
-    Info.timeStamp = result[0].value;
-  });
-  connection.end();
-}
+var connection = mysql.createConnection({
+  host      : 'localhost',
+  user      : config.user,
+  password  : config.password,
+  database  : config.database
+});
+connection.connect();
+connection.query('select value from configuration where name = "lastTimeStamp"', function(err, result) {
+  global.timeStamp = result[0].value;
+});
+connection.end();
 
 var pool  = mysql.createPool ({
   multipleStatements : true,
@@ -36,7 +32,10 @@ pool.on('connection', function(connection) {
 });
 
 /* common prefix */
-let sql_prefix = 'id, time_stamp, type, year, author, title, booktitle, abbr, vol, no, pages, publisher, doi' ;
+let sql_prefix = 'id, time_stamp, type, year, author, title, booktitle, ' +
+                 'abbr, vol, no, pages, publisher, doi' ;
+
+module.exports = DataQuery;
 
 /**
  * Get papers from $(start) to $(start) + $(step)
@@ -44,7 +43,7 @@ let sql_prefix = 'id, time_stamp, type, year, author, title, booktitle, abbr, vo
  * @param {number} step: length
  * @param callback
  */
-Info.paperList = function (start, step, callback) {
+DataQuery.prototype.paperList = function (start, step, callback) {
   pool.getConnection(function (err, connection) {
     var sql = 'SELECT SQL_CALC_FOUND_ROWS ' + sql_prefix + ' ' +
       'FROM list order by year DESC, booktitle, title limit ' + start + ', ' + step +
@@ -66,7 +65,7 @@ Info.paperList = function (start, step, callback) {
  * @param {number} step
  * @param callback
  */
-Info.searchInput = function (input, start, step, callback) {
+DataQuery.prototype.searchInput = function (input, start, step, callback) {
   pool.getConnection(function (err, connection) {
     var sql = 'select SQL_CALC_FOUND_ROWS ' + sql_prefix + ' ' +
       'from list where (author like CONCAT("%", ?, "%") OR ' +
@@ -96,7 +95,7 @@ Info.searchInput = function (input, start, step, callback) {
  * @param {number} step
  * @param {function} callback
  */
-Info.searchContent = function (group, content, start, step, callback) {
+DataQuery.prototype.searchContent = function (group, content, start, step, callback) {
   pool.getConnection(function (err, connection) {
     var sql = 'select SQL_CALC_FOUND_ROWS ' ;
     switch (group) {
@@ -155,7 +154,7 @@ Info.searchContent = function (group, content, start, step, callback) {
  * Get the whole paper.list table.
  * @param  callback:
  */
-Info.paperAll = function (callback) {
+DataQuery.prototype.paperAll = function (callback) {
   pool.getConnection(function (err, connection) {
     var sql = 'SELECT * FROM list';
     connection.query(sql, function(err, result) {
@@ -173,10 +172,10 @@ Info.paperAll = function (callback) {
  * which are used in the homepage.
  * @param callback
  */
-Info.indexInfo = function (callback) {
+DataQuery.prototype.indexInfo = function (callback) {
   pool.getConnection(function (err, connection) {
     var sql = 'select count(*) as num from list;' +
-              'select value from configuration where name = "lastUpdateDate"';
+      'select value from configuration where name = "lastUpdateDate"';
 
     connection.query(sql, function(err, results) {
       connection.release();
@@ -198,7 +197,7 @@ Info.indexInfo = function (callback) {
  *      no = 5 : the number of new institutions that join the CT community
  * @param callback
  */
-Info.statistics = function (no, callback) {
+DataQuery.prototype.statistics = function (no, callback) {
   pool.getConnection(function (err, connection) {
     var sql = '' ;
     switch ( no ) {
@@ -238,7 +237,7 @@ Info.statistics = function (no, callback) {
  * @param {string} group: [scholar | institution | country]
  * @param callback
  */
-Info.scholarList = function (group, callback) {
+DataQuery.prototype.scholarAll = function (group, callback) {
   pool.getConnection(function (err, connection) {
     var sql = '' ;
     switch ( group ) {
@@ -273,10 +272,10 @@ Info.scholarList = function (group, callback) {
  *        info  = name, institution, country, email, homepage
  *        field = the research fields that are involved
  */
-Info.scholarInfo = function (name, callback) {
+DataQuery.prototype.scholarInfo = function (name, callback) {
   pool.getConnection(function (err, connection) {
     var sql = 'select name, institution, country, email, homepage from scholar where name = ?;' +
-              'select distinct field from list where author like concat("%", ?, "%")';
+      'select distinct field from list where author like concat("%", ?, "%")';
 
     connection.query(sql, [name, name], function(err, results) {
       connection.release();
@@ -292,10 +291,10 @@ Info.scholarInfo = function (name, callback) {
  * Get the list of all selected venues.
  * @param callback(err, articles, inproceedings)
  */
-Info.venue = function getVenue(callback) {
+DataQuery.prototype.venue = function getVenue(callback) {
   pool.getConnection(function (err, connection) {
     var sql = 'select booktitle, abbr from venue where type = "article";' +
-              'select booktitle, abbr from venue where type = "inproceedings"';
+      'select booktitle, abbr from venue where type = "inproceedings"';
 
     connection.query(sql, function(err, results) {
       connection.release();
@@ -312,7 +311,7 @@ Info.venue = function getVenue(callback) {
  * @param {string} para: [author | institution]
  * @param callback
  */
-Info.ranking = function getRank(para, callback) {
+DataQuery.prototype.ranking = function getRank(para, callback) {
   var table = '' ;
   if( para == 'author' || para == 'institution' )
     table = 'rank_' + para + '_archive' ;
@@ -337,4 +336,4 @@ Info.ranking = function getRank(para, callback) {
   });
 };
 
-module.exports = Info;
+

@@ -2,9 +2,10 @@
  *  The methods used to deal with query request.
  */
 var express = require('express');
-var Info = require('../model/Info');
+var Info = require('../model/DataQuery');
 
 var router = express.Router();
+var info = new Info();
 
 /**
  *  Parameters:
@@ -31,11 +32,11 @@ router.post('/search', verify, function(req, res) {
   var start = req.body.start ;
   var step = req.body.step ;
 
-  Info.searchInput(content, start, step, function (err, totalNum, result) {
+  info.searchInput(content, start, step, function (err, totalNum, result) {
     res.send({
       totalNum: totalNum,
       result: JSON.stringify(result),
-      timeStamp: Info.timeStamp
+      timeStamp: global.timeStamp
     });
   });
 });
@@ -45,11 +46,11 @@ router.post('/all', verify, function(req, res) {
   var start = req.body.start ;
   var step = req.body.step ;
 
-  Info.paperList(start, step, function (err, totalNum, result) {
+  info.paperList(start, step, function (err, totalNum, result) {
     res.send({
       totalNum: totalNum,
       result: JSON.stringify(result),
-      timeStamp: Info.timeStamp
+      timeStamp: global.timeStamp
     });
   });
 });
@@ -65,11 +66,11 @@ router.post('/query', verify, function(req, res) {
   var start = req.body.start ;
   var step = req.body.step ;
 
-  Info.searchContent(group, content, start, step, function (err, totalNum, result) {
+  info.searchContent(group, content, start, step, function (err, totalNum, result) {
     res.send({
       totalNum: totalNum,
       result: JSON.stringify(result),
-      timeStamp: Info.timeStamp
+      timeStamp: global.timeStamp
     });
   });
 });
@@ -77,7 +78,7 @@ router.post('/query', verify, function(req, res) {
 /*  scholar information  */
 router.post('/scholar_info', verify, function(req, res) {
   var content = req.body.content ;
-  Info.scholarInfo(content, function (err, result1, result2) {
+  info.scholarInfo(content, function (err, result1, result2) {
     res.send({
       basicInfo: JSON.stringify(result1),
       focusField: JSON.stringify(result2)
@@ -91,7 +92,7 @@ router.post('/chart', function (req, res) {
 
   // chart 1: number of publication
   if( no == '1' ) {
-    Info.statistics(1, function (err, results) {
+    info.statistics(1, function (err, results) {
       if( err ) {
         res.send({error: 'Get data error.'});
         return;
@@ -115,7 +116,7 @@ router.post('/chart', function (req, res) {
 
   // chart 2: distribution of field
   else if( no == '2' ) {
-    Info.statistics(2, function (err, results) {
+    info.statistics(2, function (err, results) {
       if( err ) {
         res.send({error: 'Get data error.'});
         return;
@@ -136,7 +137,7 @@ router.post('/chart', function (req, res) {
 
   // chart 3: changing ratio of field
   else if( no == '3' ) {
-    Info.statistics(3, function (err, results) {
+    info.statistics(3, function (err, results) {
       if( err ) {
         res.send({error: 'Get data error.'});
         return;
@@ -169,7 +170,7 @@ router.post('/chart', function (req, res) {
 
   // chart 4: distribution of scholars
   else if( no =='4' ) {
-    Info.statistics(4, function (err, results) {
+    info.statistics(4, function (err, results) {
       if( err ) {
         res.send({error: 'Get data error.'});
         return;
@@ -178,9 +179,7 @@ router.post('/chart', function (req, res) {
       // add each country
       var data = [];
       for( var k=0 ; k<results.length ; k++ ) {
-        var each = new Object();
-        each.value = results[k].count;
-        each.code = results[k].code;
+        var each = {value: results[k].count, code: results[k].code};
         data.push(each);
       }
       res.send(JSON.stringify(data));
@@ -189,7 +188,7 @@ router.post('/chart', function (req, res) {
 
   // chart 5: number of new affiliation
   else if( no == '5' ) {
-    Info.statistics(5, function (err, results) {
+    info.statistics(5, function (err, results) {
       if( err ) {
         res.send({error: 'Get data error.'});
         return;

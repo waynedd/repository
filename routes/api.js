@@ -1,11 +1,11 @@
 var express = require('express');
-var Paper = require('../model/Paper');
-var Info = require('../model/Info');
+var DataUpdate = require('../model/DataUpdate');
+var DataQuery = require('../model/DataQuery');
 var Corner = require('./corner');
 
 var router = express.Router();
-let VERSION = '0.1' ;
-
+var query  = new DataQuery();
+var update = new DataUpdate();
 
 function authentication(req, res, next) {
   var method = req.method,
@@ -15,39 +15,53 @@ function authentication(req, res, next) {
       sign   = req.body.sign;
 
   Corner.signature(method, url, name, stamp, sign, function (state) {
-    if(state == 'success')
-      next();
-    else
-      res.json({'state': 'unacceptable actions'});
+    if (state == 'success') next();
+    else res.json({'state': 'unacceptable actions'});
   });
 }
 
-/* Get the information that is shown on homepage */
+/*
+ *  Return the information that is shown on homepage.
+ */
 router.get('/info', authentication, function(req, res) {
-  Info.indexInfo(function (err, number, date) {
-    res.json({'state': 'done', 'number': number, 'date': date});
+  query.indexInfo(function (err, number, date) {
+    res.json({'number': number, 'date': date});
   });
 });
 
-/* Get the whole paper list */
-router.get('/list', authentication, function(req, res) {
-  Info.paperAll(function (err, data) {
-    res.json({'state': 'done', 'list': data});
+/*
+ *  Return the whole paper list.
+ */
+router.get('/paper', authentication, function(req, res) {
+  query.paperAll(function (err, data) {
+    res.json({'list': data});
   });
 });
 
-/* Insert a set of papers into database */
-router.post('/update_list', authentication, function (req, res) {
-  var paperList = JSON.parse(req.body.paperList);  // convert received json to list
-  var paperStamp = req.body.paperStamp;
-  var paperDate = req.body.paperDate;
+/*
+ *  Return the names that are not included in current scholar table.
+ */
+router.get('/scholar', authentication, function(req, res) {
+  query.scholarAll('scholar', function (err, data) {
+    res.json({'list': data});
+  });
+});
 
-  if ( validatePaper(paperList, paperStamp, paperDate) ) {
-    Paper.updatePaper(paperList, paperStamp, paperDate, function (err, s1, s2) {
+
+/*
+ *  Insert a set of papers into database.
+ */
+router.post('/paper', authentication, function (req, res) {
+  var paper = JSON.parse(req.body.list); // convert received json to list
+  var stamp = req.body.stamp;
+  var date = req.body.date;
+
+  if ( validatePaper(paper, stamp, date) ) {
+    update.paperTable(paper, stamp, date, function (err, s1, s2) {
       if( err )
         res.json({'state': 'error'});
       else {
-        Info.timeStamp = paperStamp ;
+        global.timeStamp = stamp ;
         res.json({'state': 'success'});
       }
     });
@@ -56,12 +70,14 @@ router.post('/update_list', authentication, function (req, res) {
   }
 });
 
-/* Insert scholars into database */
-router.post('/update_scholar', authentication, function (req, res) {
-  var scholarList = JSON.parse(req.body.scholarList);  // convert received json to list
+/*
+ *  Insert a set of scholars into database.
+ */
+router.post('/scholar', authentication, function (req, res) {
+  var scholar = JSON.parse(req.body.list);  // convert received json to list
 
-  if ( validateScholar(scholarList) ) {
-    Paper.updateScholar(scholarList, function (err, s) {
+  if ( validateScholar(scholar) ) {
+    update.scholarTable(scholar, function (err, s) {
       if( err )
         res.json({'state': 'error'});
       else
@@ -72,26 +88,31 @@ router.post('/update_scholar', authentication, function (req, res) {
   }
 });
 
-/* validate paper update request */
+/*
+ *  Simple validation before updating paper.
+ */
 function validatePaper(paper, stamp, date) {
   if ( stamp == '' || date == '' )
     return false;
 
   for( var i=0 , len=paper.length ; i<len ; i++ ) {
     var each = paper[i];
-    if (each.year == '' || each.type == '' || each.author == '' || each.title == ''
-      || each.field == '' || each.booktitle == '') {
+    if (each.year == '' || each.type == '' || each.author == '' ||
+        each.title == '' || each.field == '' || each.booktitle == '') {
       return false;
     }
   }
   return true;
 }
 
-/* validate scholar update request */
+/*
+ *  Simple validation before updating scholar.
+ */
 function validateScholar(scholar) {
   for( var i=0 , len=scholar.length ; i<len ; i++ ) {
     var each = scholar[i];
-    if (each.name == '' || each.institution == '' || each.category == '' || each.country == '') {
+    if (each.name == '' || each.institution == '' || each.category == '' ||
+        each.country == '') {
       return false;
     }
   }

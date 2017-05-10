@@ -2,7 +2,7 @@ var mysql = require('mysql');
 var logger = require('../model/Logger');
 var config = require('../configuration');
 
-function User(user) {}
+function User () {}
 
 var pool  = mysql.createPool ({
   host      : 'localhost',
@@ -14,6 +14,8 @@ var pool  = mysql.createPool ({
 pool.on('connection', function(connection) {
   connection.query('SET SESSION auto_increment_increment=1');
 });
+
+module.exports = User;
 
 /* get username's appKey and secretKey fields */
 User.getKeys = function (name, callback) {
@@ -29,4 +31,3 @@ User.getKeys = function (name, callback) {
   });
 };
 
-module.exports = User;

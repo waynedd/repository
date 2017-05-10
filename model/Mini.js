@@ -8,7 +8,7 @@ function isHtml(text) {
   return text.length >= prefix.length && text.substring(0, prefix.length) === prefix;
 }
 
-exports.miniHTML = function(req, res, next) {
+exports.HTML = function(req, res, next) {
   if (req.method === 'GET' || req.method === 'POST') {
     var oldSend = res.send;
     res.send = function(data) {

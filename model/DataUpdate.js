@@ -6,9 +6,7 @@ var fs = require('fs');
 var logger = require('../model/Logger');
 var config = require('../configuration');
 
-function Paper() {
-  this.name = 'paper';
-}
+var DataUpdate = function () {};
 
 var pool  = mysql.createPool ({
   multipleStatements: true,
@@ -22,6 +20,7 @@ pool.on('connection', function(connection) {
   connection.query('SET SESSION auto_increment_increment=1');
 });
 
+module.exports = DataUpdate;
 
 /**
  *  Insert new papers into the database.
@@ -30,7 +29,7 @@ pool.on('connection', function(connection) {
  *  @param {string} indexDate: the updated date shown in the homepage
  *  @param callback
  */
-Paper.updatePaper = function (paper, timeStamp, indexDate, callback) {
+DataUpdate.prototype.paperTable = function (paper, timeStamp, indexDate, callback) {
   // insert into list table
   var sql = 'INSERT INTO list (time_stamp, year, type, author, title, field, ' +
     'tag, booktitle, abbr, vol, no, pages, publisher, doi) VALUES ?';
@@ -71,7 +70,7 @@ Paper.updatePaper = function (paper, timeStamp, indexDate, callback) {
  * @param {list} scholar: a list of scholars
  * @param callback
  */
-Paper.updateScholar = function (scholar, callback) {
+DataUpdate.prototype.scholarTable = function (scholar, callback) {
   // insert into scholar table
   var sql = 'INSERT INTO scholar (name, institution, category, country, email, homepage) VALUES ? ';
   var values = [];
@@ -90,5 +89,3 @@ Paper.updateScholar = function (scholar, callback) {
     });
   });
 };
-
-module.exports = Paper;

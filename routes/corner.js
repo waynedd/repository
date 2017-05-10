@@ -26,8 +26,6 @@ Corner.signature = function(method, url, name, stamp, sign, callback) {
     }
     else {
       // check time stamp
-
-
       var key = result[0].appKey;
       var secret = result[0].secretKey;
 
