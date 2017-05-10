@@ -1,6 +1,7 @@
 <!-- Scholar Author -->
 <ul class="nav nav-tabs">
-    <li role="presentation" class="active"><a href="#">Scholar &nbsp;<span class="label label-info"># <%=num%></span></a></li>
+    <li role="presentation" class="active"><a href="#">Scholar &nbsp;<span class="label label-info"># <%= num %></span></a>
+    </li>
     <li role="presentation"><a href="scholar?r=institution">Institution</a></li>
     <li role="presentation"><a href="scholar?r=country">Country</a></li>
     <!-- search in page
@@ -12,31 +13,91 @@
 <!-- list part -->
 <div id="main_list" class="row scholar-content">
     <%
-        var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
-            'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
-        var currentLetter ;
-        var index = 0 ;
-        for( var l=0 ; l<letters.length ; l++ ) {
-            currentLetter = letters[l] ;
+    var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
+        'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+
+    var names = [];
+    for( let l = 0 ; l < letters.length ; l++ ) {
+        var curNames = [];
+        for (let i = 0; i < result.length; i++) {
+            var nm = result[i].name.split(" ");
+            if ( nm[nm.length - 1].charAt(0) == letters[l])
+                curNames.push(result[i].name);
+        }
+        curNames.sort(function(a, b){
+            var ast = a.split(" ");
+            var bst = b.split(" ");
+            var firstA = ast[0], lastA = ast[ast.length-1];
+            var firstB = bst[0], lastB = bst[bst.length-1];
+            // compare last name at first and then compare first name
+            if ( lastA < lastB ) return -1;
+            else if ( lastA > lastB ) return 1;
+            else {
+                if ( firstA < firstB ) return -1;
+                else if ( firstA > firstB ) return 1;
+                else return 0;
+            }
+        });
+        names.push(curNames);
+    }
+
+    // reorganize to N * 4 arrays
+    var finals = []
+    for ( let l = 0 ; l < letters.length ; l++  ) {
+        curNames = names[l];
+        var row = Math.ceil(curNames.length/4)
+        var f = [];
+        for ( let i = 0 ; i < row ; i++ )
+            f.push(['x', 'x', 'x', 'x']);
+
+        var x = 0 , y = 0 ;
+        for( let i = 0 ; i < curNames.length ; i++ ) {
+            f[x++][y] = curNames[i];
+            if ( x == row ) {
+                x = 0 ;
+                y = y + 1 ;
+            }
+        }
+        finals.push(f);
+    }
     %>
-        <div class="row">
-            <div class="col-sm-1 col-xs-12">
-                <p class="pull-right">
-                    <span class='label label-success scholar-author-label'><%=currentLetter%></span>
-                </p>
-            </div>
-            <div class="col-sm-11 col-xs-12">
-                <table class="table table-condensed scholar-table-unbordered">
-    <%  while( index<num && result[index].name.charAt(0) == currentLetter ) { %>
-                <tr>
-            <% for(var i=0 ; i<4 && index<num && result[index].name.charAt(0)==currentLetter ; i++, index++ ) { %>
-                    <td class="auTD"><a id="<%=result[index].name%>" href="#"><%=result[index].name%></a></td>
-            <% } %>
-                </tr>
-        <% } %>
-               </table>
-            </div>
+
+    <%
+    for( let l = 0 ; l < letters.length ; l++ )
+    {
+        var curLetter = letters[l];
+        var fn = finals[l];
+    %>
+    <div class="row">
+        <div class="col-sm-1 col-xs-12">
+            <p class="pull-right">
+                <span class='label label-success scholar-author-label'><%=curLetter%></span>
+            </p>
         </div>
+        <div class="col-sm-11 col-xs-12">
+            <table class="table table-condensed scholar-table-unbordered">
+                <%
+                for ( let x = 0 ; x < fn.length ; x++ ) {
+                %>
+                <tr>
+                <%
+                    for ( let y = 0 ; y < 4 ; y++ ) {
+                        if ( fn[x][y] != 'x' ) {
+                %>
+                    <td class="auTD"><a id="<%=fn[x][y]%>" href="#"><%=fn[x][y]%></a></td>
+                <%
+                        }
+                    }
+                %>
+                </tr>
+                <%
+                }
+                %>
+            </table>
+        </div>
+    </div>
     <br><br>
-    <% } %>
+    <%
+    }
+    %>
 </div>

@@ -10,9 +10,9 @@ var update = new DataUpdate();
 function authentication(req, res, next) {
   var method = req.method,
       url    = req.originalUrl,
-      name   = req.body.name,
-      stamp  = req.body.stamp,
-      sign   = req.body.sign;
+      name   = req.body.authName,
+      stamp  = req.body.authStamp,
+      sign   = req.body.authSign;
 
   Corner.signature(method, url, name, stamp, sign, function (state) {
     if (state == 'success') next();
@@ -22,6 +22,7 @@ function authentication(req, res, next) {
 
 /*
  *  Return the information that is shown on homepage.
+ *  Responses: number, date
  */
 router.get('/info', authentication, function(req, res) {
   query.indexInfo(function (err, number, date) {
@@ -31,6 +32,7 @@ router.get('/info', authentication, function(req, res) {
 
 /*
  *  Return the whole paper list.
+ *  Responses: list
  */
 router.get('/paper', authentication, function(req, res) {
   query.paperAll(function (err, data) {
@@ -40,6 +42,7 @@ router.get('/paper', authentication, function(req, res) {
 
 /*
  *  Return the names that are not included in current scholar table.
+ *  Responses: list
  */
 router.get('/scholar', authentication, function(req, res) {
   query.scholarAll('scholar', function (err, data) {
@@ -50,6 +53,8 @@ router.get('/scholar', authentication, function(req, res) {
 
 /*
  *  Insert a set of papers into database.
+ *  Parameters: list, stamp, date
+ *  Responses: state
  */
 router.post('/paper', authentication, function (req, res) {
   var paper = JSON.parse(req.body.list); // convert received json to list
@@ -72,6 +77,8 @@ router.post('/paper', authentication, function (req, res) {
 
 /*
  *  Insert a set of scholars into database.
+ *  Parameters: list
+ *  Responses: state
  */
 router.post('/scholar', authentication, function (req, res) {
   var scholar = JSON.parse(req.body.list);  // convert received json to list
