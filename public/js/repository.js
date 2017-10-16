@@ -332,7 +332,7 @@ function getBibEntry( jn ) {
   // the '--' in page should be replaced by '-' (jn.pages may be null)
   var bibPages = jn.pages ? jn.pages.replace('--', '-') : null;
   // create bib
-  var tp = (jn.author.split(',')[0]).split(' ');
+  var tp = (jn.author.split(',')[0]).trim().split(' ');
   var bib = tp[tp.length-1] + ':' + jn.year + '.' + jn.id ;
 
   /*
