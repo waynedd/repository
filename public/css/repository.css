@@ -2,105 +2,123 @@
  *  repository css file
  */
 html, body {
-    overflow-y: scroll;
-    width: 100% !important;
-    height: 100% !important;
+  overflow-y: scroll;
+  width: 100% !important;
+  height: 100% !important;
 }
+
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 #wrap {
-    min-height: 100%;
-    height: auto;
-    margin: 0 auto -60px;
-    padding: 0 0 60px;
+  min-height: 100%;
+  height: auto;
+  margin: 0 auto -60px;
+  padding: 0 0 60px;
 }
+
 #footer {
-    width: 100%;
-    padding-top: 20px;
-    height: 60px;
-    background-color: #f5f5f5;
+  width: 100%;
+  padding-top: 20px;
+  height: 60px;
+  background-color: #f5f5f5;
 }
 
 hr.small {
-    padding: 5px 0;
-    max-width: 200px;
-    border-top: 1px solid #dddddd;
+  padding: 5px 0;
+  max-width: 200px;
+  border-top: 1px solid #dddddd;
 }
+
 .my-center {
-    padding-top: 40px;
-    padding-bottom: 30px;
+  padding-top: 40px;
+  padding-bottom: 30px;
 }
 
 /* repository general */
 .navbar-inverse {
-    background-color: #2a3440;
-    border-color: #2a3440;
+  background-color: #2a3440;
+  border-color: #2a3440;
 }
+
 .list_col {
-    padding-left: 25px ;
+  padding-left: 25px;
 }
+
 .panel-heading {
-    padding: 5px 10px ;
-    border-bottom: 1px solid transparent;
-    border-top-right-radius: 3px;
-    border-top-left-radius: 3px;
+  padding: 5px 10px;
+  border-bottom: 1px solid transparent;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
 }
+
 a.red_link:link, a.red_link:visited {
-    color: #E51400;
-    text-decoration:none;
+  color: #E51400;
+  text-decoration: none;
 }
+
 a.none_dec:link {
-    text-decoration:none;
+  text-decoration: none;
 }
+
 .navbar-inverse .navbar-brand {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 /* statistic page */
 #btn_group {
-    padding-top: 40px ;
+  padding-top: 40px;
 }
+
 .img-thumbnail {
-    border: none ;
+  border: none;
 }
+
 .charts {
-    padding-bottom: 10px;
+  padding-bottom: 10px;
 }
 
 /* banner */
 .banner {
-    position: relative; overflow: auto;
+  position: relative;
+  overflow: auto;
 }
+
 .banner li {
-    list-style: none;
+  list-style: none;
 }
+
 .banner ul li {
-    float: left;
+  float: left;
 }
+
 #author_aff
 #author_field {
-    padding-left: 27px;
+  padding-left: 27px;
 }
+
 #author_aff,
 #author_contact,
 #author_field {
-    color: #777777;
+  color: #777777;
 }
+
 #author_field {
-    padding-top: 5px;
-    padding-bottom: 5px
+  padding-top: 5px;
+  padding-bottom: 5px
 }
 
 /* scholar page */
 .scholar-content {
-    padding-top: 20px;
+  padding-top: 20px;
 }
+
 .scholar-author-label {
-    font-size: 20px;
-    padding: 5px 15px 5px;
+  font-size: 20px;
+  padding: 5px 15px 5px;
 }
+
 .scholar-table-unbordered,
 .scholar-table-unbordered tr,
 .scholar-table-unbordered th,
@@ -111,179 +129,204 @@ a.none_dec:link {
 .scholar-table-unbordered > thead > tr > td,
 .scholar-table-unbordered > tbody > tr > td,
 .scholar-table-unbordered > tfoot > tr > td {
-    border-top: 0;
+  border-top: 0;
 }
 
 /* new header */
 header {
-    display: table;
-    position: relative;
-    width: 100%;
-    height: 100%;
-    background: url(../image/lib1.jpg) no-repeat center center scroll;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    -o-background-size: cover;
+  display: table;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: url(../image/lib1.jpg) no-repeat center center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
 }
+
 header .floater {
-    float: left;
-    height: 27%;
+  float: left;
+  height: 27%;
 }
+
 header .intro-text {
-    text-align: center;
-    color: #ffffff;
-    clear: both;
-    position: relative;
+  text-align: center;
+  color: #ffffff;
+  clear: both;
+  position: relative;
 }
 
 /* extra small */
 header .intro-text .intro-heading {
-    font-family: Futura, Tahoma, sans-serif;
-    margin-bottom: 15px;
-    margin-top: -80px;
-    font-weight: 600;
-    font-size: 30pt;
-    line-height: 1.3;
+  font-family: Futura, Tahoma, sans-serif;
+  margin-bottom: 15px;
+  margin-top: -80px;
+  font-weight: 600;
+  font-size: 30pt;
+  line-height: 1.3;
 }
+
 header .intro-text .intro-lead-in {
-    font-family: Garamond, serif;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    font-size: 16pt;
-    line-height: 1.2;
+  font-family: Garamond, serif;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  font-size: 16pt;
+  line-height: 1.2;
 }
+
 header .main-label {
-    font-size: 16pt;
-    padding: .2em .4em .2em;
+  font-size: 16pt;
+  padding: .2em .4em .2em;
 }
+
 header .input-lg {
-    height: 35px;
-    padding: 10px 16px;
-    font-size: 18px;
-    line-height: 1.3333333;
-    border-radius: 6px;
+  height: 35px;
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+  border-radius: 6px;
 }
+
 .contact {
-    padding-top: 50px;
-    padding-bottom: 20px;
+  padding-top: 50px;
+  padding-bottom: 20px;
 }
+
 .contact p {
-    font-size: 12pt;
-    line-height: 1.2;
-    padding-top: 5px;
-    padding-bottom: 5px;
+  font-size: 12pt;
+  line-height: 1.2;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
+
 pre {
-    display: block;
-    padding: 15px;
-    margin: 0 0 10px;
-    font-size: 11pt;
-    line-height: 1.3;
-    color: #333333;
-    word-break: break-all;
-    word-wrap: break-word;
-    background-color: #f5f5f5;
-    border: none;
-    border-radius: 10px;
+  display: block;
+  padding: 15px;
+  margin: 0 0 10px;
+  font-size: 11pt;
+  line-height: 1.3;
+  color: #333333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: none;
+  border-radius: 10px;
 }
 
 .my-button-large {
-    font-size: 20px;
-    height: 40px;
-    line-height: 20px;
-    padding: 0 40px;
+  font-size: 20px;
+  height: 40px;
+  line-height: 20px;
+  padding: 0 40px;
 }
 
 /* small view */
-@media(min-width: 768px) {
-    header .intro-text .intro-heading {
-        margin-top: 0;
-        font-size: 33pt;
-        line-height: 1.3;
-    }
-    header .intro-text .intro-lead-in {
-        font-size: 18pt;
-        line-height: 1.3;
-    }
-    header .main-label {
-        font-size: 19pt;
-    }
-    header .input-lg {
-        height: 40px;
-    }
-    .contact p {
-        font-size: 13pt;
-        line-height: 1.2;
-    }
-    pre {
-        font-size: 11pt;
-        line-height: 1.3;
-    }
-    .my-button-large {
-        font-size: 20px;
-        height: 50px;
-        line-height: 50px;
-        padding: 0 40px;
-    }
+@media (min-width: 768px) {
+  header .intro-text .intro-heading {
+    margin-top: 0;
+    font-size: 33pt;
+    line-height: 1.3;
+  }
+
+  header .intro-text .intro-lead-in {
+    font-size: 18pt;
+    line-height: 1.3;
+  }
+
+  header .main-label {
+    font-size: 19pt;
+  }
+
+  header .input-lg {
+    height: 40px;
+  }
+
+  .contact p {
+    font-size: 13pt;
+    line-height: 1.2;
+  }
+
+  pre {
+    font-size: 11pt;
+    line-height: 1.3;
+  }
+
+  .my-button-large {
+    font-size: 20px;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 40px;
+  }
 }
 
 /* middle view */
-@media(min-width: 992px) {
-    header .intro-text .intro-heading {
-        margin-top: -10pt;
-        font-size: 34pt;
-        line-height: 1.4;
-    }
-    header .intro-text .intro-lead-in {
-        font-size: 20pt;
-        line-height: 1.4;
-    }
-    header .main-label {
-        font-size: 20pt;
-    }
-    header .input-lg {
-        height: 42px;
-    }
-    .contact p {
-        font-size: 14.5pt;
-        line-height: 1.3;
-    }
-    pre {
-        font-size: 12pt;
-        line-height: 1.4;
-    }
+@media (min-width: 992px) {
+  header .intro-text .intro-heading {
+    margin-top: -10pt;
+    font-size: 34pt;
+    line-height: 1.4;
+  }
+
+  header .intro-text .intro-lead-in {
+    font-size: 20pt;
+    line-height: 1.4;
+  }
+
+  header .main-label {
+    font-size: 20pt;
+  }
+
+  header .input-lg {
+    height: 42px;
+  }
+
+  .contact p {
+    font-size: 14.5pt;
+    line-height: 1.3;
+  }
+
+  pre {
+    font-size: 12pt;
+    line-height: 1.4;
+  }
 }
 
 /* large view */
-@media(min-width: 1200px) {
-    header .intro-text .intro-heading {
-        margin-top: -10pt;
-        font-size: 42pt;
-        line-height: 1.5;
-    }
-    header .intro-text .intro-lead-in {
-        font-size: 24pt;
-        line-height: 1.4;
-    }
-    header .main-label {
-        font-size: 23pt;
-    }
-    header .input-lg {
-        height: 46px;
-    }
-    .contact {
-        padding-top: 70px;
-        padding-bottom: 40px;
-    }
-    .contact p {
-        font-size: 16pt;
-        line-height: 1.4;
-    }
-    pre {
-        font-size: 13pt;
-        line-height: 1.5;
-    }
+@media (min-width: 1200px) {
+  header .intro-text .intro-heading {
+    margin-top: -10pt;
+    font-size: 42pt;
+    line-height: 1.5;
+  }
+
+  header .intro-text .intro-lead-in {
+    font-size: 24pt;
+    line-height: 1.4;
+  }
+
+  header .main-label {
+    font-size: 23pt;
+  }
+
+  header .input-lg {
+    height: 46px;
+  }
+
+  .contact {
+    padding-top: 70px;
+    padding-bottom: 40px;
+  }
+
+  .contact p {
+    font-size: 16pt;
+    line-height: 1.4;
+  }
+
+  pre {
+    font-size: 13pt;
+    line-height: 1.5;
+  }
 }
 
 /*
@@ -291,8 +334,8 @@ pre {
  */
 [data-tooltip],
 .tooltip {
-    position: relative;
-    cursor: pointer;
+  position: relative;
+  cursor: pointer;
 }
 
 /* Base styles for the entire tooltip */
@@ -300,27 +343,24 @@ pre {
 [data-tooltip]:after,
 .tooltip:before,
 .tooltip:after {
-    position: absolute;
-    visibility: hidden;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
-    opacity: 0;
-    -webkit-transition:
-    opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out,
-    -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -moz-transition:
-    opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out,
-    -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    transition:
-    opacity 0.2s ease-in-out,
-    visibility 0.2s ease-in-out,
-    transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
-    -webkit-transform: translate3d(0, 0, 0);
-    -moz-transform:    translate3d(0, 0, 0);
-    transform:         translate3d(0, 0, 0);
-    pointer-events: none;
+  position: absolute;
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition: opacity 0.2s ease-in-out,
+  visibility 0.2s ease-in-out,
+  -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -moz-transition: opacity 0.2s ease-in-out,
+  visibility 0.2s ease-in-out,
+  -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  transition: opacity 0.2s ease-in-out,
+  visibility 0.2s ease-in-out,
+  transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  pointer-events: none;
 }
 
 /* Show the entire tooltip on hover and focus */
@@ -332,33 +372,33 @@ pre {
 .tooltip:hover:after,
 .tooltip:focus:before,
 .tooltip:focus:after {
-    visibility: visible;
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
-    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
-    opacity: 1;
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
 }
 
 /* Base styles for the tooltip's directional arrow */
 .tooltip:before,
 [data-tooltip]:before {
-    z-index: 1001;
-    border: 6px solid transparent;
-    background: transparent;
-    content: "";
+  z-index: 1001;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
 }
 
 /* Base styles for the tooltip's content area */
 .tooltip:after,
 [data-tooltip]:after {
-    z-index: 1000;
-    padding: 16px 8px;
-    width: 220px;
-    background-color: #000;
-    background-color: hsla(0, 0%, 20%, 0.9);
-    color: #fff;
-    content: attr(data-tooltip);
-    font-size: 16px;
-    line-height: 1.2;
+  z-index: 1000;
+  padding: 16px 8px;
+  width: 220px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  font-size: 16px;
+  line-height: 1.2;
 }
 
 /* Directions */
@@ -369,24 +409,24 @@ pre {
 .tooltip:after,
 .tooltip-top:before,
 .tooltip-top:after {
-    bottom: 100%;
-    left: 50%;
+  bottom: 100%;
+  left: 50%;
 }
 
 [data-tooltip]:before,
 .tooltip:before,
 .tooltip-top:before {
-    margin-left: -6px;
-    margin-bottom: -12px;
-    border-top-color: #000;
-    border-top-color: hsla(0, 0%, 20%, 0.9);
+  margin-left: -6px;
+  margin-bottom: -12px;
+  border-top-color: #000;
+  border-top-color: hsla(0, 0%, 20%, 0.9);
 }
 
 /* Horizontally align top/bottom tooltips */
 [data-tooltip]:after,
 .tooltip:after,
 .tooltip-top:after {
-    margin-left: -110px;
+  margin-left: -110px;
 }
 
 [data-tooltip]:hover:before,
@@ -401,45 +441,45 @@ pre {
 .tooltip-top:hover:after,
 .tooltip-top:focus:before,
 .tooltip-top:focus:after {
-    -webkit-transform: translateY(-12px);
-    -moz-transform:    translateY(-12px);
-    transform:         translateY(-12px);
+  -webkit-transform: translateY(-12px);
+  -moz-transform: translateY(-12px);
+  transform: translateY(-12px);
 }
 
 /* Bottom */
 .tooltip-bottom:before,
 .tooltip-bottom:after {
-    top: 100%;
-    bottom: auto;
-    left: 50%;
+  top: 100%;
+  bottom: auto;
+  left: 50%;
 }
 
 .tooltip-bottom:before {
-    margin-top: -12px;
-    margin-bottom: 0;
-    border-top-color: transparent;
-    border-bottom-color: #000;
-    border-bottom-color: hsla(0, 0%, 20%, 0.9);
+  margin-top: -12px;
+  margin-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: #000;
+  border-bottom-color: hsla(0, 0%, 20%, 0.9);
 }
 
 .tooltip-bottom:hover:before,
 .tooltip-bottom:hover:after,
 .tooltip-bottom:focus:before,
 .tooltip-bottom:focus:after {
-    -webkit-transform: translateY(12px);
-    -moz-transform:    translateY(12px);
-    transform:         translateY(12px);
+  -webkit-transform: translateY(12px);
+  -moz-transform: translateY(12px);
+  transform: translateY(12px);
 }
 
 /* Move directional arrows down a bit for left/right tooltips */
 .tooltip-left:before,
 .tooltip-right:before {
-    top: 3px;
+  top: 3px;
 }
 
 /* Vertically center tooltip content for left/right tooltips */
 .tooltip-left:after,
 .tooltip-right:after {
-    margin-left: 0;
-    margin-bottom: -16px;
+  margin-left: 0;
+  margin-bottom: -16px;
 }

@@ -1,100 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Combinatorial testing repository is a web application to collect all publications that are related to combinatorial testing.">
-    <meta name="keywords" content="Repository, Combinatorial Testing, Software Testing, Publication, Research, Paper">
-    <meta name="author" content="Huayao">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+        content="Combinatorial testing repository is a web application to collect all publications that are related to combinatorial testing.">
+  <meta name="keywords" content="Repository, Combinatorial Testing, Software Testing, Publication, Research, Paper">
+  <meta name="author" content="Huayao">
 
-    <title>Statistic</title>
-    <link rel="stylesheet" href="http://gist.nju.edu.cn/css/bootstrap.min.css">
-    <link rel="stylesheet" href="http://gist.nju.edu.cn/font-awesome-4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/repository.css">
+  <title>Statistic</title>
+  <link rel="stylesheet" href="http://gist.nju.edu.cn/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://gist.nju.edu.cn/font-awesome-4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/repository.css">
 
-    <script src="http://gist.nju.edu.cn/js/jquery.min.js"></script>
-    <script src="js/repository.js"></script>
-    <script src="js/repository_chart.js"></script>
+  <script src="http://gist.nju.edu.cn/js/jquery.min.js"></script>
+  <script src="js/repository.js"></script>
+  <script src="js/repository_chart.js"></script>
 </head>
 
 <body>
 <!-- Wrap all page content here -->
 <div id="wrap">
 
-    <!-- top navigation -->
-    <%- include template/template_top.ejs %>
+  <!-- top navigation -->
+  <%- include template/template_top.ejs %>
 
-    <div class="container">
-        <br/><br/>
-        <br/><br/>
+  <div class="container">
+    <br/><br/>
+    <br/><br/>
+
+    <div class="row">
+      <!-- sidebar -->
+      <%- include template/template_sidebar.ejs %>
+
+      <!-- show -->
+      <div class="col-md-10 col-sm-9">
 
         <div class="row">
-            <!-- sidebar -->
-            <%- include template/template_sidebar.ejs %>
-
-            <!-- show -->
-            <div class="col-md-10 col-sm-9">
-
-                <div class="row">
-                    <div id="chart_info" style="display:none" class="col-md-12">
-                        <ul class="breadcrumb">
-                            <li id="chart_info_type"></li>
-                            <li id="chart_info_name"></li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div id="btn_group" style="text-align:center">
-                    <div class = "row">
-                        <div class="col-md-3 col-sm-6 charts">
-                            <div id="show_c1"><a href="#" class="img-thumbnail"><img src="image/chart1.ico"/></a></div>
-                            <h4>Number of Publication</h4>
-                            <p>The annual and cumulative number of combinatorial testing publications.</p>
-                        </div>
-
-                        <div class="col-md-3 col-sm-6 charts">
-                            <div id="show_c2"><a href="#" class="img-thumbnail"><img src="image/chart2.ico"/></a></div>
-                            <h4>Distribution of Field</h4>
-                            <p>The distribution of different combinatorial testing research fields.</p>
-                        </div>
-
-                        <div class="col-md-3 col-sm-6 charts">
-                            <div id="show_c3"><a href="#" class="img-thumbnail"><img src="image/chart3.ico"/></a></div>
-                            <h4>Relative Proportion of Field</h4>
-                            <p>The relative proportions of each combinatorial testing research field.</p>
-                        </div>
-
-                        <div class="col-md-3 col-sm-6 charts">
-                            <div id="show_c4"><a href="#" class="img-thumbnail"><img src="image/chart4.ico"/></a></div>
-                            <h4>Scholar in the World</h4>
-                            <p>The distribution of scholars in the world.</p>
-                        </div>
-                    </div>
-                    <br>
-
-                    <div class = "row">
-                        <div class="col-md-3 col-sm-6 charts">
-                            <div id="show_c5"><a href="#" class="img-thumbnail"><img src="image/chart5.ico"/></a></div>
-                            <h4>Number of Institutions</h4>
-                            <p>The number of new institutions that contribute to combinatorial testing community.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12" id="container_chart"
-                         style="display:none; min-width: 400px; height: 400px; margin: 0 auto"></div>
-                </div>
-                <div id="container2"></div>
-
-            </div>
-            <!-- span10 -->
+          <div id="chart_info" style="display:none" class="col-md-12">
+            <ul class="breadcrumb">
+              <li id="chart_info_type"></li>
+              <li id="chart_info_name"></li>
+            </ul>
+          </div>
         </div>
-    </div>
-    <!-- /container -->
 
-    <br><br>
+        <div id="btn_group" style="text-align:center">
+          <div class="row">
+            <div class="col-md-3 col-sm-6 charts">
+              <div id="show_c1"><a href="#" class="img-thumbnail"><img src="image/chart1.ico"/></a></div>
+              <h4>Number of Publication</h4>
+              <p>The annual and cumulative number of combinatorial testing publications.</p>
+            </div>
+
+            <div class="col-md-3 col-sm-6 charts">
+              <div id="show_c2"><a href="#" class="img-thumbnail"><img src="image/chart2.ico"/></a></div>
+              <h4>Distribution of Field</h4>
+              <p>The distribution of different combinatorial testing research fields.</p>
+            </div>
+
+            <div class="col-md-3 col-sm-6 charts">
+              <div id="show_c3"><a href="#" class="img-thumbnail"><img src="image/chart3.ico"/></a></div>
+              <h4>Relative Proportion of Field</h4>
+              <p>The relative proportions of each combinatorial testing research field for each year.</p>
+            </div>
+
+            <div class="col-md-3 col-sm-6 charts">
+              <div id="show_c4"><a href="#" class="img-thumbnail"><img src="image/chart4.ico"/></a></div>
+              <h4>Scholar in the World</h4>
+              <p>The distribution of scholars of combinatorial testing community all over the world.</p>
+            </div>
+          </div>
+          <br>
+
+          <div class="row">
+            <div class="col-md-3 col-sm-6 charts">
+              <div id="show_c5"><a href="#" class="img-thumbnail"><img src="image/chart5.ico"/></a></div>
+              <h4>Number of Institutions</h4>
+              <p>The number of new institutions that contribute to combinatorial testing community for each year.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12" id="container_chart"
+               style="display:none; min-width: 400px; height: 400px; margin: 0 auto"></div>
+        </div>
+        <div id="container2"></div>
+
+      </div>
+      <!-- span10 -->
+    </div>
+  </div>
+  <!-- /container -->
+
+  <br><br>
 </div>
 <!-- /wrap -->
 
