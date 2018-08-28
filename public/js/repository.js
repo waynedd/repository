@@ -276,7 +276,7 @@ function getFullPublication( jn ) {
   var abbr = jn.abbr ;
   var vol = jn.vol ;
   var no = jn.no ;
-  var pages = jn.pages ? jn.pages.replace('--', '-') : '';
+  var pages = jn.pages ? ': ' + jn.pages.replace('--', '-') : '';
   var year = jn.year ;
   var publisher = jn.publisher ;
 
@@ -289,17 +289,17 @@ function getFullPublication( jn ) {
     case 'article':
       if (vol != '') {
         if (no != '')
-          return booktitle + year + ', ' + vol + '(' + no + '): ' + pages;
+          return booktitle + year + ', ' + vol + '(' + no + ')' + pages;
         else
-          return booktitle + year + ', ' + vol + ': ' + pages;
+          return booktitle + year + ', ' + vol + pages;
       }
       return booktitle + year;
 
     case 'inproceedings':
-      return booktitle + year + ': ' + pages;
+      return booktitle + year + pages;
 
     case 'incollection':
-      return booktitle + year + ', ' + vol + ': ' + pages;
+      return booktitle + year + ', ' + vol + pages;
 
     case 'inbook':
       return booktitle + publisher + ', ' + year;
