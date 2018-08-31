@@ -8,20 +8,21 @@ var config = require('../configuration');
 var DataQuery = function () {};
 
 var connection = mysql.createConnection({
-  host      : 'localhost',
+  host      : config.host,
   user      : config.user,
   password  : config.password,
   database  : config.database
 });
 connection.connect();
 connection.query('select value from configuration where name = "lastTimeStamp"', function(err, result) {
+  if (err) throw err;
   global.timeStamp = result[0].value;
 });
 connection.end();
 
 var pool  = mysql.createPool ({
   multipleStatements : true,
-  host      : 'localhost',
+  host      : config.host,
   user      : config.user,
   password  : config.password,
   database  : config.database

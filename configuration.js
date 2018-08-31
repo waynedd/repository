@@ -1,7 +1,8 @@
 var config = {};
 
-config.user = 'wayne';
-config.password = '123456a';
+config.host = 'localhost';
+config.user = 'repo';
+config.password = 'repo1234';
 config.database = 'paper';
 
 module.exports = config;
