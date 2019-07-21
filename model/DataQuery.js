@@ -157,7 +157,7 @@ DataQuery.prototype.searchContent = function (group, content, start, step, callb
  */
 DataQuery.prototype.paperAll = function (callback) {
   pool.getConnection(function (err, connection) {
-    var sql = 'SELECT * FROM list';
+    var sql = 'SELECT * FROM list order by year DESC, booktitle, title';
     connection.query(sql, function(err, result) {
       connection.release();
       if (err)
